@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import { Welcome } from "../welcome/welcome";
+import { Button } from "@/components/ui/button";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -13,5 +14,12 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  return <Welcome message={loaderData.message} />;
+  return (
+    <div>
+      <h1 className="text-yellonw-500 text-3xl font-extrabold">
+        Start React Router
+      </h1>
+      <Button variant="secondary">Click me</Button>
+    </div>
+  );
 }
