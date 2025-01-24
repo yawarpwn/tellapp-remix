@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="relative min-h-dvh overflow-x-hidden font-sans antialiased font-['inter',san-serif]">
         {children}
         <ScrollRestoration />
         <Scripts />

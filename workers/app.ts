@@ -17,7 +17,7 @@ const requestHandler = createRequestHandler(
 );
 
 export default {
-  fetch(request, env) {
+  async fetch(request, env) {
     return requestHandler(request, {
       VALUE_FROM_CLOUDFLARE: "Hello from Cloudflare",
     });

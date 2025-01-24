@@ -1,0 +1,64 @@
+{
+  "id": "454239e3-2c77-4298-b5b0-f41e5295d20a",
+  "number": 5503,
+  "company": "M & J CONSTRUCCION E INGENIERIA S.R.L - M &J S.R.L.",
+  "ruc": "20453789854",
+  "address": "PQ. SAN CARLOS NRO. 187 URB. MATSUDA LIMA LIMA PUEBLO LIBRE",
+  "deadline": 1,
+  "phone": null,
+  "created_at": "2024-06-08T16:44:17.681+00:00",
+  "items": [
+    {
+      "id": "e58f0f9d-c3e2-44bf-83fd-1226c37f72cf",
+      "qty": 18,
+      "cost": 3,
+      "price": 6,
+      "unit_size": "60x30cm",
+      "description": "Señal vinil arclad laminado (proteccion UV) c/ soporte pvc celtex espesor = 5mm"
+    },
+    {
+      "id": "f6284728-47b4-40b4-90de-b606f40cc3f1",
+      "qty": 8,
+      "cost": 5,
+      "price": 12,
+      "unit_size": "30x40cm",
+      "description": "Señal vinil Arclad laminado brillo (protección UV) c/ soporte pvc celtex de 5mm de espesor"
+    },
+    {
+      "id": "79b04052-2c96-494c-991d-4f376e1cdc63",
+      "qty": 2,
+      "cost": 3,
+      "price": 5,
+      "unit_size": "20x30cm",
+      "description": "Señal vinil laminado con soporte pvc celtex 3mm con cinta de doble contacto"
+    },
+    {
+      "id": "373f39e4-68b0-4f87-80b8-6eb79297133a",
+      "qty": 2,
+      "cost": 10,
+      "price": 30,
+      "unit_size": "90x30cm",
+      "description": "Señal vinil Arclad laminado brillo (protección UV) c/ soporte pvc celtex de 5mm de espesor"
+    },
+    {
+      "id": "4fe8af12-77fd-479b-968e-87fd1b77beed",
+      "qty": 1,
+      "cost": 30,
+      "price": 200,
+      "unit_size": "120x100cm",
+      "description": "Señal vinil arclad laminado c/ soporte compuesto de aluminio ( sustrato de aluminio ) de 4 mm espesor"
+    },
+    {
+      "id": "a56295a6-d63b-4017-a8b5-fefb067e59e3",
+      "qty": 1,
+      "cost": 30,
+      "price": 270,
+      "unit_size": "120x150cm",
+      "description": "Señal vinil arclad laminado c/ soporte compuesto de aluminio ( sustrato de aluminio ) de 4 mm espesor"
+    }
+  ],
+  "includeIgv": true,
+  "updated_at": null,
+  "credit": null,
+  "isRegularCustomer": false
+}
