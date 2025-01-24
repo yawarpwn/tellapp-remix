@@ -4,7 +4,8 @@ import { BASE_URL } from "@/lib/constants";
 
 export async function loader() {
   try {
-    const res = await fetch(`${BASE_URL}/api/quotations`);
+    const url = "https://dragonball-api.com/api/characters";
+    const res = await fetch(url);
     if (!res.ok) throw new Error("Error fetching quotations in server");
     const data = await res.json();
     return {
