@@ -20,11 +20,15 @@ import { DuplicateQuotationButton } from "@/components/quotations/duplicate-quot
 import { DeleteQuotationButton } from "@/components/quotations/delete-quotation-button";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  const quotation = await fetchQuotaitonByNumber(+params.number);
+  try {
+    const quotation = await fetchQuotaitonByNumber(+params.number);
 
-  return {
-    quotation,
-  };
+    return {
+      quotation,
+    };
+  } catch (error) {
+    throw new Response("Quotation not found", { status: 404 });
+  }
 }
 
 export default function quotationByNumberPage({

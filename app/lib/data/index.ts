@@ -5,7 +5,7 @@ export async function fetchQuotations(): Promise<QuotationClient[]> {
   // await new Promise((resolve) => setTimeout(resolve, 5000));
   // console.log("resolved");
   const res = await fetch(`${BASE_URL}/api/quotations`);
-  console.log(res);
+  console.log(JSON.stringify(res));
   if (!res.ok) throw new Error("Failed to fetch quotations");
   const data = (await res.json()) as { items: QuotationClient[] };
   return data.items;

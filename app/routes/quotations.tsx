@@ -8,8 +8,7 @@ export async function loader() {
     const quotations = await fetchQuotations();
     return { quotations };
   } catch (error) {
-    console.log(error);
-    return new Response("Error loading quotations", { status: 500 });
+    throw new Response("Error loading quotations", { status: 500 });
   }
 }
 
