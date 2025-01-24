@@ -3,9 +3,14 @@ import type { Route } from "./+types/quotations";
 import { DataTable } from "@/components/quotations/data-table";
 import { columns } from "@/components/quotations/columns";
 
-export async function loader({ params }: Route.LoaderArgs) {
-  const quotations = await fetchQuotations();
-  return { quotations };
+export async function loader() {
+  try {
+    const quotations = await fetchQuotations();
+    return { quotations };
+  } catch (error) {
+    console.log(error);
+    return new Response("Error loading quotations", { status: 500 });
+  }
 }
 
 // export function HydrateFallback() {
