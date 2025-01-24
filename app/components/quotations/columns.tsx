@@ -1,6 +1,8 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import type { QuotationClient } from "@/lib/types";
+import { DeleteQuotationButton } from "@/components/quotations/delete-quotation-button";
 import { getIgv, formatDateToLocal } from "@/lib/utils";
+import { Form } from "react-router";
 import { MoreHorizontal } from "lucide-react";
 import { Link } from "react-router";
 import { ArrowUpDown } from "lucide-react";
@@ -16,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "../data-table-column-header";
+import { DeleteButton } from "../delete-button";
 
 export const columns: ColumnDef<QuotationClient>[] = [
   {
@@ -100,8 +103,34 @@ export const columns: ColumnDef<QuotationClient>[] = [
             <DropdownMenuItem>
               <Link to={`/quotations/${quotation.number}/update`}>Editar</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Eliminar</DropdownMenuItem>
-            <DropdownMenuItem>Duplicar</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Form
+                action={`/quotations/${quotation.number}/delete`}
+                method="post"
+                onSubmit={(ev) => {
+                  let response = confirm("¿Deseas Eliminar la cotización?");
+                  if (!response) {
+                    ev.preventDefault();
+                  }
+                }}
+              >
+                <button>Eliminar</button>
+              </Form>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Form
+                action={`/quotations/${quotation.number}/duplicate`}
+                method="post"
+                onSubmit={(ev) => {
+                  let response = confirm("¿Deseas duplicar la cotización?");
+                  if (!response) {
+                    ev.preventDefault();
+                  }
+                }}
+              >
+                <button>Duplicar</button>
+              </Form>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

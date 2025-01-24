@@ -5,4 +5,5 @@ export default [
   route("/quotations", "routes/quotations.tsx"),
   route("/quotations/:number", "routes/quotation-by-number.tsx"),
   route("/quotations/:number/duplicate", "routes/duplicate-quotation.tsx"),
+  route("/quotations/:number/delete", "routes/delete-quotation.tsx"),
 ] satisfies RouteConfig;

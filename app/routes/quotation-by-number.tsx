@@ -15,9 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DeleteButton } from "@/components/delete-button";
 import { DownloadAndShareButtons } from "@/components/quotations/download-and-share-buttons";
 import { DuplicateQuotationButton } from "@/components/quotations/duplicate-quotation-button";
+import { DeleteQuotationButton } from "@/components/quotations/delete-quotation-button";
 
 export async function loader({ params }: Route.LoaderArgs) {
   const quotation = await fetchQuotaitonByNumber(+params.number);
@@ -25,13 +25,6 @@ export async function loader({ params }: Route.LoaderArgs) {
   return {
     quotation,
   };
-}
-
-export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const id = formData.get("id") as string;
-  await deleteQuotation(id);
-  return redirect("/quotations");
 }
 
 export default function quotationByNumberPage({
@@ -55,9 +48,8 @@ export default function quotationByNumberPage({
             <span className="hidden lg:block">Editar</span>
           </Link>
           <DownloadAndShareButtons quotation={quotation} />
-          <DuplicateQuotationButton quotationNumber={quotation.number} />
-          {/* <DuplicateButton quotationNumber={quotation.number} showTrigger id={quotation.id} /> */}
-          <DeleteButton quotationNumber={quotation.number} id={quotation.id} />
+          <DuplicateQuotationButton />
+          <DeleteQuotationButton />
           {/* {quotation.customerId && ( */}
           {/*   <IsRegularButton */}
           {/*     id={quotation.customerId} */}

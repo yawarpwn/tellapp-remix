@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button";
-import { FilesIcon } from "lucide-react";
+import { TrashIcon } from "lucide-react";
 import { Form } from "react-router";
 
-export function DuplicateQuotationButton() {
+export function DeleteQuotationButton() {
   return (
     <Form
       method="post"
-      action="duplicate"
+      action="delete"
       onSubmit={(event) => {
-        let response = confirm("¿Deseas duplicar la cotización?");
+        let response = confirm("¿Deseas Eliminar la cotización?");
         if (!response) event.preventDefault();
       }}
     >
       <Button variant={"outline"} size={"sm"}>
-        <FilesIcon /> <span className="hidden lg:block">Duplicar</span>
+        <TrashIcon /> <span className="hidden lg:block">Eliminar</span>
       </Button>
     </Form>
   );

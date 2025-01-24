@@ -1,8 +1,8 @@
 import { fetchQuotaitonByNumber } from "../data";
 import { BASE_URL } from "../constants";
 
-export async function deleteQuotation(id: string) {
-  const url = `${BASE_URL}/api/quotations/${id}`;
+export async function deleteQuotation(quotationNumber: number) {
+  const url = `${BASE_URL}/api/quotations/${quotationNumber}`;
   const res = await fetch(url, {
     method: "DELETE",
   });
