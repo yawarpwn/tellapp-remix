@@ -2,7 +2,7 @@ import type { Route } from "./+types/test-page";
 import { BASE_URL } from "@/lib/constants";
 
 export async function loader() {
-  const url = `${BASE_URL}/api/quotations`;
+  const url = `https://api.tellsenales.workers.dev/api/test`;
   try {
     const data = await fetch(url).then(async (res) => {
       if (!res.ok) {
@@ -13,7 +13,7 @@ export async function loader() {
       return res.json();
     });
     return {
-      quotations: data.items,
+      data,
     };
   } catch (err) {
     console.error("Error en loader:", err);
@@ -22,10 +22,10 @@ export async function loader() {
 }
 
 export default function testPage({ loaderData }: Route.ComponentProps) {
-  const { quotations } = loaderData;
+  const { data } = loaderData;
   return (
     <div>
-      <pre>{JSON.stringify(quotations, null, 2)}</pre>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
 }
