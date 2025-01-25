@@ -2,12 +2,14 @@ import type { Route } from "./+types/test-page";
 import { BASE_URL } from "@/lib/constants";
 
 export async function loader() {
-  const url = `${BASE_URL}/api/customers`;
+  const url = `${BASE_URL}/api/quotations`;
   try {
-    const data = await fetch(url).then((res) => {
-      console.log(url);
-      console.log(JSON.stringify(res));
-      if (!res.ok) throw new Error("Error en peticion");
+    const data = await fetch(url).then(async (res) => {
+      // res.headers.forEach((h, k) => console.log(k, h));
+      if (!res.ok) {
+        console.log(await res.text());
+        throw new Error("Error en peticion");
+      }
       return res.json();
     });
     return {
