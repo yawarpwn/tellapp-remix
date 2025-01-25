@@ -4,7 +4,7 @@ import { BASE_URL } from "@/lib/constants";
 
 export async function loader() {
   try {
-    const res = await fetch(`${BASE_URL}/api/quotations`);
+    const res = await fetch(`${BASE_URL}/api/customers`);
     if (!res.ok) throw new Error("Failed to fetch quotations");
 
     const data = await res.json();
