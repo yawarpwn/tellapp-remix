@@ -4,13 +4,10 @@ import { BASE_URL } from "@/lib/constants";
 
 export async function loader() {
   try {
-    const url = "https://dragonball-api.com/api/characters";
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Error fetching quotations in server");
+    const res = await fetch(`${BASE_URL}/api/quotations`);
+    if (!res.ok) throw new Error("Failed to fetch quotations");
     const data = await res.json();
-    return {
-      quotations: data.items,
-    };
+    return data.items;
   } catch (error) {
     throw new Response("Erorr server", { status: 500 });
   }

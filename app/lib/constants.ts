@@ -1,1 +1,1 @@
-export const BASE_URL = "https://hono-tell-api.tellsenales.workers.dev";
+export const BASE_URL = "https://api.tellsenales.workers.dev";
