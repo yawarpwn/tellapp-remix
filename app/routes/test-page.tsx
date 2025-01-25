@@ -5,10 +5,10 @@ export async function loader() {
   const url = `${BASE_URL}/api/quotations`;
   try {
     const data = await fetch(url).then(async (res) => {
-      // res.headers.forEach((h, k) => console.log(k, h));
       if (!res.ok) {
-        console.log(await res.text());
-        throw new Error("Error en peticion");
+        const errorText = await res.text();
+        console.error(`Error en petición: ${res.status} - ${errorText}`);
+        throw new Error(`Error en petición: ${res.status} - ${errorText}`);
       }
       return res.json();
     });
@@ -16,7 +16,7 @@ export async function loader() {
       quotations: data.items,
     };
   } catch (err) {
-    console.log(err);
+    console.error("Error en loader:", err);
     throw new Response("Error loading quotations", { status: 500 });
   }
 }
