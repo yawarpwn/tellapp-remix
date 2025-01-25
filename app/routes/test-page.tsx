@@ -2,8 +2,11 @@ import type { Route } from "./+types/test-page";
 import { BASE_URL } from "@/lib/constants";
 
 export async function loader() {
+  const url = `${BASE_URL}/api/customers`;
   try {
-    const data = await fetch(`${BASE_URL}/api/customers`).then((res) => {
+    const data = await fetch(url).then((res) => {
+      console.log(url);
+      console.log(JSON.stringify(res));
       if (!res.ok) throw new Error("Error en peticion");
       return res.json();
     });
