@@ -2,7 +2,7 @@ import { fetchQuotations } from "@/lib/data";
 import type { Route } from "./+types/test";
 import { BASE_URL } from "@/lib/constants";
 
-export async function loader() {
+export async function clientLoader() {
   try {
     const res = await fetch(`${BASE_URL}/api/customers`);
     if (!res.ok) throw new Error("Failed to fetch quotations");
