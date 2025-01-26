@@ -4,6 +4,11 @@ compatibility_date = "2024-11-18"
 main = "./build/server/index.js"
 assets = { directory = "./build/client/" }
 
+[vars]
+MY_VAR = "my-variable"
+
+services = [{ binding = "API", service = "api" }]
+
 [[d1_databases]]
 binding = "TELLAPP_DB"
 database_name = "tellapp-db"
