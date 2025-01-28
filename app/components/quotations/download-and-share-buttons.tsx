@@ -5,67 +5,66 @@ import type { QuotationClient } from "@/lib/types";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
 
+const formatDate = (date: string | Date) => {
+  return Intl.DateTimeFormat("es-PE")
+    .format(new Date(date))
+    .replace(/\//g, "-");
+};
+
+const getCustomerName = (name?: string) => {
+  if (!name) return "";
+  return name.toUpperCase().replace(/\./g, "").replace(/ /, "-");
+};
+
+const getPdfFilename = (quotation: QuotationClient) => {
+  const date = formatDate(quotation.updatedAt);
+  const ruc = getCustomerName(quotation?.customer?.name) || `-${date}-SIN-RUC`;
+  const isUpdate = Number(quotation.updatedAt) > Number(quotation.createdAt);
+  const updatePrefix = isUpdate ? "-ACTUALIZADO" : "";
+  return `${quotation.number}-COT${ruc}${updatePrefix}.pdf`;
+};
+
 export function DownloadAndShareButtons({
   quotation,
 }: {
   quotation: QuotationClient;
 }) {
-  //WARN: Mejorar legibilidad
-  //
-  const date = Intl.DateTimeFormat("es-PE")
-    .format(new Date(quotation.updatedAt))
-    .replace(/\//g, "-");
-  const ruc = quotation.customer.name
-    ? `-${quotation.customer.name.replace(/\./g, "").split(" ").join("-")}`
-    : `-${date}-SIN-RUC`;
-  const diferenceTime =
-    Number(quotation.updatedAt) - Number(quotation.createdAt);
-  const isUpdate = diferenceTime > 0;
+  const pdfFileName = getPdfFilename(quotation);
 
-  const pdfFileName = `${quotation.number}-COT${ruc}${
-    isUpdate ? "-ACTUALIZADO" : ""
-  }.pdf`;
-
-  const documentQuotationPdf = () => {
-    const documentDefinition = generateQuotationPdf(quotation);
-    return pdfMake.createPdf(documentDefinition);
-  };
-
-  const handleShare = async () => {
-    // 		// Comprobar si el navegador admite la API navigator.share
+  const handleSharePdf = async () => {
+    // Comprobar si el navegador admite la API navigator.share
     if (!navigator.share) {
       console.log("Share api no supported");
       return;
     }
 
-    documentQuotationPdf().getBlob(
-      async (pdfBlob) => {
-        // Usar la API navigator.share para compartir el Blob del PDF
-        try {
-          await navigator.share({
-            files: [
-              new File([pdfBlob], pdfFileName, {
-                type: "application/pdf",
-              }),
-            ],
-            title: `Cotización ${quotation.number}`,
-            text: "¡Echa un vistazo a esta cotización!",
-          });
-        } catch (error) {
-          console.log("Error al interntar compartir", error);
-        }
-      },
-      {
-        progressCallback: (progress) => {
-          console.log(progress);
-        },
-      }
-    );
+    const documentDefinition = generateQuotationPdf(quotation);
+    const pdfDoc = pdfMake.createPdf(documentDefinition);
+
+    const blob = await new Promise<Blob>((resolve) => {
+      pdfDoc.getBlob((blob) => resolve(blob));
+    });
+
+    // Usar la API navigator.share para compartir el Blob del PDF
+    try {
+      await navigator.share({
+        files: [
+          new File([blob], pdfFileName, {
+            type: "application/pdf",
+          }),
+        ],
+        title: `Cotización ${quotation.number}`,
+        text: "¡Echa un vistazo a esta cotización!",
+      });
+    } catch (error) {
+      console.log("Error al interntar compartir", error);
+    }
   };
 
   const downloadPdf = () => {
-    // dd.open()
-    documentQuotationPdf().download(pdfFileName);
+    const documentDefinition = generateQuotationPdf(quotation);
+    const pdfDoc = pdfMake.createPdf(documentDefinition);
+    pdfDoc.download(pdfFileName);
   };
 
   return (
@@ -75,7 +74,7 @@ export function DownloadAndShareButtons({
         <span className="hidden lg:block">Descargar</span>
       </Button>
 
-      <Button variant="outline" onClick={handleShare} size={"sm"}>
+      <Button variant="outline" onClick={handleSharePdf} size={"sm"}>
         <ShareIcon size={20} />
         <span className=" hidden lg:block">Compartir</span>
       </Button>
