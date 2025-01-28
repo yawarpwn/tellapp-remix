@@ -1,6 +1,6 @@
 import { fetchQuotaitonByNumber } from "@/lib/data";
 import { deleteQuotation } from "@/lib/actions";
-import { CopyText } from "@/components/quotations/copy-text";
+import { CopyText } from "@/quotations/copy-text";
 import type { Route } from "./+types/quotation-by-number";
 import { Link, redirect } from "react-router";
 import { buttonVariants } from "@/components/ui/button";
@@ -15,9 +15,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DownloadAndShareButtons } from "@/components/quotations/download-and-share-buttons";
-import { DuplicateQuotationButton } from "@/components/quotations/duplicate-quotation-button";
-import { DeleteQuotationButton } from "@/components/quotations/delete-quotation-button";
+import { DownloadAndShareButtons } from "@/quotations/download-and-share-buttons";
+import { DuplicateQuotationButton } from "@/quotations/duplicate-quotation-button";
+import { DeleteQuotationButton } from "@/quotations/delete-quotation-button";
 
 export async function loader({ params }: Route.LoaderArgs) {
   try {

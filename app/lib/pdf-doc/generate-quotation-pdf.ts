@@ -1,5 +1,5 @@
 import { formatDateToLocal, formatNumberToLocal, getIgv } from "@/lib/utils";
-import { type QuotationClient } from "@/lib/types";
+import { type QuotationClient } from "@/types";
 import type { TDocumentDefinitions } from "pdfmake/interfaces";
 import { companyInfo } from "./company-info";
 import { getItemsTable } from "./items-table";

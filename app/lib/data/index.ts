@@ -1,5 +1,6 @@
 import { BASE_URL } from "../constants";
-import type { QuotationClient } from "../types";
+
+import type { DataResponse, QuotationClient, Customer, Product } from "@/types";
 
 export async function fetchQuotations(): Promise<QuotationClient[]> {
   // await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -16,4 +17,32 @@ export async function fetchQuotaitonByNumber(quotationNumber: number) {
   if (!res.ok) throw new Error("Failed to fetch quotations");
   const data = (await res.json()) as QuotationClient;
   return data;
+}
+
+export async function fetchCustomers() {
+  const url = `${BASE_URL}/api/customers`;
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch customers");
+    const data = (await res.json()) as DataResponse<Customer>;
+    return data.items;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function fetchProducts() {
+  const url = `${BASE_URL}/api/products`;
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Failed to fetch products");
+    const data = (await res.json()) as DataResponse<Product>;
+    return data.items;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }

@@ -1,11 +1,9 @@
 import { type ColumnDef } from "@tanstack/react-table";
-import type { QuotationClient } from "@/lib/types";
-import { DeleteQuotationButton } from "@/components/quotations/delete-quotation-button";
+import type { QuotationClient } from "@/types";
 import { getIgv, formatDateToLocal } from "@/lib/utils";
 import { Form } from "react-router";
 import { MoreHorizontal } from "lucide-react";
 import { Link } from "react-router";
-import { ArrowUpDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { Button } from "@/components/ui/button";
@@ -17,8 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "../data-table-column-header";
-import { DeleteButton } from "../delete-button";
+import { DataTableColumnHeader } from "@/components/data-table-column-header";
 
 export const columns: ColumnDef<QuotationClient>[] = [
   {

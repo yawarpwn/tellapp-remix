@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ShareIcon, DownloadIcon } from "lucide-react";
+import { Share2Icon, DownloadIcon } from "lucide-react";
 import { generateQuotationPdf } from "@/lib/pdf-doc/generate-quotation-pdf";
-import type { QuotationClient } from "@/lib/types";
+import type { QuotationClient } from "@/types";
 import * as pdfMake from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts";
 
@@ -75,7 +75,7 @@ export function DownloadAndShareButtons({
       </Button>
 
       <Button variant="outline" onClick={handleSharePdf} size={"sm"}>
-        <ShareIcon size={20} />
+        <Share2Icon size={20} />
         <span className=" hidden lg:block">Compartir</span>
       </Button>
     </>

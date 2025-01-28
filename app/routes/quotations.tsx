@@ -1,7 +1,7 @@
 import { fetchQuotations } from "@/lib/data";
 import type { Route } from "./+types/quotations";
-import { DataTable } from "@/components/quotations/data-table";
-import { columns } from "@/components/quotations/columns";
+import { DataTable } from "@/quotations/data-table";
+import { columns } from "@/quotations/columns";
 
 export async function loader() {
   try {

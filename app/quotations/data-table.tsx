@@ -1,12 +1,6 @@
 import * as React from "react";
-import { Button } from "@/components/ui/button";
-import { DataTablePagination } from "../data-table-pagination";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { DataTablePagination } from "@/components/data-table-pagination";
 import { Input } from "@/components/ui/input";
 import {
   type ColumnDef,
@@ -29,7 +23,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DataTableViewOptions } from "../data-table-view-options";
+import { PlugIcon, PlusIcon } from "lucide-react";
+import { Link } from "react-router";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -69,7 +64,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter number"
           value={(table.getColumn("number")?.getFilterValue() as string) ?? ""}
@@ -78,7 +73,10 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <DataTableViewOptions table={table} />
+        <Link className={buttonVariants()} to="/quotations/create">
+          <PlusIcon />
+          Crear
+        </Link>
         {/* <DropdownMenu> */}
         {/*   <DropdownMenuTrigger asChild> */}
         {/*     <Button variant="outline" className="ml-auto"> */}

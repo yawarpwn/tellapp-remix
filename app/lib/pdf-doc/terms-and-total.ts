@@ -1,4 +1,4 @@
-import { type QuotationClient } from "@/lib/types";
+import { type QuotationClient } from "@/types";
 
 import { getIgv } from "@/lib/utils";
 import type { Content, Table } from "pdfmake/interfaces";

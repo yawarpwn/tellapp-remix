@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-import { type QuotationItem } from "@/lib/types";
+import { type QuotationItem } from "@/types";
 
 export const formatDateToLocal = (
   date: Date,
