@@ -16,7 +16,7 @@ const getCustomerName = (name?: string) => {
   return name.toUpperCase().replace(/\./g, "").replace(/ /, "-");
 };
 
-const getPdfFilename = (quotation: QuotationClient) => {
+const getQuotationPdfName = (quotation: QuotationClient) => {
   const date = formatDate(quotation.updatedAt);
   const ruc = getCustomerName(quotation?.customer?.name) || `-${date}-SIN-RUC`;
   const isUpdate = Number(quotation.updatedAt) > Number(quotation.createdAt);
@@ -29,7 +29,7 @@ export function DownloadAndShareButtons({
 }: {
   quotation: QuotationClient;
 }) {
-  const pdfFileName = getPdfFilename(quotation);
+  const pdfFileName = getQuotationPdfName(quotation);
 
   const handleSharePdf = async () => {
     // Comprobar si el navegador admite la API navigator.share
