@@ -1,3 +1,4 @@
+//ui
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,12 +9,18 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { type Product } from "@/types";
 import { useFuse } from "@/hooks/use-fuse";
-import { type QuotationItem } from "@/types";
 import React, { useState } from "react";
+
+//utils
 import { cn, formatNumberToLocal } from "@/lib/utils";
-import { EmpetyIcon, SearchIcon } from "@/icons";
+
+//types
+import { type Product } from "@/types";
+import { type QuotationItem } from "@/types";
+
+//icons
+import { CircleOffIcon, SearchIcon } from "lucide-react";
 
 function EmpetyHits() {
   return (
@@ -21,7 +28,7 @@ function EmpetyHits() {
       <div className="flex flex-col items-center gap-8">
         <h2 className="text-muted-foreground">Sin Resultados</h2>
         <span className="text-muted">
-          <EmpetyIcon size={86} />
+          <CircleOffIcon size={86} />
         </span>
       </div>
     </div>
@@ -40,8 +47,9 @@ type Props = {
 const initialQuoItem = {
   price: 0,
   qty: 0,
-  unit_size: "",
+  unitSize: "",
   description: "",
+  code: "",
   cost: 0,
   link: "",
 };
@@ -111,7 +119,6 @@ export function CreateEditItemModal(props: Props) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogTitle>Crear Item</DialogTitle>
       <DialogContent
-        showCloseButton={false}
         className={cn(
           "flex  max-w-md flex-col border p-2 py-4 md:p-6",
           hits.length === 0 ? "h-auto" : "h-[95svh] md:h-[90svh]"
@@ -142,7 +149,7 @@ export function CreateEditItemModal(props: Props) {
                     description: hit.item.description,
                     cost: hit.item.cost,
                     price: hit.item.price,
-                    unit_size: hit.item.unitSize,
+                    unitSize: hit.item.unitSize,
                     link: hit.item.link ? hit.item.link : "",
                     qty: 1,
                   });
@@ -223,7 +230,7 @@ export function CreateEditItemModal(props: Props) {
                   type="text"
                   name="unit_size"
                   onChange={handleChangeItem}
-                  defaultValue={quoItem.unit_size}
+                  defaultValue={quoItem.unitSize}
                 />
               </div>
             </div>

@@ -17,8 +17,13 @@ import { useState } from "react";
 //types
 import type { CreateQuotationClient, Customer } from "@/types";
 import type { Route } from "./+types/create-quotation";
+
+//utils
 import { fetchCustomers, fetchProducts } from "@/lib/data";
+
+//components
 import { CustomerPickerDialog } from "@/quotations/customer-pick-dialog";
+import { ItemsQuotationTable } from "@/quotations/items-quotation-table";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const products = await fetchProducts();
@@ -63,6 +68,16 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
   const handleRucBlur = () => {};
 
   const handleSubmit = () => {};
+
+  const addItem = () => {};
+
+  const deleteItem = () => {};
+
+  const editItem = () => {};
+
+  const duplicateItem = () => {};
+
+  const setItems = () => {};
 
   const onPickCustomer = (customer: Customer) => {
     setQuo({
@@ -202,15 +217,15 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
           )}
         </div>
 
-        {/* <QuotationItems */}
-        {/*   products={products} */}
-        {/*   addItem={addItem} */}
-        {/*   items={items} */}
-        {/*   editItem={editItem} */}
-        {/*   deleteItem={deleteItem} */}
-        {/*   duplicateItem={duplicateItem} */}
-        {/*   setItems={setItems} */}
-        {/* /> */}
+        <ItemsQuotationTable
+          products={products}
+          addItem={addItem}
+          items={quo.items}
+          editItem={editItem}
+          deleteItem={deleteItem}
+          duplicateItem={duplicateItem}
+          setItems={setItems}
+        />
         <footer className="flex items-center justify-between">
           <Button disabled={false} type="button" className="px-12" asChild>
             <Link to="/quotations">Cancelar</Link>
