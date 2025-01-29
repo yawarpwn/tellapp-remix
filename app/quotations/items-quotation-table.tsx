@@ -20,70 +20,57 @@ import { ProductCard } from "./product-card";
 interface Props {
   items: QuotationItem[];
   products: Product[];
-  duplicateItem: (item: QuotationItem) => void;
-  setItems: (item: QuotationItem[]) => void;
-  editItem: (id: string, item: Partial<QuotationItem>) => void;
-  deleteItem: (id: string) => void;
-  addItem: (item: Omit<QuotationItem, "id">) => void;
+  onDuplicateItem: (item: QuotationItem) => void;
+  onEditItem: (itemToEdit: QuotationItem) => void;
+  onDeleteItem: (id: string) => void;
+  onAddItem: (item: QuotationItem) => void;
+  onMoveUpItem: (index: number) => void;
+  onMoveDownItem: (index: number) => void;
 }
 
 export function ItemsQuotationTable(props: Props) {
   const {
     products,
     items,
-    duplicateItem,
-    setItems,
-    editItem,
-    deleteItem,
-    addItem,
+    onDuplicateItem,
+    onEditItem,
+    onDeleteItem,
+    onAddItem,
+    onMoveDownItem,
+    onMoveUpItem,
   } = props;
 
-  //Estados
+  //States
   const [seletedProductId, setSelectedProductId] = useState<string | null>(
     null
   );
   const productItem = items.find((item) => item.id == seletedProductId);
-  const [open, setOpen] = useState(false);
+  const [openCreateEditModal, setOpenCreateEditModal] = useState(false);
 
   //functions
-  const closeItemModal = () => setOpen(false);
-  const move = (currentIndex: number, nextIndex: number) => {
-    const newItems = [...items];
-    newItems[currentIndex] = items[nextIndex];
-    newItems[nextIndex] = items[currentIndex];
-    setItems(newItems);
-  };
-
-  const moveUpItem = (index: number) => {
-    if (index > 0) {
-      move(index, index - 1);
-    }
-  };
-
-  const moveDownItem = (index: number) => {
-    if (index < items.length - 1) {
-      move(index, index + 1);
-    }
-  };
+  const closeItemModal = () => setOpenCreateEditModal(false);
 
   const onChangeValue = (
     event: React.ChangeEvent<HTMLInputElement>,
     item: QuotationItem
   ) => {
     const { name, value } = event.target;
+
     if (name == "price" || name == "qty") {
-      editItem(item.id, {
+      onEditItem({
+        ...item,
         [name]: Number(value),
       });
     } else {
-      editItem(item.id, {
+      onEditItem({
+        ...item,
         [name]: value,
       });
     }
   };
 
-  const onEditItem = (id: string) => {
-    setOpen(true);
+  const onOpenCreateEditItemModal = (id: string) => {
+    setOpenCreateEditModal(true);
     setSelectedProductId(id);
   };
 
@@ -92,13 +79,13 @@ export function ItemsQuotationTable(props: Props) {
 
   return (
     <section>
-      {open && (
+      {openCreateEditModal && (
         <CreateEditItemModal
-          open={open}
+          open={openCreateEditModal}
           onClose={closeItemModal}
           products={products}
-          addItem={addItem}
-          editItem={editItem}
+          onAddItem={onAddItem}
+          onEditItem={onEditItem}
           item={productItem}
         />
       )}
@@ -113,7 +100,7 @@ export function ItemsQuotationTable(props: Props) {
           <Button
             type="button"
             onClick={() => {
-              setOpen(true);
+              setOpenCreateEditModal(true);
               setSelectedProductId(null);
             }}
             variant={"secondary"}
@@ -128,15 +115,15 @@ export function ItemsQuotationTable(props: Props) {
           <ul className="flex flex-col gap-4">
             {items.map((item, index) => (
               <ProductCard
-                duplicateItem={duplicateItem}
+                onDuplicateItem={onDuplicateItem}
                 item={item}
                 key={item.id}
-                editItem={editItem}
+                editItem={() => {}}
                 index={index}
-                onEditItem={onEditItem}
-                moveUpItem={moveUpItem}
-                moveDownItem={moveDownItem}
-                deleteItem={deleteItem}
+                onOpenCreateEditItemModal={onOpenCreateEditItemModal}
+                moveUpItem={onMoveDownItem}
+                moveDownItem={onMoveUpItem}
+                onDeleteItem={onDeleteItem}
                 onChangeValue={onChangeValue}
               />
             ))}

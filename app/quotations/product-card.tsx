@@ -15,14 +15,14 @@ interface Props {
   item: QuotationItem;
   moveUpItem: (index: number) => void;
   moveDownItem: (index: number) => void;
-  duplicateItem: (item: QuotationItem) => void;
+  onDuplicateItem: (item: QuotationItem) => void;
   onChangeValue: (
     e: React.ChangeEvent<HTMLInputElement>,
     item: QuotationItem
   ) => void;
   editItem: (id: string, item: Partial<Product>) => void;
-  onEditItem: (id: string) => void;
-  deleteItem: (id: string) => void;
+  onOpenCreateEditItemModal: (id: string) => void;
+  onDeleteItem: (id: string) => void;
   index: number;
 }
 export function ProductCard(props: Props) {
@@ -33,10 +33,10 @@ export function ProductCard(props: Props) {
     editItem,
     moveDownItem,
     index,
-    duplicateItem,
+    onDuplicateItem,
     onChangeValue,
-    onEditItem,
-    deleteItem,
+    onOpenCreateEditItemModal,
+    onDeleteItem,
   } = props;
 
   return (
@@ -47,23 +47,44 @@ export function ProductCard(props: Props) {
             <div className="flex items-center gap-1">
               <Button
                 type="button"
+                variant="outline"
                 size="icon"
                 onClick={() => moveUpItem(index)}
               >
                 <ChevronUp />
               </Button>
-              <Button size="icon" onClick={() => moveDownItem(index)}>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => moveDownItem(index)}
+              >
                 <ChevronDown />
               </Button>
             </div>
             <div className="flex items-center space-x-2">
-              <Button size="icon" onClick={() => duplicateItem(item)}>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => onDuplicateItem(item)}
+              >
                 <FilesIcon />
               </Button>
-              <Button size="icon" onClick={() => onEditItem(item.id)}>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => onOpenCreateEditItemModal(item.id)}
+              >
                 <EditIcon />
               </Button>
-              <Button size="icon" onClick={() => deleteItem(item.id)}>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={() => onDeleteItem(item.id)}
+              >
                 <TrashIcon />
               </Button>
             </div>

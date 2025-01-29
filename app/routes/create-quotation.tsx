@@ -15,7 +15,7 @@ import { StarIcon } from "lucide-react";
 import { useState } from "react";
 
 //types
-import type { CreateQuotationClient, Customer } from "@/types";
+import type { CreateQuotationClient, Customer, QuotationItem } from "@/types";
 import type { Route } from "./+types/create-quotation";
 
 //utils
@@ -69,22 +69,67 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
 
   const handleSubmit = () => {};
 
-  const addItem = () => {};
+  const handleadditem = (item: QuotationItem) => {
+    setQuo({
+      ...quo,
+      items: [...quo.items, item],
+    });
+  };
 
-  const deleteItem = () => {};
+  const handleDeleteItem = (id: string) => {
+    setQuo({
+      ...quo,
+      items: quo.items.filter((item) => item.id !== id),
+    });
+  };
 
-  const editItem = () => {};
+  const handleEditItem = (itemToEdit: QuotationItem) => {
+    setQuo({
+      ...quo,
+      items: quo.items.map((item) => {
+        if (item.id === itemToEdit.id) {
+          return itemToEdit;
+        }
+        return item;
+      }),
+    });
+  };
 
-  const duplicateItem = () => {};
+  const handleDuplicateItem = (item: QuotationItem) => {
+    setQuo({
+      ...quo,
+      items: [...quo.items, { ...item, id: crypto.randomUUID() }],
+    });
+  };
 
-  const setItems = () => {};
-
-  const onPickCustomer = (customer: Customer) => {
+  const handlePickCustomer = (customer: Customer) => {
     setQuo({
       ...quo,
       customerId: customer.id,
       customer,
     });
+  };
+
+  const move = (currentIndex: number, nextIndex: number) => {
+    const newItems = [...quo.items];
+    newItems[currentIndex] = quo.items[nextIndex];
+    newItems[nextIndex] = quo.items[currentIndex];
+    setQuo({
+      ...quo,
+      items: newItems,
+    });
+  };
+
+  const moveUpItem = (index: number) => {
+    if (index > 0) {
+      move(index, index - 1);
+    }
+  };
+
+  const moveDownItem = (index: number) => {
+    if (index < quo.items.length - 1) {
+      move(index, index + 1);
+    }
   };
 
   return (
@@ -93,7 +138,7 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
         <div className="flex justify-end">
           <CustomerPickerDialog
             customers={customers}
-            onCustomerPick={onPickCustomer}
+            onCustomerPick={handlePickCustomer}
             customerId={quo.customerId}
           />
         </div>
@@ -219,12 +264,13 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
 
         <ItemsQuotationTable
           products={products}
-          addItem={addItem}
+          onAddItem={handleadditem}
           items={quo.items}
-          editItem={editItem}
-          deleteItem={deleteItem}
-          duplicateItem={duplicateItem}
-          setItems={setItems}
+          onEditItem={handleEditItem}
+          onDeleteItem={handleDeleteItem}
+          onDuplicateItem={handleDuplicateItem}
+          onMoveDownItem={moveDownItem}
+          onMoveUpItem={moveUpItem}
         />
         <footer className="flex items-center justify-between">
           <Button disabled={false} type="button" className="px-12" asChild>

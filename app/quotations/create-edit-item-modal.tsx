@@ -40,8 +40,8 @@ type Props = {
   products: Product[];
   onClose: () => void;
   item?: QuotationItem;
-  addItem: (item: Omit<QuotationItem, "id">) => void;
-  editItem: (id: string, item: Partial<QuotationItem>) => void;
+  onAddItem: (item: QuotationItem) => void;
+  onEditItem: (itemToEdit: QuotationItem) => void;
 };
 
 const initialQuoItem = {
@@ -55,8 +55,9 @@ const initialQuoItem = {
 };
 
 export function CreateEditItemModal(props: Props) {
-  const { open, onClose, item, addItem, editItem } = props;
+  const { open, onClose, item, onAddItem, onEditItem } = props;
   const { products } = props;
+
   const [quoItem, setQuoItem] = useState<
     Omit<QuotationItem, "id"> | QuotationItem
   >(item ?? initialQuoItem);
@@ -101,9 +102,14 @@ export function CreateEditItemModal(props: Props) {
     event.preventDefault();
     //edit
     if (item) {
-      editItem(item.id, quoItem);
+      console.log("edit Item");
+      onEditItem(quoItem as QuotationItem);
     } else {
-      addItem(quoItem);
+      console.log("create Item");
+      onAddItem({
+        ...quoItem,
+        id: crypto.randomUUID(),
+      });
     }
     onClose();
   };
