@@ -46,3 +46,21 @@ export async function fetchProducts() {
     return null;
   }
 }
+
+export async function fetchCustomerByRuc(ruc: string) {
+  if (ruc.length !== 11) {
+    console.log("ruc must have 11 characters");
+    return null;
+  }
+  const customer = {
+    ruc: "20610555536",
+    name: "TELL SENALES  SOCIEDAD ANONIMA CERRADa",
+    address: "Maquinaria 325 - Callao",
+  };
+
+  setTimeout(() => console.log("resolved"), 1000);
+
+  return new Promise((resolve) => {
+    resolve(customer);
+  });
+}

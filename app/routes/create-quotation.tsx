@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Form, Link, redirect } from "react-router";
 import { useSubmit } from "react-router";
 
 //ui components
@@ -46,12 +46,16 @@ export async function action({ request }: Route.ActionArgs) {
   const quotationString = formData.get("quotation") as string;
   const quotation = JSON.parse(quotationString);
   const { insertedNumber } = await createQuotationAction(quotation);
-  console.log(insertedNumber);
+  return redirect("/quotations");
   // const entries = Object.fromEntries(formData.entries());
 }
 
-export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
+export default function CreateQuotation({
+  loaderData,
+  actionData,
+}: Route.ComponentProps) {
   const { products, customers } = loaderData;
+  console.log(actionData);
 
   const [quo, setQuo] = useState<CreateQuotationClient>({
     deadline: 1,
@@ -150,6 +154,8 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
     }
   };
 
+  const hasItems = quo.items.length !== 0;
+
   return (
     <>
       <header className="flex justify-end">
@@ -167,29 +173,31 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
           <div className="col-span-4 grid flex-grow gap-2 md:col-span-3">
             <Label htmlFor="ruc">Ruc</Label>
             <div className="relative">
-              <Input
-                required
-                id="ruc"
-                value={quo.customer?.ruc ?? ""}
-                type="number"
-                name="ruc"
-                disabled={pendingRuc}
-                onChange={(e) =>
-                  setQuo({
-                    ...quo,
-                    customer: { ...quo.customer, ruc: e.target.value },
-                  })
-                }
-              />
-              <Button
-                size="icon"
-                type="button"
-                onClick={handleRucBlur}
-                className="absolute right-1.5 top-1 size-7"
-                variant="secondary"
-              >
-                <SearchIcon className="size-4" />
-              </Button>
+              <Form method="post" action={`/quotations/search-by-ruc`}>
+                <Input
+                  required
+                  id="ruc"
+                  value={quo.customer?.ruc ?? ""}
+                  type="number"
+                  name="ruc"
+                  disabled={pendingRuc}
+                  onChange={(e) =>
+                    setQuo({
+                      ...quo,
+                      customer: { ...quo.customer, ruc: e.target.value },
+                    })
+                  }
+                />
+                <Button
+                  size="icon"
+                  type="submit"
+                  onClick={handleRucBlur}
+                  className="absolute right-1.5 top-1 size-7"
+                  variant="secondary"
+                >
+                  <SearchIcon className="size-4" />
+                </Button>
+              </Form>
             </div>
           </div>
           {/* Deadline  */}
@@ -312,7 +320,7 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
           <Button
             onClick={handleSubmit}
             className="px-12"
-            // disabled={pending || !hastItems || quo.deadline === 0}
+            disabled={pending || !hasItems || quo.deadline === 0}
             type="submit"
           >
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
