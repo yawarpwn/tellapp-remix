@@ -227,14 +227,14 @@ export function CreateEditItemModal(props: Props) {
               <div className="grid w-full gap-2">
                 <label
                   className="text-xs text-muted-foreground"
-                  htmlFor="unit_size"
+                  htmlFor="unitSize"
                 >
                   Unidad/Medida
                 </label>
                 <Input
-                  id="unit_size"
+                  id="unitSize"
                   type="text"
-                  name="unit_size"
+                  name="unitSize"
                   onChange={handleChangeItem}
                   defaultValue={quoItem.unitSize}
                 />
