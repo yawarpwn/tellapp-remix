@@ -16,11 +16,7 @@ interface Props {
   moveUpItem: (index: number) => void;
   moveDownItem: (index: number) => void;
   onDuplicateItem: (item: QuotationItem) => void;
-  onChangeValue: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    item: QuotationItem
-  ) => void;
-  editItem: (id: string, item: Partial<Product>) => void;
+  onEditItem: (itemToEdit: QuotationItem) => void;
   onOpenCreateEditItemModal: (id: string) => void;
   onDeleteItem: (id: string) => void;
   index: number;
@@ -30,11 +26,10 @@ export function ProductCard(props: Props) {
   const {
     item,
     moveUpItem,
-    editItem,
+    onEditItem,
     moveDownItem,
     index,
     onDuplicateItem,
-    onChangeValue,
     onOpenCreateEditItemModal,
     onDeleteItem,
   } = props;
@@ -94,11 +89,12 @@ export function ProductCard(props: Props) {
             <div className="relative flex min-h-[100px]  w-full flex-col gap-4">
               <textarea
                 className={cn(
-                  "absolute inset-0 z-20 resize-none border-none outline-none",
+                  "absolute inset-0 z-20 resize-none border-none outline-none bg-background",
                   !isEditingDescription && "hidden"
                 )}
                 onChange={(event) => {
-                  editItem(item.id, {
+                  onEditItem({
+                    ...item,
                     description: event.target.value,
                   });
                 }}
@@ -130,14 +126,24 @@ export function ProductCard(props: Props) {
             <input
               className="col-span-4 rounded  border border-transparent bg-zinc-800 px-2 py-1 text-xs outline-none focus:border-primary"
               type="text"
-              onChange={(e) => onChangeValue(e, item)}
+              onChange={(e) => {
+                onEditItem({
+                  ...item,
+                  unitSize: e.target.value,
+                });
+              }}
               name="unit_size"
               value={item.unitSize}
             />
             <input
               className="col-span-2 rounded border border-transparent bg-transparent bg-zinc-800 px-2 py-1 outline-none focus:border-primary"
               type="number"
-              onChange={(e) => onChangeValue(e, item)}
+              onChange={(e) => {
+                onEditItem({
+                  ...item,
+                  qty: Number(e.target.value),
+                });
+              }}
               name="qty"
               value={item.qty}
             />
@@ -146,7 +152,12 @@ export function ProductCard(props: Props) {
               <input
                 className="w-full rounded border border-transparent bg-zinc-800 px-2 py-1 outline-none focus:border-primary"
                 type="number"
-                onChange={(e) => onChangeValue(e, item)}
+                onChange={() => {
+                  onEditItem({
+                    ...item,
+                    price: Number(item.price),
+                  });
+                }}
                 name="price"
                 value={item.price}
               />

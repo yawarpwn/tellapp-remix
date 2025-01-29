@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { useSubmit } from "react-router";
 
 //ui components
 import { Label } from "@/components/ui/label";
@@ -24,6 +25,7 @@ import { fetchCustomers, fetchProducts } from "@/lib/data";
 //components
 import { CustomerPickerDialog } from "@/quotations/customer-pick-dialog";
 import { ItemsQuotationTable } from "@/quotations/items-quotation-table";
+import { createQuotationAction } from "@/lib/actions";
 
 export async function loader({ context }: Route.LoaderArgs) {
   const products = await fetchProducts();
@@ -37,6 +39,15 @@ export async function loader({ context }: Route.LoaderArgs) {
     products,
     customers,
   };
+}
+
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const quotationString = formData.get("quotation") as string;
+  const quotation = JSON.parse(quotationString);
+  const { insertedNumber } = await createQuotationAction(quotation);
+  console.log(insertedNumber);
+  // const entries = Object.fromEntries(formData.entries());
 }
 
 export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
@@ -53,8 +64,9 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
       id: "",
       name: "",
       ruc: "",
+      phone: undefined,
       address: "",
-      phone: "",
+      email: undefined,
       isRegular: false,
     },
   });
@@ -63,11 +75,17 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
   const [pending, setPending] = useState(false);
   const pendingRuc = false;
 
-  const handleInputChange = () => {};
+  const submit = useSubmit();
 
   const handleRucBlur = () => {};
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    const formData = new FormData();
+    formData.append("quotation", JSON.stringify(quo));
+    submit(formData, {
+      method: "post",
+    });
+  };
 
   const handleadditem = (item: QuotationItem) => {
     setQuo({
@@ -156,7 +174,12 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
                 type="number"
                 name="ruc"
                 disabled={pendingRuc}
-                onChange={handleInputChange}
+                onChange={(e) =>
+                  setQuo({
+                    ...quo,
+                    customer: { ...quo.customer, ruc: e.target.value },
+                  })
+                }
               />
               <Button
                 size="icon"
@@ -193,7 +216,12 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
               type="text"
               value={quo.customer?.name ?? ""}
               disabled={pendingRuc}
-              onChange={() => {}}
+              onChange={(e) => {
+                setQuo({
+                  ...quo,
+                  customer: { ...quo.customer, name: e.target.value },
+                });
+              }}
             />
           </div>
           {/* Address */}
@@ -203,9 +231,14 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
               id="address"
               name="address"
               type="text"
-              value={""}
+              value={quo?.customer?.address ?? ""}
               disabled={pendingRuc}
-              onChange={() => {}}
+              onChange={(e) => {
+                setQuo({
+                  ...quo,
+                  customer: { ...quo.customer, address: e.target.value },
+                });
+              }}
             />
           </div>
 

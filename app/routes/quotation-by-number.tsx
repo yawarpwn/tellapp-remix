@@ -1,5 +1,5 @@
 import { fetchQuotaitonByNumber } from "@/lib/data";
-import { deleteQuotation } from "@/lib/actions";
+import { deleteQuotationAction } from "@/lib/actions";
 import { CopyText } from "@/quotations/copy-text";
 import type { Route } from "./+types/quotation-by-number";
 import { Link, redirect } from "react-router";
@@ -22,7 +22,7 @@ import { DeleteQuotationButton } from "@/quotations/delete-quotation-button";
 export async function loader({ params }: Route.LoaderArgs) {
   try {
     const quotation = await fetchQuotaitonByNumber(+params.number);
-
+    console.log(quotation);
     return {
       quotation,
     };

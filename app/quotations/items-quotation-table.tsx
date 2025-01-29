@@ -50,25 +50,6 @@ export function ItemsQuotationTable(props: Props) {
   //functions
   const closeItemModal = () => setOpenCreateEditModal(false);
 
-  const onChangeValue = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    item: QuotationItem
-  ) => {
-    const { name, value } = event.target;
-
-    if (name == "price" || name == "qty") {
-      onEditItem({
-        ...item,
-        [name]: Number(value),
-      });
-    } else {
-      onEditItem({
-        ...item,
-        [name]: value,
-      });
-    }
-  };
-
   const onOpenCreateEditItemModal = (id: string) => {
     setOpenCreateEditModal(true);
     setSelectedProductId(id);
@@ -118,13 +99,12 @@ export function ItemsQuotationTable(props: Props) {
                 onDuplicateItem={onDuplicateItem}
                 item={item}
                 key={item.id}
-                editItem={() => {}}
+                onEditItem={onEditItem}
                 index={index}
                 onOpenCreateEditItemModal={onOpenCreateEditItemModal}
-                moveUpItem={onMoveDownItem}
-                moveDownItem={onMoveUpItem}
+                moveUpItem={onMoveUpItem}
+                moveDownItem={onMoveDownItem}
                 onDeleteItem={onDeleteItem}
-                onChangeValue={onChangeValue}
               />
             ))}
           </ul>

@@ -1,7 +1,7 @@
-import { fetchQuotaitonByNumber } from "../data";
-import { BASE_URL } from "../constants";
+import { fetchQuotaitonByNumber } from "@/lib/data";
+import { BASE_URL } from "@/lib/constants";
 
-export async function deleteQuotation(quotationNumber: number) {
+export async function deleteQuotationAction(quotationNumber: number) {
   const url = `${BASE_URL}/api/quotations/${quotationNumber}`;
   const res = await fetch(url, {
     method: "DELETE",
@@ -10,7 +10,7 @@ export async function deleteQuotation(quotationNumber: number) {
   return res.json();
 }
 
-export async function createQuotation(newQuotation: Object) {
+export async function createQuotationAction(newQuotation: Object) {
   const url = `${BASE_URL}/api/quotations`;
   const res = await fetch(url, {
     method: "POST",
@@ -18,14 +18,14 @@ export async function createQuotation(newQuotation: Object) {
   });
 
   if (!res.ok) throw new Error("Failed to create quotation");
-  return res.json();
+  return (await res.json()) as { insertedNumber: number };
 }
 
-export async function duplicateQuotation(quotationNumber: number) {
+export async function duplicateQuotationAction(quotationNumber: number) {
   const quotation = await fetchQuotaitonByNumber(quotationNumber);
-  const createdQuotation = await createQuotation(quotation);
+  const createdQuotation = await createQuotationAction(quotation);
 
   if (!createdQuotation) throw new Error("Failed to duplicate quotation");
 
-  return { number: createdQuotation.data.insertedNumber };
+  return { number: createdQuotation.insertedNumber };
 }

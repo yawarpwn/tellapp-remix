@@ -18,6 +18,7 @@ interface Props {
   customerId?: string | null;
   onCustomerPick: (customer: Customer) => void;
 }
+
 export function CustomerPickerDialog({
   customers,
   customerId,
