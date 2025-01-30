@@ -5,6 +5,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigate,
+  useNavigation,
 } from "react-router";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -27,6 +29,8 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const navigation = useNavigation();
+  console.log(navigation.location);
   return (
     <html lang="en" className="dark">
       <head>
@@ -36,6 +40,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="relative min-h-dvh overflow-x-hidden font-sans antialiased font-['inter',san-serif]">
+        {navigation.location ? "...loading" : undefined}
         {children}
         <ScrollRestoration />
         <Scripts />

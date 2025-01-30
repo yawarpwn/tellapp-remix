@@ -2,23 +2,36 @@ import { fetchQuotaitonByNumber } from "@/lib/data";
 import type { Route } from "./+types/quotation-by-number";
 import ViewQuotation from "@/quotations/view-quotation";
 import { QuotationSkeleton } from "@/components/skeletons/quotations";
-import { Await } from "react-router";
 
 import React from "react";
 
 export async function loader({ params }: Route.LoaderArgs) {
-  return {
-    quotationPromise: fetchQuotaitonByNumber(+params.number),
-  };
+  return await fetchQuotaitonByNumber(+params.number);
+}
+
+export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
+  const quotation = await serverLoader();
+  return { quotation };
+}
+
+export function HydrateFallback() {
+  console.log("hydrateFallback");
+  return <p>Skeleton rendered during SSR</p>; // (2)
 }
 
 export default function QuotationByNumber({
   loaderData,
 }: Route.ComponentProps) {
-  const { quotationPromise } = loaderData;
+  const { quotation } = loaderData;
+  console.log(quotation);
+  // const { quotationPromise } = loaderData;
   return (
-    <React.Suspense fallback={<QuotationSkeleton />}>
-      <ViewQuotation quotationPromise={quotationPromise} />;
-    </React.Suspense>
+    <div>
+      MUUU
+      {/* <React.Suspense fallback={<QuotationSkeleton />}> */}
+      {/*   <h1>noo meee</h1> */}
+      {/*   <ViewQuotation quotationPromise={quotationPromise} />; */}
+      {/* </React.Suspense> */}
+    </div>
   );
 }
