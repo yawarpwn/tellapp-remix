@@ -6,7 +6,7 @@ import { BASE_URL } from "@/lib/constants";
 import type { Customer } from "@/types";
 
 export async function deleteQuotationAction(quotationNumber: number) {
-  const url = `${BASE_URL}/api/quotation/${quotationNumber}`;
+  const url = `${BASE_URL}/api/quotations/${quotationNumber}`;
   const data = await fetchData<Customer>(url, {
     method: "DELETE",
   });

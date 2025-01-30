@@ -8,7 +8,6 @@ export function DeleteQuotationButton({
   quotationNumber: number;
 }) {
   const deleteFetcher = useFetcher();
-  console.log(deleteFetcher.data);
 
   return (
     <deleteFetcher.Form

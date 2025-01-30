@@ -26,6 +26,7 @@ import { fetchCustomers, fetchProducts } from "@/lib/data";
 import { CustomerPickerDialog } from "@/quotations/customer-pick-dialog";
 import { ItemsQuotationTable } from "@/quotations/items-quotation-table";
 import { createQuotationAction } from "@/lib/actions";
+import { toast } from "sonner";
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
@@ -150,17 +151,24 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
 
   useEffect(() => {
     if (fetcher.data) {
-      // alert("Customer fond");
-      setQuo({
-        ...quo,
-        customer: {
-          ...quo.customer,
-          ruc: fetcher.data.ruc,
-          name: fetcher.data.name,
-          address: fetcher.data.address,
-        },
-        customerId: fetcher.data.id,
-      });
+      if (fetcher.data.success) {
+        toast("Cliente encontrado", {
+          description: <div>Que fueee</div>,
+        });
+
+        setQuo({
+          ...quo,
+          customer: {
+            ...quo.customer,
+            ruc: fetcher.data.data.ruc,
+            name: fetcher.data.data.name,
+            address: fetcher.data.data.address,
+          },
+          customerId: fetcher.data.data.id,
+        });
+      } else {
+        toast.error(fetcher.data.error);
+      }
     }
   }, [fetcher.data]);
 

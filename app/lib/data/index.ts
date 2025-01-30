@@ -1,9 +1,9 @@
-import { BASE_URL } from "../constants";
+import { BASE_URL } from "@/lib/constants";
 
 import type { DataResponse, QuotationClient, Customer, Product } from "@/types";
-import { fetchData } from "../utils";
-import { getCompanybyRuc } from "../services/sunat";
-import { HTTPRequestError } from "../errors";
+import { fetchData } from "@/lib/utils";
+import { getCompanybyRuc } from "@/lib/services/sunat";
+import { HTTPRequestError } from "@/lib/errors";
 
 export async function fetchQuotations(): Promise<QuotationClient[]> {
   const url = `${BASE_URL}/api/quotations`;
@@ -13,46 +13,34 @@ export async function fetchQuotations(): Promise<QuotationClient[]> {
 
 export async function fetchQuotaitonByNumber(quotationNumber: number) {
   const url = `${BASE_URL}/api/quotations/${quotationNumber}`;
-  const res = await fetch(`${BASE_URL}/api/quotations/${quotationNumber}`);
-  if (!res.ok) throw new Error("Failed to fetch quotations");
-  const data = (await res.json()) as QuotationClient;
+  const data = await fetchData<QuotationClient>(url);
   return data;
 }
 
-export async function fetchCustomers() {
+export async function fetchCustomers(): Promise<Customer[]> {
   const url = `${BASE_URL}/api/customers`;
-
-  try {
-    const data = await fetchData<DataResponse<Customer>>(url);
-    return data.items;
-  } catch (error) {
-    if (error instanceof HTTPRequestError) {
-      console.log(error);
-    }
-    return null;
-  }
+  const data = await fetchData<DataResponse<Customer>>(url);
+  return data.items;
 }
 
-export async function fetchProducts() {
+export async function fetchProducts(): Promise<Product[]> {
   const url = `${BASE_URL}/api/products`;
-
-  try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Failed to fetch products");
-    const data = (await res.json()) as DataResponse<Product>;
-    return data.items;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
+  const data = await fetchData<DataResponse<Product>>(url);
+  return data.items;
 }
+
+type CustomerFromService = {
+  id?: string;
+  ruc: string;
+  name: string;
+  address?: string;
+};
 
 export async function fetchCustomerByRuc(
   ruc: string
-): Promise<Customer | null> {
+): Promise<CustomerFromService> {
   if (ruc.length !== 11) {
-    console.log("ruc must have 11 characters");
-    return null;
+    throw new HTTPRequestError("Ruc must have 11 characters");
   }
 
   const url = `${BASE_URL}/api/customers/${ruc}`;
@@ -60,20 +48,31 @@ export async function fetchCustomerByRuc(
   const customerFromDatabase = await fetchData<Customer>(url);
 
   if (customerFromDatabase) {
-    return customerFromDatabase;
+    return {
+      id: customerFromDatabase.id,
+      ruc: customerFromDatabase.ruc,
+      name: customerFromDatabase.name,
+      address: customerFromDatabase.address ?? undefined,
+    };
   }
 
   const customerFromSunat = await getCompanybyRuc(ruc);
-
-  const customer = {
-    ruc: "20610555536",
-    name: "TELL SENALES  SOCIEDAD ANONIMA CERRADa",
-    address: "Maquinaria 325 - Callao",
+  return {
+    id: undefined,
+    ruc: customerFromSunat.ruc,
+    name: customerFromSunat.company,
+    address: customerFromSunat.address,
   };
 
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(customerFromDatabase);
-    }, 1000);
-  });
+  // const customer = {
+  //   ruc: "20610555536",
+  //   name: "TELL SENALES  SOCIEDAD ANONIMA CERRADa",
+  //   address: "Maquinaria 325 - Callao",
+  // };
+  //
+  // return new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(customerFromDatabase);
+  //   }, 1000);
+  // });
 }
