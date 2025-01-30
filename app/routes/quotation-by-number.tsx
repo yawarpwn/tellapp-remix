@@ -2,6 +2,7 @@ import { fetchQuotaitonByNumber } from "@/lib/data";
 import type { Route } from "./+types/quotation-by-number";
 import ViewQuotation from "@/quotations/view-quotation";
 import { QuotationSkeleton } from "@/components/skeletons/quotations";
+import { Await } from "react-router";
 
 import React from "react";
 

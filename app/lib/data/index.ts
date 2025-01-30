@@ -5,6 +5,12 @@ import { fetchData } from "@/lib/utils";
 import { getCompanybyRuc } from "@/lib/services/sunat";
 import { HTTPRequestError } from "@/lib/errors";
 
+async function fakePromise(time = 1000) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+}
+
 export async function fetchQuotations(): Promise<QuotationClient[]> {
   const url = `${BASE_URL}/api/quotations`;
   const data = await fetchData<DataResponse<QuotationClient>>(url);
@@ -12,18 +18,21 @@ export async function fetchQuotations(): Promise<QuotationClient[]> {
 }
 
 export async function fetchQuotaitonByNumber(quotationNumber: number) {
+  await fakePromise(3000);
   const url = `${BASE_URL}/api/quotations/${quotationNumber}`;
   const data = await fetchData<QuotationClient>(url);
   return data;
 }
 
 export async function fetchCustomers(): Promise<Customer[]> {
+  await fakePromise(2000);
   const url = `${BASE_URL}/api/customers`;
   const data = await fetchData<DataResponse<Customer>>(url);
   return data.items;
 }
 
 export async function fetchProducts(): Promise<Product[]> {
+  await fakePromise(2000);
   const url = `${BASE_URL}/api/products`;
   const data = await fetchData<DataResponse<Product>>(url);
   return data.items;

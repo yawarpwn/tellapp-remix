@@ -10,20 +10,21 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import React, { useState } from "react";
 import { DialogTitle } from "@radix-ui/react-dialog";
 
 interface Props {
-  customers: Customer[];
+  customersPromise: Promise<Customer[]>;
   customerId?: string | null;
   onCustomerPick: (customer: Customer) => void;
 }
 
 export function CustomerPickerDialog({
-  customers,
+  customersPromise,
   customerId,
   onCustomerPick,
 }: Props) {
+  const customers = React.use(customersPromise);
   const [open, setOpen] = useState(false);
   return (
     <>

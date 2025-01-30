@@ -13,7 +13,7 @@ import { Loader2, Loader2Icon, SearchIcon } from "lucide-react";
 import { StarIcon } from "lucide-react";
 
 //hooks
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 //types
 import type { CreateQuotationClient, Customer, QuotationItem } from "@/types";
@@ -27,29 +27,33 @@ import { CustomerPickerDialog } from "@/quotations/customer-pick-dialog";
 import { ItemsQuotationTable } from "@/quotations/items-quotation-table";
 import { createQuotationAction } from "@/lib/actions";
 import { toast } from "sonner";
+import { HTTPRequestError } from "@/lib/errors";
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const quotation = JSON.parse(formData.get("quotation") as string);
-  await createQuotationAction(quotation);
-  return redirect("/quotations");
-}
-export async function loader({ context }: Route.LoaderArgs) {
-  const products = await fetchProducts();
-  const customers = await fetchCustomers();
+  try {
+    await createQuotationAction(quotation);
+    return redirect("/quotations");
+  } catch (error) {
+    if (error instanceof HTTPRequestError) {
+      return { error: error.message };
+    }
 
-  if (!products || !customers) {
-    return new Response("Error loading data", { status: 500 });
+    return {
+      error: "Error creating quotation",
+    };
   }
-
+}
+export async function loader(_: Route.LoaderArgs) {
   return {
-    products,
-    customers,
+    productsPromise: fetchProducts(),
+    customersPromise: fetchCustomers(),
   };
 }
 
 export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
-  const { products, customers } = loaderData;
+  const { productsPromise, customersPromise } = loaderData;
 
   const [quo, setQuo] = useState<CreateQuotationClient>({
     deadline: 1,
@@ -178,11 +182,13 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
     <>
       <header className="flex justify-end">
         <div className="flex justify-end">
-          <CustomerPickerDialog
-            customers={customers}
-            onCustomerPick={handlePickCustomer}
-            customerId={quo.customerId}
-          />
+          <React.Suspense fallback="cargando...">
+            <CustomerPickerDialog
+              customersPromise={customersPromise}
+              onCustomerPick={handlePickCustomer}
+              customerId={quo.customerId}
+            />
+          </React.Suspense>
         </div>
       </header>
       <article className="mt-4 flex flex-col gap-4 ">
@@ -328,16 +334,18 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
           )}
         </div>
 
-        <ItemsQuotationTable
-          products={products}
-          onAddItem={handleadditem}
-          items={quo.items}
-          onEditItem={handleEditItem}
-          onDeleteItem={handleDeleteItem}
-          onDuplicateItem={handleDuplicateItem}
-          onMoveDownItem={moveDownItem}
-          onMoveUpItem={moveUpItem}
-        />
+        <React.Suspense fallback="...cargando">
+          <ItemsQuotationTable
+            productsPromise={productsPromise}
+            onAddItem={handleadditem}
+            items={quo.items}
+            onEditItem={handleEditItem}
+            onDeleteItem={handleDeleteItem}
+            onDuplicateItem={handleDuplicateItem}
+            onMoveDownItem={moveDownItem}
+            onMoveUpItem={moveUpItem}
+          />
+        </React.Suspense>
         <footer className="flex items-center justify-between">
           <Button disabled={false} type="button" className="px-12" asChild>
             <Link to="/quotations">Cancelar</Link>

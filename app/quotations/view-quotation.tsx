@@ -18,12 +18,13 @@ import { DeleteQuotationButton } from "@/quotations/delete-quotation-button";
 import type { QuotationClient } from "@/types";
 import React from "react";
 
-export default function ViewQuotation({
-  quotationPromise,
-}: {
+type Props = {
   quotationPromise: Promise<QuotationClient>;
-}) {
+};
+export default function ViewQuotation({ quotationPromise }: Props) {
+  // const quotation = quotationPromise;
   const quotation = React.use(quotationPromise);
+  console.log({ quotation });
 
   const { formatedIgv, formatedTotal, formatedSubTotal } = getIgv(
     quotation.items

@@ -19,7 +19,7 @@ import { ProductCard } from "./product-card";
 
 interface Props {
   items: QuotationItem[];
-  products: Product[];
+  productsPromise: Promise<Product[]>;
   onDuplicateItem: (item: QuotationItem) => void;
   onEditItem: (itemToEdit: QuotationItem) => void;
   onDeleteItem: (id: string) => void;
@@ -30,7 +30,7 @@ interface Props {
 
 export function ItemsQuotationTable(props: Props) {
   const {
-    products,
+    productsPromise,
     items,
     onDuplicateItem,
     onEditItem,
@@ -40,6 +40,7 @@ export function ItemsQuotationTable(props: Props) {
     onMoveUpItem,
   } = props;
 
+  const products = React.use(productsPromise);
   //States
   const [seletedProductId, setSelectedProductId] = useState<string | null>(
     null
