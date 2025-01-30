@@ -19,12 +19,12 @@ import type { QuotationClient } from "@/types";
 import React from "react";
 
 type Props = {
-  quotationPromise: Promise<QuotationClient>;
+  quotation: QuotationClient;
 };
-export default function ViewQuotation({ quotationPromise }: Props) {
+export default function ViewQuotation({ quotation }: Props) {
   // const quotation = quotationPromise;
-  const quotation = React.use(quotationPromise);
-  console.log({ quotation });
+  // const quotation = React.use(quotationPromise);
+  // console.log({ quotation });
 
   const { formatedIgv, formatedTotal, formatedSubTotal } = getIgv(
     quotation.items

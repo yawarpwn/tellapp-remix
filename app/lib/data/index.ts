@@ -18,7 +18,6 @@ export async function fetchQuotations(): Promise<QuotationClient[]> {
 }
 
 export async function fetchQuotaitonByNumber(quotationNumber: number) {
-  await fakePromise(3000);
   const url = `${BASE_URL}/api/quotations/${quotationNumber}`;
   const data = await fetchData<QuotationClient>(url);
   return data;
