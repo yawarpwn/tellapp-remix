@@ -6,8 +6,7 @@ export async function action({ context, params, request }: Route.ActionArgs) {
   const formData = await request.formData();
   const ruc = formData.get("ruc") as string;
   const customer = await fetchCustomerByRuc(ruc);
-  console.log(customer);
-  return {
-    customer,
-  };
+  return customer;
 }
+
+export type SearchAction = typeof action;

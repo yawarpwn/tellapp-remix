@@ -2,7 +2,7 @@ import { fetchQuotaitonByNumber } from "@/lib/data";
 import { deleteQuotationAction } from "@/lib/actions";
 import { CopyText } from "@/quotations/copy-text";
 import type { Route } from "./+types/quotation-by-number";
-import { Link, redirect } from "react-router";
+import { Link, redirect, useFetcher } from "react-router";
 import { buttonVariants } from "@/components/ui/button";
 import { EditIcon, ExternalLinkIcon } from "lucide-react";
 import { formatDateToLocal, formatNumberToLocal, getIgv } from "@/lib/utils";
@@ -33,6 +33,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export default function quotationByNumberPage({
   loaderData,
+  actionData,
 }: Route.ComponentProps) {
   const { quotation } = loaderData;
 
@@ -53,7 +54,7 @@ export default function quotationByNumberPage({
           </Link>
           <DownloadAndShareButtons quotation={quotation} />
           <DuplicateQuotationButton />
-          <DeleteQuotationButton />
+          <DeleteQuotationButton quotationNumber={quotation.number} />
           {/* {quotation.customerId && ( */}
           {/*   <IsRegularButton */}
           {/*     id={quotation.customerId} */}

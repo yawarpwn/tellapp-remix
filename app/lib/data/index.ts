@@ -1,13 +1,13 @@
 import { BASE_URL } from "../constants";
 
 import type { DataResponse, QuotationClient, Customer, Product } from "@/types";
+import { fetchData } from "../utils";
+import { getCompanybyRuc } from "../services/sunat";
+import { HTTPRequestError } from "../errors";
 
 export async function fetchQuotations(): Promise<QuotationClient[]> {
-  // await new Promise((resolve) => setTimeout(resolve, 5000));
-  // console.log("resolved");
-  const res = await fetch(`${BASE_URL}/api/quotations`);
-  if (!res.ok) throw new Error("Failed to fetch quotations");
-  const data = (await res.json()) as { items: QuotationClient[] };
+  const url = `${BASE_URL}/api/quotations`;
+  const data = await fetchData<DataResponse<QuotationClient>>(url);
   return data.items;
 }
 
@@ -23,12 +23,12 @@ export async function fetchCustomers() {
   const url = `${BASE_URL}/api/customers`;
 
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Failed to fetch customers");
-    const data = (await res.json()) as DataResponse<Customer>;
+    const data = await fetchData<DataResponse<Customer>>(url);
     return data.items;
   } catch (error) {
-    console.log(error);
+    if (error instanceof HTTPRequestError) {
+      console.log(error);
+    }
     return null;
   }
 }
@@ -47,20 +47,33 @@ export async function fetchProducts() {
   }
 }
 
-export async function fetchCustomerByRuc(ruc: string) {
+export async function fetchCustomerByRuc(
+  ruc: string
+): Promise<Customer | null> {
   if (ruc.length !== 11) {
     console.log("ruc must have 11 characters");
     return null;
   }
+
+  const url = `${BASE_URL}/api/customers/${ruc}`;
+  //Search customer in Database
+  const customerFromDatabase = await fetchData<Customer>(url);
+
+  if (customerFromDatabase) {
+    return customerFromDatabase;
+  }
+
+  const customerFromSunat = await getCompanybyRuc(ruc);
+
   const customer = {
     ruc: "20610555536",
     name: "TELL SENALES  SOCIEDAD ANONIMA CERRADa",
     address: "Maquinaria 325 - Callao",
   };
 
-  setTimeout(() => console.log("resolved"), 1000);
-
   return new Promise((resolve) => {
-    resolve(customer);
+    setTimeout(() => {
+      resolve(customerFromDatabase);
+    }, 1000);
   });
 }

@@ -1,4 +1,4 @@
-import { Form, Link, redirect } from "react-router";
+import { Form, Link, redirect, useFetcher } from "react-router";
 import { useSubmit } from "react-router";
 
 //ui components
@@ -9,11 +9,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 
 //Icons
-import { Loader2, SearchIcon } from "lucide-react";
+import { Loader2, Loader2Icon, SearchIcon } from "lucide-react";
 import { StarIcon } from "lucide-react";
 
 //hooks
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 //types
 import type { CreateQuotationClient, Customer, QuotationItem } from "@/types";
@@ -27,6 +27,12 @@ import { CustomerPickerDialog } from "@/quotations/customer-pick-dialog";
 import { ItemsQuotationTable } from "@/quotations/items-quotation-table";
 import { createQuotationAction } from "@/lib/actions";
 
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const quotation = JSON.parse(formData.get("quotation") as string);
+  await createQuotationAction(quotation);
+  return redirect("/quotations");
+}
 export async function loader({ context }: Route.LoaderArgs) {
   const products = await fetchProducts();
   const customers = await fetchCustomers();
@@ -41,21 +47,8 @@ export async function loader({ context }: Route.LoaderArgs) {
   };
 }
 
-export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const quotationString = formData.get("quotation") as string;
-  const quotation = JSON.parse(quotationString);
-  const { insertedNumber } = await createQuotationAction(quotation);
-  return redirect("/quotations");
-  // const entries = Object.fromEntries(formData.entries());
-}
-
-export default function CreateQuotation({
-  loaderData,
-  actionData,
-}: Route.ComponentProps) {
+export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
   const { products, customers } = loaderData;
-  console.log(actionData);
 
   const [quo, setQuo] = useState<CreateQuotationClient>({
     deadline: 1,
@@ -76,18 +69,19 @@ export default function CreateQuotation({
   });
 
   const [showCreditOption, setShowCreditOption] = useState(false);
-  const [pending, setPending] = useState(false);
   const pendingRuc = false;
 
   const submit = useSubmit();
 
-  const handleRucBlur = () => {};
+  const fetcher = useFetcher();
+  let pending = fetcher.state !== "idle";
 
   const handleSubmit = () => {
     const formData = new FormData();
     formData.append("quotation", JSON.stringify(quo));
     submit(formData, {
       method: "post",
+      action: "/quotations/search-by-ruc",
     });
   };
 
@@ -154,6 +148,22 @@ export default function CreateQuotation({
     }
   };
 
+  useEffect(() => {
+    if (fetcher.data) {
+      // alert("Customer fond");
+      setQuo({
+        ...quo,
+        customer: {
+          ...quo.customer,
+          ruc: fetcher.data.ruc,
+          name: fetcher.data.name,
+          address: fetcher.data.address,
+        },
+        customerId: fetcher.data.id,
+      });
+    }
+  }, [fetcher.data]);
+
   const hasItems = quo.items.length !== 0;
 
   return (
@@ -173,31 +183,38 @@ export default function CreateQuotation({
           <div className="col-span-4 grid flex-grow gap-2 md:col-span-3">
             <Label htmlFor="ruc">Ruc</Label>
             <div className="relative">
-              <Form method="post" action={`/quotations/search-by-ruc`}>
+              <fetcher.Form method="post" action="/quotations/search-by-ruc">
                 <Input
                   required
                   id="ruc"
-                  value={quo.customer?.ruc ?? ""}
+                  autoComplete=""
+                  value={quo?.customer?.ruc ?? ""}
                   type="number"
                   name="ruc"
                   disabled={pendingRuc}
                   onChange={(e) =>
                     setQuo({
                       ...quo,
-                      customer: { ...quo.customer, ruc: e.target.value },
+                      customer: { ...quo?.customer, ruc: e.target.value },
                     })
                   }
                 />
                 <Button
                   size="icon"
                   type="submit"
-                  onClick={handleRucBlur}
+                  disabled={pending}
                   className="absolute right-1.5 top-1 size-7"
-                  variant="secondary"
+                  variant="outline"
                 >
-                  <SearchIcon className="size-4" />
+                  {pending ? (
+                    <Loader2Icon className="size-4 animate-spin" />
+                  ) : (
+                    <span>
+                      <SearchIcon className="size-4 " />
+                    </span>
+                  )}
                 </Button>
-              </Form>
+              </fetcher.Form>
             </div>
           </div>
           {/* Deadline  */}
@@ -222,12 +239,12 @@ export default function CreateQuotation({
               id="company"
               name="company"
               type="text"
-              value={quo.customer?.name ?? ""}
+              value={quo?.customer?.name ?? ""}
               disabled={pendingRuc}
               onChange={(e) => {
                 setQuo({
                   ...quo,
-                  customer: { ...quo.customer, name: e.target.value },
+                  customer: { ...quo?.customer, name: e.target.value },
                 });
               }}
             />

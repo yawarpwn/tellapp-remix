@@ -1,3 +1,4 @@
+import { HTTPRequestError } from "@/lib/errors";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -67,4 +68,17 @@ export function getIgv(items: QuotationItem[]) {
     formatedSubTotal: formatNumberToLocal(subTotal),
     totalItems,
   };
+}
+
+export async function fetchData<T>(
+  url: string,
+  options?: RequestInit
+): Promise<T> {
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new HTTPRequestError(
+      `Error en la peticion: ${url} - ${response.statusText}`
+    );
+  }
+  return response.json() as T;
 }

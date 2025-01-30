@@ -1,31 +1,32 @@
+import { HTTPRequestError } from "@/lib/errors";
+import { fetchData } from "@/lib/utils";
+
 import { fetchQuotaitonByNumber } from "@/lib/data";
 import { BASE_URL } from "@/lib/constants";
+import type { Customer } from "@/types";
 
 export async function deleteQuotationAction(quotationNumber: number) {
-  const url = `${BASE_URL}/api/quotations/${quotationNumber}`;
-  const res = await fetch(url, {
+  const url = `${BASE_URL}/api/quotation/${quotationNumber}`;
+  const data = await fetchData<Customer>(url, {
     method: "DELETE",
   });
-  if (!res.ok) throw new Error("Failed to delete quotation");
-  return res.json();
+  return data;
 }
 
 export async function createQuotationAction(newQuotation: Object) {
   const url = `${BASE_URL}/api/quotations`;
-  const res = await fetch(url, {
+  const data = await fetchData<{ insertedNumber: number }>(url, {
     method: "POST",
     body: JSON.stringify(newQuotation),
   });
-
-  if (!res.ok) throw new Error("Failed to create quotation");
-  return (await res.json()) as { insertedNumber: number };
+  return data.insertedNumber;
 }
 
 export async function duplicateQuotationAction(quotationNumber: number) {
   const quotation = await fetchQuotaitonByNumber(quotationNumber);
-  const createdQuotation = await createQuotationAction(quotation);
-
-  if (!createdQuotation) throw new Error("Failed to duplicate quotation");
-
-  return { number: createdQuotation.insertedNumber };
+  const insertedQuotationNumber = await createQuotationAction({
+    id: crypto.randomUUID(),
+    quotation,
+  });
+  return insertedQuotationNumber;
 }
