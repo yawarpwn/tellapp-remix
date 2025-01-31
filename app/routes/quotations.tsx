@@ -24,9 +24,5 @@ export async function loader() {
 
 export default function QuotationsPage({ loaderData }: Route.ComponentProps) {
   const { quotations } = loaderData;
-  return (
-    <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={quotations} />
-    </div>
-  );
+  return <DataTable columns={columns} data={quotations} />;
 }

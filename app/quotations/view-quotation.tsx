@@ -31,7 +31,7 @@ export default function ViewQuotation({ quotation }: Props) {
   );
 
   return (
-    <div className="container mx-auto">
+    <div className="flex flex-col gap-6">
       <header className="flex justify-end gap-x-2">
         <div className="flex gap-2">
           <Link
@@ -57,7 +57,7 @@ export default function ViewQuotation({ quotation }: Props) {
       <div className="flex justify-end">
         <div className="text-right">
           <h2 className="text-2xl font-semibold md:text-3xl">Cotización</h2>
-          <div className="mt-1 flex justify-end gap-1 text-xl text-yellow-500">
+          <div className="mt-1 flex justify-end gap-1 text-xl text-primary">
             <span>#</span>
             <span className="font-bold">{quotation.number}</span>
           </div>

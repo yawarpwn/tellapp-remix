@@ -173,7 +173,7 @@ export function CreateEditItemModal(props: Props) {
                   </Badge>
                   <Badge
                     variant="outline"
-                    className="border border-secondary uppercase text-secondary"
+                    className="border border-primary uppercase text-primary"
                   >
                     {hit.item.code}
                   </Badge>
@@ -271,11 +271,11 @@ export function CreateEditItemModal(props: Props) {
             </div>
             <footer className="flex gap-2">
               <DialogClose asChild>
-                <Button type="button" className="w-full">
+                <Button type="button" variant="secondary" className="w-full">
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button variant="secondary" className="w-full" type="submit">
+              <Button className="w-full" type="submit">
                 Aceptar
               </Button>
             </footer>

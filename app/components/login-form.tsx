@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Form } from "react-router";
+import { Form, Link } from "react-router";
 import { Button } from "@/components/ui/button";
 
 export function LoginForm({ message }: { message: string }) {
@@ -41,15 +41,17 @@ export function LoginForm({ message }: { message: string }) {
             {/*   <p className=" text-xs text-destructive">{state?.errors?.password[0]}</p> */}
             {/* )} */}
             {/* {state?.message && <p className=" text-xs text-destructive">*{state.message}</p>} */}
-            <p className="text-xs text-[#6b66ff]">
+            <p className="text-xs text-primary">
               <a href="#">Olvidates tu contraseña ?</a>
             </p>
           </div>
-          <Button type="submit">Ingresar</Button>
+          <Button asChild type="submit">
+            <Link to="/quotations">Ingresar</Link>
+          </Button>
           {/* <SubmitButton /> */}
           <p className="text-center text-xs">
             Necesitas una cuenta?{" "}
-            <a href="#" className="text-[#6b66ff] ">
+            <a href="#" className="text-primary ">
               Registrate
             </a>
           </p>

@@ -347,7 +347,13 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
           />
         </React.Suspense>
         <footer className="flex items-center justify-between">
-          <Button disabled={false} type="button" className="px-12" asChild>
+          <Button
+            variant="outline"
+            disabled={false}
+            type="button"
+            className="px-12"
+            asChild
+          >
             <Link to="/quotations">Cancelar</Link>
           </Button>
           <Button

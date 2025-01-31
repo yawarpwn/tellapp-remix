@@ -2,7 +2,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 import type { QuotationClient } from "@/types";
 import { getIgv, formatDateToLocal } from "@/lib/utils";
 import { Form } from "react-router";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, StarIcon } from "lucide-react";
 import { Link } from "react-router";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -20,63 +20,47 @@ import { DataTableColumnHeader } from "@/components/data-table-column-header";
 export const columns: ColumnDef<QuotationClient>[] = [
   {
     id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
+    cell: ({ row }) => <StarIcon className="size-4" />,
     enableSorting: false,
     enableHiding: false,
   },
   {
     accessorKey: "number",
+    enableGlobalFilter: true,
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="Número" />;
-      // return (
-      //   <Button
-      //     variant="ghost"
-      //     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      //   >
-      //     Número
-      //     <ArrowUpDown className="ml-2 h-4 w-4" />
-      //   </Button>
-      // );
+      return <DataTableColumnHeader column={column} title="#Nro" />;
     },
   },
   {
     accessorKey: "customer.name",
     header: "Cliente",
-  },
-  {
-    accessorKey: "customer.ruc",
-    header: "Ruc",
-  },
-  {
-    accessorKey: "created_at",
-    header: "Fecha",
-    cell: ({ row }) => {
-      const date = formatDateToLocal(new Date(row.original.createdAt));
-      return <div>{date}</div>;
-    },
+    enableGlobalFilter: false,
+    cell: ({ row }) => (
+      <div>
+        <p className="min-w-[230px]">
+          {row.original.customer?.name || "SIN RUC"}
+        </p>
+        <p>{row.original.customer?.ruc}</p>
+      </div>
+    ),
   },
   {
     accessorKey: "id",
-    header: () => <div className="text-right">Total</div>,
+    header: () => <div className="">Monto</div>,
     cell: ({ row }) => {
       const formated = getIgv(row.original.items).formatedTotal;
-      return <div className="text-right font-medium">{formated}</div>;
+      return <div className="font-medium">{formated}</div>;
+    },
+  },
+  {
+    accessorKey: "created_at",
+    enableGlobalFilter: false,
+    header: "Fecha",
+    cell: ({ row }) => {
+      const date = formatDateToLocal(new Date(row.original.createdAt), {
+        month: "short",
+      });
+      return <div>{date}</div>;
     },
   },
   {
