@@ -1,60 +1,70 @@
-import { Form, Link, redirect, useFetcher } from "react-router";
-import { useSubmit } from "react-router";
+import { Link, redirect, useFetcher } from 'react-router'
 
 //ui components
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Switch } from "@/components/ui/switch";
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Switch } from '@/components/ui/switch'
 
 //Icons
-import { Loader2, Loader2Icon, SearchIcon } from "lucide-react";
-import { StarIcon } from "lucide-react";
+import {
+  Loader2,
+  Loader2Icon,
+  SearchIcon,
+  StarIcon,
+  StarOffIcon,
+} from 'lucide-react'
 
 //hooks
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 
 //types
-import type { CreateQuotationClient, Customer, QuotationItem } from "@/types";
-import type { Route } from "./+types/create-quotation";
+import type { CreateQuotationClient, Customer, QuotationItem } from '@/types'
+import type { Route } from './+types/create-quotation'
 
 //utils
-import { fetchCustomers, fetchProducts } from "@/lib/data";
+import { fetchCustomers, fetchProducts } from '@/lib/data'
 
 //components
-import { CustomerPickerDialog } from "@/quotations/customer-pick-dialog";
-import { ItemsQuotationTable } from "@/quotations/items-quotation-table";
-import { createQuotationAction } from "@/lib/actions";
-import { toast } from "sonner";
-import { HTTPRequestError } from "@/lib/errors";
+import { CustomerPickerDialog } from '@/quotations/customer-pick-dialog'
+import { ItemsQuotationTable } from '@/quotations/items-quotation-table'
+import { createQuotationAction } from '@/lib/actions'
+import { toast } from 'sonner'
+import { HTTPRequestError } from '@/lib/errors'
 
 export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const quotation = JSON.parse(formData.get("quotation") as string);
+  const formData = await request.formData()
+  const quotation = JSON.parse(formData.get('quotation') as string)
+  // const quotation = JSON.parse(formData.get('quotation') as string)
   try {
-    await createQuotationAction(quotation);
-    return redirect("/quotations");
+    await createQuotationAction(quotation)
+    return redirect('/quotations')
   } catch (error) {
     if (error instanceof HTTPRequestError) {
-      return { error: error.message };
+      return {
+        error: error.message,
+        success: false,
+      }
     }
 
     return {
-      error: "Error creating quotation",
-    };
+      error: 'Error creating quotation',
+      success: false,
+    }
   }
 }
 export async function loader(_: Route.LoaderArgs) {
   return {
     productsPromise: fetchProducts(),
     customersPromise: fetchCustomers(),
-  };
+  }
 }
 
 export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
-  const { productsPromise, customersPromise } = loaderData;
+  const { productsPromise, customersPromise } = loaderData
 
+  //states
   const [quo, setQuo] = useState<CreateQuotationClient>({
     deadline: 1,
     includeIgv: true,
@@ -63,120 +73,129 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
     isPaymentPending: false,
     items: [],
     customer: {
-      id: "",
-      name: "",
-      ruc: "",
+      id: '',
+      name: '',
+      ruc: '',
       phone: undefined,
-      address: "",
+      address: '',
       email: undefined,
       isRegular: false,
     },
-  });
+  })
+  const [showCreditOption, setShowCreditOption] = useState(false)
 
-  const [showCreditOption, setShowCreditOption] = useState(false);
-  const pendingRuc = false;
+  const createQuotationFetcher = useFetcher()
+  const searchRucFetcher = useFetcher()
 
-  const submit = useSubmit();
+  let pendingSearchRuc = searchRucFetcher.state !== 'idle'
+  let pendingCreateQuotation = createQuotationFetcher.state !== 'idle'
+  const pending = pendingSearchRuc || pendingCreateQuotation
 
-  const fetcher = useFetcher();
-  let pending = fetcher.state !== "idle";
+  console.log({ createQuotationFetcher, searchRucFetcher, pending })
 
-  const handleSubmit = () => {
-    const formData = new FormData();
-    formData.append("quotation", JSON.stringify(quo));
-    submit(formData, {
-      method: "post",
-      action: "/quotations/search-by-ruc",
-    });
-  };
+  const handleCreateQuotationSubmit = () => {
+    const formData = new FormData()
+    formData.append('quotation', JSON.stringify(quo))
+    createQuotationFetcher.submit(formData, {
+      method: 'post',
+    })
+  }
 
   const handleadditem = (item: QuotationItem) => {
     setQuo({
       ...quo,
       items: [...quo.items, item],
-    });
-  };
+    })
+  }
 
   const handleDeleteItem = (id: string) => {
     setQuo({
       ...quo,
       items: quo.items.filter((item) => item.id !== id),
-    });
-  };
+    })
+  }
 
   const handleEditItem = (itemToEdit: QuotationItem) => {
     setQuo({
       ...quo,
       items: quo.items.map((item) => {
         if (item.id === itemToEdit.id) {
-          return itemToEdit;
+          return itemToEdit
         }
-        return item;
+        return item
       }),
-    });
-  };
+    })
+  }
 
   const handleDuplicateItem = (item: QuotationItem) => {
     setQuo({
       ...quo,
       items: [...quo.items, { ...item, id: crypto.randomUUID() }],
-    });
-  };
+    })
+  }
 
   const handlePickCustomer = (customer: Customer) => {
     setQuo({
       ...quo,
       customerId: customer.id,
       customer,
-    });
-  };
+    })
+  }
 
   const move = (currentIndex: number, nextIndex: number) => {
-    const newItems = [...quo.items];
-    newItems[currentIndex] = quo.items[nextIndex];
-    newItems[nextIndex] = quo.items[currentIndex];
+    const newItems = [...quo.items]
+    newItems[currentIndex] = quo.items[nextIndex]
+    newItems[nextIndex] = quo.items[currentIndex]
     setQuo({
       ...quo,
       items: newItems,
-    });
-  };
+    })
+  }
 
   const moveUpItem = (index: number) => {
     if (index > 0) {
-      move(index, index - 1);
+      move(index, index - 1)
     }
-  };
+  }
 
   const moveDownItem = (index: number) => {
     if (index < quo.items.length - 1) {
-      move(index, index + 1);
+      move(index, index + 1)
     }
-  };
+  }
 
-  useEffect(() => {
-    if (fetcher.data) {
-      if (fetcher.data.success) {
-        toast("Cliente encontrado", {
-          description: <div>Que fueee</div>,
-        });
+  React.useEffect(() => {
+    if (searchRucFetcher.data) {
+      if (searchRucFetcher.data.success) {
+        toast('Cliente encontrado', {
+          description: (
+            <pre>{JSON.stringify(searchRucFetcher.data.customer, null, 2)}</pre>
+          ),
+        })
 
         setQuo({
           ...quo,
           customer: {
             ...quo.customer,
-            ruc: fetcher.data.data.ruc,
-            name: fetcher.data.data.name,
-            address: fetcher.data.data.address,
+            ruc: searchRucFetcher.data.customer.ruc,
+            name: searchRucFetcher.data.customer.name,
+            address: searchRucFetcher.data.customer.address,
           },
-          customerId: fetcher.data.data.id,
-        });
+          customerId: searchRucFetcher.data.customer.id,
+        })
       } else {
-        toast.error(fetcher.data.error);
+        toast.error(searchRucFetcher.data.error)
       }
     }
-  }, [fetcher.data]);
+  }, [searchRucFetcher.data])
 
-  const hasItems = quo.items.length !== 0;
+  React.useEffect(() => {
+    if (createQuotationFetcher.data) {
+      toast.error(createQuotationFetcher.data.error)
+    }
+  }, [createQuotationFetcher.data])
+
+  const hasItems = quo.items.length !== 0
 
   return (
     <>
@@ -195,17 +214,22 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
         <div className="grid grid-cols-6 gap-3 md:gap-4">
           {/* Ruc  */}
           <div className="col-span-4 grid flex-grow gap-2 md:col-span-3">
-            <Label htmlFor="ruc">Ruc</Label>
+            <Label className="text-muted-foreground" htmlFor="ruc">
+              Ruc
+            </Label>
             <div className="relative">
-              <fetcher.Form method="post" action="/quotations/search-by-ruc">
+              <searchRucFetcher.Form
+                method="post"
+                action="/quotations/search-by-ruc"
+              >
                 <Input
                   required
                   id="ruc"
                   autoComplete=""
-                  value={quo?.customer?.ruc ?? ""}
+                  value={quo?.customer?.ruc ?? ''}
                   type="number"
                   name="ruc"
-                  disabled={pendingRuc}
+                  disabled={pending}
                   onChange={(e) =>
                     setQuo({
                       ...quo,
@@ -216,11 +240,11 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
                 <Button
                   size="icon"
                   type="submit"
-                  disabled={pending}
+                  disabled={pendingSearchRuc}
                   className="absolute right-1.5 top-1 size-7"
                   variant="outline"
                 >
-                  {pending ? (
+                  {pendingSearchRuc ? (
                     <Loader2Icon className="size-4 animate-spin" />
                   ) : (
                     <span>
@@ -228,19 +252,21 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
                     </span>
                   )}
                 </Button>
-              </fetcher.Form>
+              </searchRucFetcher.Form>
             </div>
           </div>
           {/* Deadline  */}
           <div className="col-span-2 grid gap-2 md:col-span-3">
-            <Label htmlFor="deadline">Entrega</Label>
+            <Label className="text-muted-foreground" htmlFor="deadline">
+              Entrega
+            </Label>
             <Input
-              className={quo?.deadline === 0 ? "border border-destructive" : ""}
+              className={quo?.deadline === 0 ? 'border border-destructive' : ''}
               required
               type="number"
               id="deadline"
               value={quo.deadline}
-              disabled={pendingRuc}
+              disabled={pending}
               onChange={(e) =>
                 setQuo({ ...quo, deadline: Number(e.target.value) })
               }
@@ -248,35 +274,39 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
           </div>
           {/* Customer */}
           <div className="col-span-6 grid gap-2 md:col-span-3">
-            <Label htmlFor="company">Cliente</Label>
+            <Label className="text-muted-foreground" htmlFor="company">
+              Cliente
+            </Label>
             <Input
               id="company"
               name="company"
               type="text"
-              value={quo?.customer?.name ?? ""}
-              disabled={pendingRuc}
+              value={quo?.customer?.name ?? ''}
+              disabled={pending}
               onChange={(e) => {
                 setQuo({
                   ...quo,
                   customer: { ...quo?.customer, name: e.target.value },
-                });
+                })
               }}
             />
           </div>
           {/* Address */}
           <div className="col-span-6 grid gap-2 md:col-span-3">
-            <Label htmlFor="company">Dirección</Label>
+            <Label className="text-muted-foreground" htmlFor="company">
+              Dirección
+            </Label>
             <Input
               id="address"
               name="address"
               type="text"
-              value={quo?.customer?.address ?? ""}
-              disabled={pendingRuc}
+              value={quo?.customer?.address ?? ''}
+              disabled={pending}
               onChange={(e) => {
                 setQuo({
                   ...quo,
                   customer: { ...quo.customer, address: e.target.value },
-                });
+                })
               }}
             />
           </div>
@@ -300,7 +330,7 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
                 className="flex 
                   items-center gap-2"
               >
-                <StarIcon />
+                <StarIcon className="size-5 text-primary" />
                 <span className="text-sm">Cliente Atendido</span>
               </div>
             )}
@@ -321,12 +351,12 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
                 name="credit"
                 type="number"
                 className="w-32 grow"
-                value={quo.credit ?? ""}
+                value={quo.credit ?? ''}
                 placeholder="30"
                 onChange={(e) => {
-                  const { value } = e.target;
-                  const credit = value ? Number(value) : null;
-                  setQuo({ ...quo, credit });
+                  const { value } = e.target
+                  const credit = value ? Number(value) : null
+                  setQuo({ ...quo, credit })
                 }}
               />
               <span>Días</span>
@@ -357,7 +387,7 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
             <Link to="/quotations">Cancelar</Link>
           </Button>
           <Button
-            onClick={handleSubmit}
+            onClick={handleCreateQuotationSubmit}
             className="px-12"
             disabled={pending || !hasItems || quo.deadline === 0}
             type="submit"
@@ -368,5 +398,5 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
         </footer>
       </article>
     </>
-  );
+  )
 }
