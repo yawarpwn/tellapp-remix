@@ -1,31 +1,31 @@
 //utils
-import { getIgv } from "@/lib/utils";
+import { getIgv } from '@/lib/utils'
 
 //ui
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 
 //icons
-import { Plus, CircleOffIcon } from "lucide-react";
+import { Plus, CircleOffIcon } from 'lucide-react'
 
 //types
-import type { Product, QuotationItem } from "@/types";
+import type { Product, QuotationItem } from '@/types'
 
 //react
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
 //components
-import { CreateEditItemModal } from "./create-edit-item-modal";
-import { ProductCard } from "./product-card";
+import { CreateEditItemModal } from './create-edit-item-modal'
+import { ProductCard } from './product-card'
 
 interface Props {
-  items: QuotationItem[];
-  productsPromise: Promise<Product[]>;
-  onDuplicateItem: (item: QuotationItem) => void;
-  onEditItem: (itemToEdit: QuotationItem) => void;
-  onDeleteItem: (id: string) => void;
-  onAddItem: (item: QuotationItem) => void;
-  onMoveUpItem: (index: number) => void;
-  onMoveDownItem: (index: number) => void;
+  items: QuotationItem[]
+  productsPromise: Promise<Product[]>
+  onDuplicateItem: (item: QuotationItem) => void
+  onEditItem: (itemToEdit: QuotationItem) => void
+  onDeleteItem: (id: string) => void
+  onAddItem: (item: QuotationItem) => void
+  onMoveUpItem: (index: number) => void
+  onMoveDownItem: (index: number) => void
 }
 
 export function ItemsQuotationTable(props: Props) {
@@ -38,26 +38,26 @@ export function ItemsQuotationTable(props: Props) {
     onAddItem,
     onMoveDownItem,
     onMoveUpItem,
-  } = props;
+  } = props
 
-  const products = React.use(productsPromise);
+  const products = React.use(productsPromise)
   //States
-  const [seletedProductId, setSelectedProductId] = useState<string | null>(
-    null
-  );
-  const productItem = items.find((item) => item.id == seletedProductId);
-  const [openCreateEditModal, setOpenCreateEditModal] = useState(false);
+  const [seletedProductId, setSelectedProductId] = useState<string | null>(null)
+  const productItem = items.find((item) => item.id == seletedProductId)
+  const [openCreateEditModal, setOpenCreateEditModal] = useState(false)
+
+  console.log('render quotation tables')
 
   //functions
-  const closeItemModal = () => setOpenCreateEditModal(false);
+  const closeItemModal = () => setOpenCreateEditModal(false)
 
   const onOpenCreateEditItemModal = (id: string) => {
-    setOpenCreateEditModal(true);
-    setSelectedProductId(id);
-  };
+    setOpenCreateEditModal(true)
+    setSelectedProductId(id)
+  }
 
   const { formatedIgv, formatedTotal, formatedSubTotal, totalItems } =
-    getIgv(items);
+    getIgv(items)
 
   return (
     <section>
@@ -82,10 +82,10 @@ export function ItemsQuotationTable(props: Props) {
           <Button
             type="button"
             onClick={() => {
-              setOpenCreateEditModal(true);
-              setSelectedProductId(null);
+              setOpenCreateEditModal(true)
+              setSelectedProductId(null)
             }}
-            variant={"secondary"}
+            variant={'secondary'}
           >
             <Plus size={20} />
             <span className="ml-2 hidden md:block">Agregar Item</span>
@@ -136,5 +136,5 @@ export function ItemsQuotationTable(props: Props) {
         </div>
       )}
     </section>
-  );
+  )
 }

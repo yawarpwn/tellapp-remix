@@ -57,7 +57,7 @@ export async function action({ request }: Route.ActionArgs) {
 export async function loader(_: Route.LoaderArgs) {
   return {
     productsPromise: fetchProducts(),
-    customersPromise: fetchCustomers(),
+    customersPromise: fetchCustomers({ onlyRegular: true }),
   }
 }
 

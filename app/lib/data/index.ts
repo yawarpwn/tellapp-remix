@@ -23,11 +23,18 @@ export async function fetchQuotaitonByNumber(quotationNumber: number) {
   return data
 }
 
-export async function fetchCustomers(): Promise<Customer[]> {
-  await fakePromise(2000)
+type FetchCustomerOptions = {
+  onlyRegular?: boolean
+}
+export async function fetchCustomers(
+  options?: FetchCustomerOptions
+): Promise<Customer[]> {
+  const { onlyRegular = false } = options ?? {}
   const url = `${BASE_URL}/api/customers`
   const data = await fetchData<DataResponse<Customer>>(url)
-  return data.items
+  return onlyRegular
+    ? data.items.filter((customer) => customer.isRegular)
+    : data.items
 }
 
 export async function fetchProducts(): Promise<Product[]> {
