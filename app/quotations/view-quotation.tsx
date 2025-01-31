@@ -1,8 +1,8 @@
-import { CopyText } from "@/quotations/copy-text";
-import { Link } from "react-router";
-import { buttonVariants } from "@/components/ui/button";
-import { EditIcon, ExternalLinkIcon } from "lucide-react";
-import { formatDateToLocal, formatNumberToLocal, getIgv } from "@/lib/utils";
+import { CopyText } from '@/quotations/copy-text'
+import { Link } from 'react-router'
+import { buttonVariants } from '@/components/ui/button'
+import { EditIcon, ExternalLinkIcon } from 'lucide-react'
+import { formatDateToLocal, formatNumberToLocal, getIgv } from '@/lib/utils'
 import {
   Table,
   TableBody,
@@ -11,24 +11,25 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { DownloadAndShareButtons } from "@/quotations/download-and-share-buttons";
-import { DuplicateQuotationButton } from "@/quotations/duplicate-quotation-button";
-import { DeleteQuotationButton } from "@/quotations/delete-quotation-button";
-import type { QuotationClient } from "@/types";
-import React from "react";
+} from '@/components/ui/table'
+import { DownloadAndShareButtons } from '@/quotations/download-and-share-buttons'
+import { DuplicateQuotationButton } from '@/quotations/duplicate-quotation-button'
+import { DeleteQuotationButton } from '@/quotations/delete-quotation-button'
+import type { QuotationClient } from '@/types'
+import React from 'react'
+import { ToggleRegularCustomerButton } from './toggle-rregular-customer-button'
 
 type Props = {
-  quotation: QuotationClient;
-};
-export default function ViewQuotation({ quotation }: Props) {
+  quotationPromise: Promise<QuotationClient>
+}
+export default function ViewQuotation({ quotationPromise }: Props) {
   // const quotation = quotationPromise;
-  // const quotation = React.use(quotationPromise);
+  const quotation = React.use(quotationPromise)
   // console.log({ quotation });
 
   const { formatedIgv, formatedTotal, formatedSubTotal } = getIgv(
     quotation.items
-  );
+  )
 
   return (
     <div className="flex flex-col gap-6">
@@ -36,7 +37,7 @@ export default function ViewQuotation({ quotation }: Props) {
         <div className="flex gap-2">
           <Link
             to={`/new-quos/${quotation.number}/update`}
-            className={buttonVariants({ size: "sm", variant: "outline" })}
+            className={buttonVariants({ size: 'sm', variant: 'outline' })}
           >
             <EditIcon size={18} />
             <span className="hidden lg:block">Editar</span>
@@ -44,13 +45,9 @@ export default function ViewQuotation({ quotation }: Props) {
           <DownloadAndShareButtons quotation={quotation} />
           <DuplicateQuotationButton />
           <DeleteQuotationButton quotationNumber={quotation.number} />
-          {/* {quotation.customerId && ( */}
-          {/*   <IsRegularButton */}
-          {/*     id={quotation.customerId} */}
-          {/*     isRegular={Boolean(quotation.isRegularCustomer)} */}
-          {/*     quotationNumber={quotation.number} */}
-          {/*   /> */}
-          {/* )} */}
+          {quotation.customerId && (
+            <ToggleRegularCustomerButton id={quotation.customerId} />
+          )}
         </div>
       </header>
 
@@ -67,13 +64,13 @@ export default function ViewQuotation({ quotation }: Props) {
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <div>
           <h3 className="text-lg font-semibold ">
-            {quotation?.customer?.name ?? "SIN NOMBRE"}
+            {quotation?.customer?.name ?? 'SIN NOMBRE'}
           </h3>
           <address className="mt-2 not-italic text-muted-foreground ">
-            {quotation?.customer?.address ?? ""}
+            {quotation?.customer?.address ?? ''}
           </address>
           <p className="mt-2 text-muted-foreground">
-            {quotation.customer.ruc ?? "SIN RUC"}
+            {quotation.customer.ruc ?? 'SIN RUC'}
           </p>
         </div>
         <div className="space-y-2 sm:text-right">
@@ -100,7 +97,7 @@ export default function ViewQuotation({ quotation }: Props) {
               <dd className="col-span-3 ">
                 {quotation.credit
                   ? `${quotation.credit} días`
-                  : "50% Adelanto "}
+                  : '50% Adelanto '}
               </dd>
             </dl>
           </div>
@@ -139,7 +136,7 @@ export default function ViewQuotation({ quotation }: Props) {
               </TableCell>
               <TableCell className="text-center">{item.unitSize}</TableCell>
               <TableCell className="text-center">
-                {item.qty.toString().padStart(2, "0")}
+                {item.qty.toString().padStart(2, '0')}
               </TableCell>
               <TableCell className="text-center">
                 {(item.price / 1.18).toFixed(4)}
@@ -193,5 +190,5 @@ export default function ViewQuotation({ quotation }: Props) {
         </TableFooter>
       </Table>
     </div>
-  );
+  )
 }

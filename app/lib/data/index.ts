@@ -54,8 +54,9 @@ export async function fetchCustomerByRuc(
   const url = `${BASE_URL}/api/customers/${ruc}`
   //Search customer in Database
   const customerFromDatabase = await fetchData<Customer>(url)
+  console.log({ customerFromDatabase })
 
-  if (customerFromDatabase) {
+  if (customerFromDatabase?.id) {
     return {
       id: customerFromDatabase.id,
       ruc: customerFromDatabase.ruc,
@@ -64,6 +65,7 @@ export async function fetchCustomerByRuc(
     }
   }
 
+  //Search customer in Sunat
   const customerFromSunat = await getCompanybyRuc(ruc)
   return {
     id: undefined,

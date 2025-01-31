@@ -91,7 +91,7 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
   let pendingCreateQuotation = createQuotationFetcher.state !== 'idle'
   const pending = pendingSearchRuc || pendingCreateQuotation
 
-  console.log({ createQuotationFetcher, searchRucFetcher, pending })
+  // console.log({ createQuotationFetcher, searchRucFetcher, pending })
 
   const handleCreateQuotationSubmit = () => {
     const formData = new FormData()

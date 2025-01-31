@@ -1,6 +1,14 @@
-import { Form, Link, NavLink, Outlet } from 'react-router'
+import { Form, Link, NavLink, Outlet, useNavigation } from 'react-router'
 import { Button } from '@/components/ui/button'
-import { HomeIcon, ShoppingBagIcon, LogOutIcon } from 'lucide-react'
+import {
+  HomeIcon,
+  ShoppingBagIcon,
+  LogOutIcon,
+  TruckIcon,
+  PrinterIcon,
+  UsersIcon,
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const routes = [
   {
@@ -13,19 +21,28 @@ const routes = [
     label: 'Productos',
     icon: <ShoppingBagIcon />,
   },
+
+  {
+    path: '/customers',
+    label: 'Clientes',
+    icon: <UsersIcon />,
+  },
+
+  {
+    path: '/labels',
+    label: 'Etiquetas',
+    icon: <PrinterIcon />,
+  },
+  {
+    path: '/agencies',
+    label: 'Agencias',
+    icon: <TruckIcon />,
+  },
 ]
-// margin-top: 0px;
-//   display: flex;
-//   width: 100vw;
-//   max-width: 100%;
-//   -moz-box-pack: justify;
-//   justify-content: space-between;
-//   align-self: center;
-//   flex: 1 1 auto;
-//   background-color: var(--ui-page-flat-1);
-// }
 
 export default function SidebarLayout() {
+  const navigation = useNavigation()
+
   return (
     <div
       style={{ alignSelf: 'center' }}
@@ -36,9 +53,10 @@ export default function SidebarLayout() {
       <div className="w-[3rem] shrink-0 md:w-[15rem]">
         <div className="w-[3rem] md:w-[15rem]  h-screen border-r fixed z-50 left-0 flex justify-center">
           <div className="">
-            <nav className="flex flex-col gap-4  pt-8">
+            <nav className="flex flex-col gap-6  pt-8">
               {routes.map((route) => (
                 <NavLink
+                  key={route.path}
                   className={({ isActive }) => (isActive ? 'text-primary' : '')}
                   to={route.path}
                 >
@@ -62,7 +80,12 @@ export default function SidebarLayout() {
         </div>
       </div>
       {/* Main */}
-      <main className="min-w-[320px] max-w-7xl mx-auto flex shrink w-full justify-center items-stretch ">
+      <main
+        className={cn(
+          'min-w-[320px] max-w-7xl mx-auto flex shrink w-full justify-center items-stretch',
+          navigation.state === 'loading' && 'opacity-25'
+        )}
+      >
         <div className="w-full relative max-h-[calc(0px+100vh)] pb-[3rem]">
           <div className="px-2 py-4 md:px-6">
             <Outlet />

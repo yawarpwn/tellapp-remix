@@ -6,28 +6,20 @@ import { QuotationSkeleton } from '@/components/skeletons/quotations'
 import React from 'react'
 
 export async function loader({ params }: Route.LoaderArgs) {
-  return fetchQuotaitonByNumber(+params.number)
+  return {
+    quotationPromise: fetchQuotaitonByNumber(+params.number),
+  }
 }
-
-export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
-  const quotation = await serverLoader()
-  console.log('client', quotation)
-  return { quotation }
-}
-
-export function HydrateFallback() {
-  return <QuotationSkeleton /> // (2)
-}
-
-clientLoader.hydrate = true as const // (3)
 
 export default function QuotationByNumber({
   loaderData,
 }: Route.ComponentProps) {
-  const { quotation } = loaderData
+  const { quotationPromise } = loaderData
   return (
     <div className="py-10">
-      <ViewQuotation quotation={quotation} />
+      <React.Suspense fallback={<QuotationSkeleton />}>
+        <ViewQuotation quotationPromise={quotationPromise} />
+      </React.Suspense>
     </div>
   )
 }
