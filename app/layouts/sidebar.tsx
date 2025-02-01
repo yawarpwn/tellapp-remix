@@ -90,7 +90,7 @@ export default function SidebarLayout() {
                   className={({ isActive }) => (isActive ? 'text-primary' : '')}
                   style={{
                     color: !route.active ? '#333' : 'currentcolor',
-                    cursor: 'not-allowed',
+                    cursor: !route.active ? 'not-allowed' : 'pointer',
                   }}
                   to={route.path}
                 >
