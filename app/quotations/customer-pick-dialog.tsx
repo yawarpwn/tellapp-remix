@@ -1,5 +1,5 @@
-import type { Customer } from "@/types";
-import { Check, SearchIcon } from "lucide-react";
+import type { Customer } from '@/types'
+import { Check, SearchIcon } from 'lucide-react'
 import {
   CommandDialog,
   CommandEmpty,
@@ -7,16 +7,16 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import React, { useState } from "react";
-import { DialogTitle } from "@radix-ui/react-dialog";
+} from '@/components/ui/command'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import React, { useState } from 'react'
+import { DialogTitle } from '@radix-ui/react-dialog'
 
 interface Props {
-  customersPromise: Promise<Customer[]>;
-  customerId?: string | null;
-  onCustomerPick: (customer: Customer) => void;
+  customersPromise: Promise<Customer[]>
+  customerId?: string | null
+  onCustomerPick: (customer: Customer) => void
 }
 
 export function CustomerPickerDialog({
@@ -24,18 +24,18 @@ export function CustomerPickerDialog({
   customerId,
   onCustomerPick,
 }: Props) {
-  const customers = React.use(customersPromise);
-  const [open, setOpen] = useState(false);
+  const customers = React.use(customersPromise)
+  const [open, setOpen] = useState(false)
   return (
     <>
       <Button
         variant="secondary"
+        size="sm"
         type="button"
-        className="w-full"
         onClick={() => setOpen(true)}
       >
         Clientes
-        <SearchIcon className="ml-2 size-4" />
+        <SearchIcon />
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <DialogTitle className="sr-only">
@@ -51,14 +51,14 @@ export function CustomerPickerDialog({
                 key={customer.id}
                 value={customer.name}
                 onSelect={() => {
-                  onCustomerPick(customer);
-                  setOpen(false);
+                  onCustomerPick(customer)
+                  setOpen(false)
                 }}
               >
                 <Check
                   className={cn(
-                    "mr-2 size-2",
-                    customer.id === customerId ? "opacity-100" : "opacity-30"
+                    'mr-2 size-2',
+                    customer.id === customerId ? 'opacity-100' : 'opacity-30'
                   )}
                 />
                 {customer.name}
@@ -68,5 +68,5 @@ export function CustomerPickerDialog({
         </CommandList>
       </CommandDialog>
     </>
-  );
+  )
 }

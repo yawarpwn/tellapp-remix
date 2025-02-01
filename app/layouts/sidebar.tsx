@@ -19,54 +19,54 @@ const routes = [
     path: '/quotations',
     label: 'Cotizaciones',
     active: true,
-    icon: <HomeIcon />,
+    Icon: HomeIcon,
   },
   {
     path: '/products',
     label: 'Productos',
     active: true,
-    icon: <ShoppingBagIcon />,
+    Icon: ShoppingBagIcon,
   },
 
   {
     path: '/customers',
     label: 'Clientes',
     active: false,
-    icon: <UsersIcon />,
+    Icon: UsersIcon,
   },
 
   {
     path: '/labels',
     label: 'Etiquetas',
     active: false,
-    icon: <PrinterIcon />,
+    Icon: PrinterIcon,
   },
   {
     path: '/agencies',
     label: 'Agencias',
     active: false,
-    icon: <TruckIcon />,
+    Icon: TruckIcon,
   },
 
   {
     path: '/gallery',
     label: 'Galeria',
     active: false,
-    icon: <ImageIcon />,
+    Icon: ImageIcon,
   },
 
   {
     path: '/signals',
     label: 'Señales',
     active: false,
-    icon: <SplitIcon />,
+    Icon: SplitIcon,
   },
 
   {
     path: '/watermark',
     label: 'Marca de agua',
     active: false,
-    icon: <ImageOffIcon />,
+    Icon: ImageOffIcon,
   },
 ]
 
@@ -80,7 +80,7 @@ export default function SidebarLayout() {
     >
       <div className="fixed size-px hidden"></div>
       {/* Sidebar */}
-      <div className="w-[3rem] shrink-0 md:w-[15rem]">
+      <div className="w-[3rem] shrink-0 md:w-[15rem] hidden md:block">
         <div className="w-[3rem] md:w-[15rem]  h-screen border-r fixed z-50 left-0 flex justify-center">
           <div className="">
             <nav className="flex flex-col gap-8  pt-8">
@@ -88,14 +88,10 @@ export default function SidebarLayout() {
                 <NavLink
                   key={route.path}
                   className={({ isActive }) => (isActive ? 'text-primary' : '')}
-                  style={{
-                    color: !route.active ? '#333' : 'currentcolor',
-                    cursor: !route.active ? 'not-allowed' : 'pointer',
-                  }}
                   to={route.path}
                 >
                   <div className={cn('flex items-center gap-2')}>
-                    {route.icon}
+                    <route.Icon size={22} />
                     <span className="hidden md:block">{route.label}</span>
                   </div>
                 </NavLink>
@@ -121,11 +117,28 @@ export default function SidebarLayout() {
         )}
       >
         <div className="w-full relative max-h-[calc(0px+100vh)] pb-[3rem]">
-          <div className="px-2 py-4 md:px-6">
+          <div className="px-3 py-6 md:px-6">
             <Outlet />
           </div>
         </div>
       </main>
+      <div className="h-[3rem] fixed bottom-0 z-50  right-0 left-0 bg-background md:hidden border-t border-primary">
+        <div className="w-full  h-full px-3  flex items-center justify-center">
+          <nav className="flex  gap-5">
+            {routes.map((route) => (
+              <NavLink
+                key={route.path}
+                className={({ isActive }) => (isActive ? 'text-primary' : '')}
+                to={route.path}
+              >
+                <div className={cn('flex items-center gap-2')}>
+                  <route.Icon size={22} />
+                </div>
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+      </div>
     </div>
   )
 }

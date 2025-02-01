@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch'
 
 //Icons
 import {
+  ArrowLeftIcon,
   Loader2,
   Loader2Icon,
   SearchIcon,
@@ -32,6 +33,7 @@ import { ItemsQuotationTable } from '@/quotations/items-quotation-table'
 import { createQuotationAction } from '@/lib/actions'
 import { toast } from 'sonner'
 import { HTTPRequestError } from '@/lib/errors'
+import { BackTo } from '@/components/back-to'
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
@@ -199,8 +201,9 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <header className="flex justify-end">
-        <div className="flex justify-end">
+      <header className="flex justify-between">
+        <BackTo to="/quotations" compact />
+        <div className="">
           <React.Suspense fallback="cargando...">
             <CustomerPickerDialog
               customersPromise={customersPromise}

@@ -16,10 +16,8 @@ export default function QuotationByNumber({
 }: Route.ComponentProps) {
   const { quotationPromise } = loaderData
   return (
-    <div className="py-10">
-      <React.Suspense fallback={<QuotationSkeleton />}>
-        <ViewQuotation quotationPromise={quotationPromise} />
-      </React.Suspense>
-    </div>
+    <React.Suspense fallback={<QuotationSkeleton />}>
+      <ViewQuotation quotationPromise={quotationPromise} />
+    </React.Suspense>
   )
 }
