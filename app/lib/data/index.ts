@@ -4,16 +4,13 @@ import type { DataResponse, QuotationClient, Customer, Product } from '@/types'
 import { fetchData } from '@/lib/utils'
 import { getCompanybyRuc } from '@/lib/services/sunat'
 import { HTTPRequestError } from '@/lib/errors'
-
-async function fakePromise(time = 1000) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time)
-  })
-}
+import { fakePromise } from '@/lib/utils'
 
 export async function fetchQuotations(): Promise<QuotationClient[]> {
+  console.log('fetch quotations')
   const url = `${BASE_URL}/api/quotations`
   const data = await fetchData<DataResponse<QuotationClient>>(url)
+  console.log(data.items)
   return data.items
 }
 

@@ -75,6 +75,7 @@ export async function fetchData<T>(
   options?: RequestInit
 ): Promise<T> {
   const response = await fetch(url, options)
+  console.log(`OK:${response.ok} - ${response.statusText}`)
   if (!response.ok) {
     throw new HTTPRequestError(
       `Error en la peticion: ${url} - ${response.statusText}`

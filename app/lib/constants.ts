@@ -1,5 +1,5 @@
-// export const BASE_URL = "http://localhost:8787";
-const isDev = import.meta.env.MODE === "development";
+const isDev = import.meta.env.MODE === 'development'
+// export const BASE_URL = 'https://api.tellsignals.workers.dev'
 export const BASE_URL = isDev
-  ? "http://localhost:8787"
-  : "https://api.tellsignals.workers.dev";
+  ? 'http://localhost:8787'
+  : 'https://api.tellsignals.workers.dev'

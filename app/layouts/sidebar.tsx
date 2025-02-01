@@ -7,6 +7,10 @@ import {
   TruckIcon,
   PrinterIcon,
   UsersIcon,
+  PictureInPictureIcon,
+  ImageIcon,
+  SplitIcon,
+  ImageOffIcon,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -14,29 +18,55 @@ const routes = [
   {
     path: '/quotations',
     label: 'Cotizaciones',
+    active: true,
     icon: <HomeIcon />,
   },
   {
     path: '/products',
     label: 'Productos',
+    active: true,
     icon: <ShoppingBagIcon />,
   },
 
   {
     path: '/customers',
     label: 'Clientes',
+    active: false,
     icon: <UsersIcon />,
   },
 
   {
     path: '/labels',
     label: 'Etiquetas',
+    active: false,
     icon: <PrinterIcon />,
   },
   {
     path: '/agencies',
     label: 'Agencias',
+    active: false,
     icon: <TruckIcon />,
+  },
+
+  {
+    path: '/gallery',
+    label: 'Galeria',
+    active: false,
+    icon: <ImageIcon />,
+  },
+
+  {
+    path: '/signals',
+    label: 'Señales',
+    active: false,
+    icon: <SplitIcon />,
+  },
+
+  {
+    path: '/watermark',
+    label: 'Marca de agua',
+    active: false,
+    icon: <ImageOffIcon />,
   },
 ]
 
@@ -53,21 +83,25 @@ export default function SidebarLayout() {
       <div className="w-[3rem] shrink-0 md:w-[15rem]">
         <div className="w-[3rem] md:w-[15rem]  h-screen border-r fixed z-50 left-0 flex justify-center">
           <div className="">
-            <nav className="flex flex-col gap-6  pt-8">
+            <nav className="flex flex-col gap-8  pt-8">
               {routes.map((route) => (
                 <NavLink
                   key={route.path}
                   className={({ isActive }) => (isActive ? 'text-primary' : '')}
+                  style={{
+                    color: !route.active ? '#333' : 'currentcolor',
+                    cursor: 'not-allowed',
+                  }}
                   to={route.path}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className={cn('flex items-center gap-2')}>
                     {route.icon}
                     <span className="hidden md:block">{route.label}</span>
                   </div>
                 </NavLink>
               ))}
             </nav>
-            <div className="h-px bg-primary my-4"></div>
+            <div className="h-px bg-primary my-8"></div>
             <div className="mt-4">
               <Button asChild className="w-full" size="icon">
                 <Link to="/">

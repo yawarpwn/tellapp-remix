@@ -19,14 +19,18 @@ export async function createQuotationAction(newQuotation: Object) {
     method: 'POST',
     body: JSON.stringify(newQuotation),
   })
+
+  console.log('create quotation action')
+  console.log(data)
+
   return data.insertedNumber
 }
 
 export async function duplicateQuotationAction(quotationNumber: number) {
   const quotation = await fetchQuotaitonByNumber(quotationNumber)
   const insertedQuotationNumber = await createQuotationAction({
+    ...quotation,
     id: crypto.randomUUID(),
-    quotation,
   })
   return insertedQuotationNumber
 }
