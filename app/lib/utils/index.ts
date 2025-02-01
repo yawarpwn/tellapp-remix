@@ -75,7 +75,7 @@ export async function fetchData<T>(
   options?: RequestInit
 ): Promise<T> {
   const response = await fetch(url, options)
-  console.log(`OK:${response.ok} - ${response.statusText}`)
+  console.log(`OK:${response.ok} - ${response.url} - ${response.statusText}`)
   if (!response.ok) {
     throw new HTTPRequestError(
       `Error en la peticion: ${url} - ${response.statusText}`
@@ -88,4 +88,18 @@ export async function fakePromise(time = 1000) {
   return new Promise((resolve) => {
     setTimeout(resolve, time)
   })
+}
+
+export function handleError(error: unknown) {
+  console.log(error)
+  if (error instanceof HTTPRequestError) {
+    return {
+      success: false,
+      error: error.message,
+    }
+  }
+  return {
+    success: false,
+    error: 'Error Desconocido',
+  }
 }

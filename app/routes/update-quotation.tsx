@@ -1,33 +1,30 @@
 import { redirect, useFetcher } from 'react-router'
+import { handleError } from '@/lib/utils'
 
-import React, { useState } from 'react'
-import type { Route } from './+types/create-quotation'
-import { fetchCustomers, fetchProducts } from '@/lib/data'
-import { createQuotationAction } from '@/lib/actions'
+import React from 'react'
+import type { Route } from './+types/update-quotation'
+import {
+  fetchCustomers,
+  fetchProducts,
+  fetchQuotaitonByNumber,
+} from '@/lib/data'
+import { updateQuotationAction } from '@/lib/actions'
 import { toast } from 'sonner'
 import { HTTPRequestError } from '@/lib/errors'
 import { useQuotation } from '@/hooks/use-quotation'
 import { CreateUpdateQuotation } from '@/quotations/create-update-quotation'
+import type { Customer, Product, QuotationClient } from '@/types'
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
   const quotation = JSON.parse(formData.get('quotation') as string)
+  console.log({ quotation })
   // const quotation = JSON.parse(formData.get('quotation') as string)
   try {
-    await createQuotationAction(quotation)
+    await updateQuotationAction(quotation)
     return redirect('/quotations')
   } catch (error) {
-    if (error instanceof HTTPRequestError) {
-      return {
-        error: error.message,
-        success: false,
-      }
-    }
-
-    return {
-      error: 'Error creating quotation',
-      success: false,
-    }
+    return handleError(error)
   }
 }
 
@@ -35,12 +32,20 @@ export async function loader({ params }: Route.LoaderArgs) {
   return {
     productsPromise: fetchProducts(),
     customersPromise: fetchCustomers({ onlyRegular: true }),
+    quotationPromise: fetchQuotaitonByNumber(+params.number),
   }
 }
 
-export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
-  const { productsPromise, customersPromise } = loaderData
-
+export function UpdateQuotation({
+  productsPromise,
+  customersPromise,
+  quotationPromise,
+}: {
+  productsPromise: Promise<Product[]>
+  customersPromise: Promise<Customer[]>
+  quotationPromise: Promise<QuotationClient>
+}) {
+  const quotatoinFromDb = React.use(quotationPromise)
   const {
     quotation,
     updateQuotation,
@@ -54,24 +59,24 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
     hasItems,
     showCreditOption,
     toggleCreditOption,
-  } = useQuotation()
+  } = useQuotation(quotatoinFromDb)
 
-  const createQuotationFetcher = useFetcher()
-  const pending = createQuotationFetcher.state !== 'idle'
+  const fetcher = useFetcher()
+  const pending = fetcher.state !== 'idle'
 
-  const handleCreateQuotationSubmit = () => {
+  const handleUpdateQuotation = () => {
     const formData = new FormData()
     formData.append('quotation', JSON.stringify(quotation))
-    createQuotationFetcher.submit(formData, {
+    fetcher.submit(formData, {
       method: 'post',
     })
   }
 
   React.useEffect(() => {
-    if (createQuotationFetcher.data) {
-      toast.error(createQuotationFetcher.data.error)
+    if (fetcher.data) {
+      toast.error(fetcher.data.error)
     }
-  }, [createQuotationFetcher.data])
+  }, [fetcher.data])
 
   return (
     <CreateUpdateQuotation
@@ -89,8 +94,18 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
       toggleCreditOption={toggleCreditOption}
       productsPromise={productsPromise}
       customersPromise={customersPromise}
-      handleSubmit={handleCreateQuotationSubmit}
+      handleSubmit={handleUpdateQuotation}
       pending={pending}
     />
+  )
+}
+
+export default function WrapperUpdateQuotation({
+  loaderData,
+}: Route.ComponentProps) {
+  return (
+    <React.Suspense fallback="loading...">
+      <UpdateQuotation {...loaderData} />
+    </React.Suspense>
   )
 }

@@ -1,12 +1,12 @@
-import { type ColumnDef } from "@tanstack/react-table";
-import type { QuotationClient } from "@/types";
-import { getIgv, formatDateToLocal } from "@/lib/utils";
-import { Form } from "react-router";
-import { MoreHorizontal, StarIcon } from "lucide-react";
-import { Link } from "react-router";
-import { Checkbox } from "@/components/ui/checkbox";
+import { type ColumnDef } from '@tanstack/react-table'
+import type { QuotationClient } from '@/types'
+import { getIgv, formatDateToLocal } from '@/lib/utils'
+import { Form } from 'react-router'
+import { MoreHorizontal, StarIcon } from 'lucide-react'
+import { Link } from 'react-router'
+import { Checkbox } from '@/components/ui/checkbox'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,59 +14,59 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTableColumnHeader } from "@/components/data-table-column-header";
+} from '@/components/ui/dropdown-menu'
+import { DataTableColumnHeader } from '@/components/data-table-column-header'
 
 export const columns: ColumnDef<QuotationClient>[] = [
   {
-    id: "select",
+    id: 'select',
     cell: ({ row }) => <StarIcon className="size-4" />,
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "number",
+    accessorKey: 'number',
     enableGlobalFilter: true,
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="#Nro" />;
+      return <DataTableColumnHeader column={column} title="#Nro" />
     },
   },
   {
-    accessorKey: "customer.name",
-    header: "Cliente",
+    accessorKey: 'customer.name',
+    header: 'Cliente',
     enableGlobalFilter: false,
     cell: ({ row }) => (
       <div>
         <p className="min-w-[230px]">
-          {row.original.customer?.name || "SIN RUC"}
+          {row.original.customer?.name || 'SIN RUC'}
         </p>
         <p>{row.original.customer?.ruc}</p>
       </div>
     ),
   },
   {
-    accessorKey: "id",
+    accessorKey: 'id',
     header: () => <div className="">Monto</div>,
     cell: ({ row }) => {
-      const formated = getIgv(row.original.items).formatedTotal;
-      return <div className="font-medium">{formated}</div>;
+      const formated = getIgv(row.original.items).formatedTotal
+      return <div className="font-medium">{formated}</div>
     },
   },
   {
-    accessorKey: "created_at",
+    accessorKey: 'created_at',
     enableGlobalFilter: false,
-    header: "Fecha",
+    header: 'Fecha',
     cell: ({ row }) => {
       const date = formatDateToLocal(new Date(row.original.createdAt), {
-        month: "short",
-      });
-      return <div>{date}</div>;
+        month: 'short',
+      })
+      return <div>{date}</div>
     },
   },
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => {
-      const quotation = row.original;
+      const quotation = row.original
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -89,9 +89,9 @@ export const columns: ColumnDef<QuotationClient>[] = [
                 action={`/quotations/${quotation.number}/delete`}
                 method="post"
                 onSubmit={(ev) => {
-                  let response = confirm("¿Deseas Eliminar la cotización?");
+                  let response = confirm('¿Deseas Eliminar la cotización?')
                   if (!response) {
-                    ev.preventDefault();
+                    ev.preventDefault()
                   }
                 }}
               >
@@ -103,9 +103,9 @@ export const columns: ColumnDef<QuotationClient>[] = [
                 action={`/quotations/${quotation.number}/duplicate`}
                 method="post"
                 onSubmit={(ev) => {
-                  let response = confirm("¿Deseas duplicar la cotización?");
+                  let response = confirm('¿Deseas duplicar la cotización?')
                   if (!response) {
-                    ev.preventDefault();
+                    ev.preventDefault()
                   }
                 }}
               >
@@ -114,7 +114,7 @@ export const columns: ColumnDef<QuotationClient>[] = [
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      );
+      )
     },
   },
-];
+]

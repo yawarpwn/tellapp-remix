@@ -107,7 +107,7 @@ export function CreateUpdateQuotation({
               name="company"
               type="text"
               value={quotation?.customer?.name ?? ''}
-              disabled={pending}
+              disabled={true}
               onChange={(e) => {
                 updateQuotation({
                   ...quotation,
@@ -126,7 +126,7 @@ export function CreateUpdateQuotation({
               name="address"
               type="text"
               value={quotation?.customer?.address ?? ''}
-              disabled={pending}
+              disabled={true}
               onChange={(e) => {
                 updateQuotation({
                   ...quotation,
@@ -217,7 +217,7 @@ export function CreateUpdateQuotation({
             type="submit"
           >
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Crear
+            {'id' in (quotation as QuotationClient) ? 'Actualizar' : 'Crear'}
           </Button>
         </footer>
       </article>

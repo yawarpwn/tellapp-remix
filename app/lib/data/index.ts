@@ -54,38 +54,24 @@ export async function fetchCustomerByRuc(
     throw new HTTPRequestError('El Ruc Debe tener 11 digitos')
   }
 
-  const url = `${BASE_URL}/api/customers/${ruc}`
-  //Search customer in Database
-  const customerFromDatabase = await fetchData<Customer>(url)
-  console.log({ customerFromDatabase })
-
-  if (customerFromDatabase?.id) {
+  try {
+    //Search customer in Database
+    const url = `${BASE_URL}/api/customers/${ruc}`
+    const customerFromDatabase = await fetchData<Customer>(url)
     return {
       id: customerFromDatabase.id,
       ruc: customerFromDatabase.ruc,
       name: customerFromDatabase.name,
       address: customerFromDatabase.address ?? undefined,
     }
+  } catch (error) {
+    //Search customer in Sunat
+    const customerFromSunat = await getCompanybyRuc(ruc)
+    return {
+      id: undefined,
+      ruc: customerFromSunat.ruc,
+      name: customerFromSunat.company,
+      address: customerFromSunat.address,
+    }
   }
-
-  //Search customer in Sunat
-  const customerFromSunat = await getCompanybyRuc(ruc)
-  return {
-    id: undefined,
-    ruc: customerFromSunat.ruc,
-    name: customerFromSunat.company,
-    address: customerFromSunat.address,
-  }
-
-  // const customer = {
-  //   ruc: "20610555536",
-  //   name: "TELL SENALES  SOCIEDAD ANONIMA CERRADa",
-  //   address: "Maquinaria 325 - Callao",
-  // };
-  //
-  // return new Promise((resolve) => {
-  //   setTimeout(() => {
-  //     resolve(customerFromDatabase);
-  //   }, 1000);
-  // });
 }

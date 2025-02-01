@@ -29,8 +29,6 @@ export function useQuotation(initialState?: QuotationClient) {
     }
   )
 
-  console.log(quotation)
-
   const [showCreditOption, setShowCreditOption] = React.useState(false)
 
   const addItem = (item: QuotationItem) => {
