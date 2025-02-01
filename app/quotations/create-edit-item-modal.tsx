@@ -1,26 +1,26 @@
 //ui
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useFuse } from "@/hooks/use-fuse";
-import React, { useState } from "react";
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { useFuse } from '@/hooks/use-fuse'
+import React, { useState } from 'react'
 
 //utils
-import { cn, formatNumberToLocal } from "@/lib/utils";
+import { cn, formatNumberToLocal } from '@/lib/utils'
 
 //types
-import { type Product } from "@/types";
-import { type QuotationItem } from "@/types";
+import { type Product } from '@/types'
+import { type QuotationItem } from '@/types'
 
 //icons
-import { CircleOffIcon, SearchIcon } from "lucide-react";
+import { CircleOffIcon, SearchIcon } from 'lucide-react'
 
 function EmpetyHits() {
   return (
@@ -32,102 +32,103 @@ function EmpetyHits() {
         </span>
       </div>
     </div>
-  );
+  )
 }
 
 type Props = {
-  open: boolean;
-  products: Product[];
-  onClose: () => void;
-  item?: QuotationItem;
-  onAddItem: (item: QuotationItem) => void;
-  onEditItem: (itemToEdit: QuotationItem) => void;
-};
+  open: boolean
+  products: Product[]
+  onClose: () => void
+  item?: QuotationItem
+  onAddItem: (item: QuotationItem) => void
+  onEditItem: (itemToEdit: QuotationItem) => void
+}
 
 const initialQuoItem = {
   price: 0,
   qty: 0,
-  unitSize: "",
-  description: "",
-  code: "",
+  unitSize: '',
+  description: '',
+  code: '',
   cost: 0,
-  link: "",
-};
+  link: '',
+}
 
 export function CreateEditItemModal(props: Props) {
-  const { open, onClose, item, onAddItem, onEditItem } = props;
-  const { products } = props;
+  const { open, onClose, item, onAddItem, onEditItem } = props
+  const { products } = props
+  const qtyInputRef = React.useRef<HTMLInputElement>(null)
 
   const [quoItem, setQuoItem] = useState<
-    Omit<QuotationItem, "id"> | QuotationItem
-  >(item ?? initialQuoItem);
+    Omit<QuotationItem, 'id'> | QuotationItem
+  >(item ?? initialQuoItem)
 
   const { hits, onSearch } = useFuse<Product>(products, {
     keys: [
       {
-        name: "code",
+        name: 'code',
         weight: 2,
       },
       {
-        name: "description",
+        name: 'description',
         weight: 1,
       },
     ],
-  });
+  })
 
   const handleChangeItem = (
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    const { name, value } = event.currentTarget;
+    const { name, value } = event.currentTarget
 
     const updateValue =
-      name === "price" || name === "qty" || name === "cost"
+      name === 'price' || name === 'qty' || name === 'cost'
         ? Number(value)
-        : value;
+        : value
 
     setQuoItem({
       ...quoItem,
       [name]: updateValue,
-    });
-  };
+    })
+  }
 
   const handleChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
-    onSearch(value);
-  };
+    const { value } = event.currentTarget
+    onSearch(value)
+  }
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     //edit
     if (item) {
-      console.log("edit Item");
-      onEditItem(quoItem as QuotationItem);
+      console.log('edit Item')
+      onEditItem(quoItem as QuotationItem)
     } else {
-      console.log("create Item");
+      console.log('create Item')
       onAddItem({
         ...quoItem,
         id: crypto.randomUUID(),
-      });
+      })
     }
-    onClose();
-  };
+    onClose()
+  }
 
   const removeLink = () => {
     setQuoItem({
       ...quoItem,
       link: undefined,
-    });
-  };
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogTitle>Crear Item</DialogTitle>
       <DialogContent
         className={cn(
-          "flex  max-w-md flex-col border p-2 py-4 md:p-6",
-          hits.length === 0 ? "h-auto" : "h-[95svh] md:h-[90svh]"
+          'flex  max-w-md flex-col border p-2 py-4 md:p-6',
+          hits.length === 0 ? 'h-auto' : 'h-[95svh] md:h-[90svh]'
         )}
       >
         {/* Search Product */}
@@ -156,9 +157,10 @@ export function CreateEditItemModal(props: Props) {
                     cost: hit.item.cost,
                     price: hit.item.price,
                     unitSize: hit.item.unitSize,
-                    link: hit.item.link ? hit.item.link : "",
+                    link: hit.item.link ? hit.item.link : '',
                     qty: 1,
-                  });
+                  })
+                  qtyInputRef.current?.focus()
                 }}
               >
                 <div className="line-clamp-2 text-left text-muted-foreground">
@@ -217,6 +219,7 @@ export function CreateEditItemModal(props: Props) {
                   Cantidad
                 </label>
                 <Input
+                  ref={qtyInputRef}
                   id="qty"
                   name="qty"
                   type="number"
@@ -265,7 +268,7 @@ export function CreateEditItemModal(props: Props) {
                   disabled
                   name="cost"
                   onChange={handleChangeItem}
-                  value={quoItem.cost ?? ""}
+                  value={quoItem.cost ?? ''}
                 />
               </div>
             </div>
@@ -283,5 +286,5 @@ export function CreateEditItemModal(props: Props) {
         </footer>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

@@ -8,46 +8,53 @@ import {
   TrashIcon,
   EditIcon,
   FilesIcon,
+  SeparatorVerticalIcon,
 } from 'lucide-react'
 import type { Product, QuotationItem } from '@/types'
+import { Separator } from '@/components/ui/separator'
 
 function SingleInputEdit({
   onInputChange,
   value,
   type,
   name,
+  className,
 }: {
   onInputChange: (value: string) => void
   value: string | number
   type: React.HTMLInputTypeAttribute | undefined
   name: string | undefined
+  className?: React.HTMLAttributes<HTMLElement>['className']
 }) {
   const [isEditing, setIsEditing] = useState(false)
 
   return (
-    <div className="relative">
+    <div className={cn(' h-full relative', className)}>
       <input
         className={cn(
-          'absolute inset-0 z-20 resize-none border-none outline-none bg-background',
+          'absolute inset-0 text-center bg-muted border-none outline-none',
           !isEditing && 'hidden'
         )}
         type={type}
         onChange={(ev) => onInputChange(ev.target.value)}
         name={name}
         value={value}
-        onBlurCapture={() => setIsEditing(false)}
+        onBlur={() => setIsEditing(false)}
         onKeyDown={(ev) => {
           if (ev.key === 'Enter') {
             setIsEditing(false)
           }
         }}
       />
-      <p
+      <div
         onClick={() => setIsEditing(true)}
-        className={cn('absolute inset-0 z-10', isEditing && 'hidden')}
+        className={cn(
+          'absolute flex justify-center inset-0',
+          isEditing && 'hidden'
+        )}
       >
-        {value}
-      </p>
+        <p>{value}</p>
+      </div>
     </div>
   )
 }
@@ -127,7 +134,6 @@ export function ProductCard(props: Props) {
               </Button>
             </div>
           </div>
-
           <div className="flex items-center justify-between gap-4">
             <div className="relative flex min-h-[100px]  w-full flex-col gap-4">
               <textarea
@@ -165,24 +171,28 @@ export function ProductCard(props: Props) {
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
-            <div className="col-span-3 w-[100px]">
-              <SingleInputEdit
-                value={item.unitSize}
-                onInputChange={(unitSize) =>
-                  onEditItem({ ...item, unitSize: unitSize })
-                }
-                type="text"
-                name="name"
-              />
-            </div>
+          <Separator className="mb-1" />
+          <div className="flex space-x-4 items-center text-sm h-5">
             <SingleInputEdit
+              value={item.unitSize}
+              className="flex-1"
+              onInputChange={(unitSize) =>
+                onEditItem({ ...item, unitSize: unitSize })
+              }
+              type="text"
+              name="name"
+            />
+            <Separator orientation="vertical" />
+            <SingleInputEdit
+              className="flex-1"
               value={item.qty}
               onInputChange={(qty) => onEditItem({ ...item, qty: Number(qty) })}
               name="qty"
               type="number"
             />
+            <Separator orientation="vertical" />
             <SingleInputEdit
+              className="flex-1"
               value={item.price}
               onInputChange={(price) =>
                 onEditItem({ ...item, price: Number(price) })
@@ -190,9 +200,10 @@ export function ProductCard(props: Props) {
               name="price"
               type="number"
             />
-            <span className="text-success col-span-3 rounded px-2 py-1">
+            <Separator orientation="vertical" />
+            <div className="text-success flex justify-center  rounded px-2 md:px-8 ">
               S/ {item.price * item.qty}
-            </span>
+            </div>
           </div>
         </CardContent>
       </Card>
