@@ -10,7 +10,6 @@ export async function fetchQuotations(): Promise<QuotationClient[]> {
   console.log('fetch quotations')
   const url = `${BASE_URL}/api/quotations`
   const data = await fetchData<DataResponse<QuotationClient>>(url)
-  console.log(data.items)
   return data.items
 }
 
