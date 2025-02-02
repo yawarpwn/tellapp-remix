@@ -1,7 +1,7 @@
 import type { Route } from './+types/create-product'
 import { insertProductSchema } from '@/lib/schemas'
 import { applySchema } from 'composable-functions'
-import { formAction } from 'remix-forms'
+import { formAction, performMutation } from 'remix-forms'
 import { SchemaForm } from '@/components/schema-form'
 import { Textarea } from '@/components/ui/textarea'
 import { PRODUCT_CATEGORIES } from '@/lib/constants'
@@ -23,18 +23,31 @@ import {
 import { useEffect, useState } from 'react'
 import React from 'react'
 
-const mutation = applySchema(insertProductSchema)(async (values) => {
-  console.log({ values })
-})
+const mutation = applySchema(insertProductSchema)(async (values) => values)
 
 export async function action({ request }: Route.ActionArgs) {
-  formAction({
+  const result = await performMutation({
     request,
     schema: insertProductSchema,
     mutation,
-    successPath: '/products' /* path to redirect on success */,
   })
+
+  console.log(result)
+  if (!result.success) {
+    return {
+      data: 'mu',
+    }
+  }
+
+  return redirect('/products')
 }
+//   formAction({
+//     request,
+//     schema: insertProductSchema,
+//     mutation,
+//     successPath: '/products' /* path to redirect on success */,
+//   })
+// }
 
 // function ErrorMessage({
 //   errors,
@@ -73,7 +86,7 @@ export default function CreateProduct() {
                     Descripcion
                   </Label>
                   <Textarea
-                    required
+                    defaultValue={undefined}
                     id="description"
                     placeholder="Señal fotoluminiscente 20x30cm con soporte pvc celtex 3mm"
                     {...register('description')}
@@ -86,15 +99,8 @@ export default function CreateProduct() {
             <Field name="unitSize" label="unitSize">
               {({ Errors }) => (
                 <div className="grid gap-2">
-                  <Label className="text-muted-foreground">
-                    unidad / medida
-                  </Label>
-                  <Input
-                    id="unitSize"
-                    placeholder="30x20cm"
-                    required
-                    {...register('unitSize')}
-                  />
+                  <Label className="text-muted-foreground">Unidad/Medida</Label>
+                  <Input placeholder="20x30cm" {...register('unitSize')} />
                   <Errors />
                 </div>
               )}
@@ -108,7 +114,6 @@ export default function CreateProduct() {
                   <Input
                     id="code"
                     placeholder="FHP-50"
-                    required
                     minLength={3}
                     {...register('code')}
                   />
@@ -128,7 +133,6 @@ export default function CreateProduct() {
                       id="cost"
                       placeholder="100"
                       type="number"
-                      required
                       {...register('cost')}
                     />
                     <Errors />
@@ -145,7 +149,6 @@ export default function CreateProduct() {
                       id="price"
                       placeholder="100"
                       type="number"
-                      required
                       {...register('price')}
                     />
                     <Errors />
@@ -162,7 +165,6 @@ export default function CreateProduct() {
                   </Label>
                   <Input
                     placeholder="http://tellsenales.com/products/product-link"
-                    required
                     {...register('link')}
                   />
                   <Errors />

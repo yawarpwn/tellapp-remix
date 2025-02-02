@@ -5,8 +5,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useNavigate,
-  useNavigation,
 } from 'react-router'
 
 import { Toaster } from '@/components/ui/sonner'
@@ -29,8 +27,6 @@ export const links: Route.LinksFunction = () => [
 ]
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const navigation = useNavigation()
-  console.log(navigation.location)
   return (
     <html lang="es" className="dark">
       <head>
