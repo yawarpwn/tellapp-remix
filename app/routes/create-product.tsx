@@ -1,14 +1,16 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { InsertProductSchema } from '@/lib/schemas'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import type { Route } from './+types/create-product'
+import { insertProductSchema } from '@/lib/schemas'
+import { applySchema } from 'composable-functions'
+import { formAction } from 'remix-forms'
+import { SchemaForm } from '@/components/schema-form'
+import { Textarea } from '@/components/ui/textarea'
+import { PRODUCT_CATEGORIES } from '@/lib/constants'
+import { BackTo } from '@/components/back-to'
+import { Button } from '@/components/ui/button'
+import type { InsertProduct } from '@/types'
+import { Link, redirect, useFetcher } from 'react-router'
+import { Label } from '@radix-ui/react-label'
+import { Loader2Icon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -18,177 +20,195 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { PRODUCT_CATEGORIES } from '@/lib/constants'
-import type { InsertProduct } from '@/types'
-import { BackTo } from '@/components/back-to'
-import { Button } from '@/components/ui/button'
-import { Link } from 'react-router'
+import { useEffect, useState } from 'react'
+import React from 'react'
+
+const mutation = applySchema(insertProductSchema)(async (values) => {
+  console.log({ values })
+})
+
+export async function action({ request }: Route.ActionArgs) {
+  formAction({
+    request,
+    schema: insertProductSchema,
+    mutation,
+    successPath: '/products' /* path to redirect on success */,
+  })
+}
+
+// function ErrorMessage({
+//   errors,
+//   name,
+// }: {
+//   errors?: {
+//     [key: string]: string[]
+//   }
+//   name: keyof InsertProduct
+// }) {
+//   if (!errors?.[name]) return null
+//
+//   return <p className="text-destructive">{errors[name][0]}</p>
+// }
+//
+// type ValidErrors<T> = {
+//   [key in keyof T]: string[]
+// }
 
 export default function CreateProduct() {
-  const form = useForm<InsertProduct>({
-    resolver: zodResolver(InsertProductSchema),
-    defaultValues: {
-      description: '',
-      price: '',
-      link: '',
-      category: '',
-      cost: '',
-      unitSize: '',
-    },
-  })
-
-  const onSubmit = (data: InsertProduct) => {
-    console.log(data)
-  }
-
   return (
-    <div>
-      <div className="mb-6">
+    <div className="pb-8">
+      <div>
         <BackTo to="/products" />
       </div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
-        >
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Descripcion</FormLabel>
-                <FormControl>
+      <SchemaForm schema={insertProductSchema}>
+        {({ Field, Errors, register }) => (
+          <div className="flex flex-col gap-4">
+            <Field name="description" label="description">
+              {({ Errors }) => (
+                <div className="grid gap-2">
+                  <Label
+                    className="text-muted-foreground"
+                    htmlFor="description"
+                  >
+                    Descripcion
+                  </Label>
                   <Textarea
-                    placeholder="Descripcion de producto..."
-                    className="resize-none"
-                    {...field}
+                    required
+                    id="description"
+                    placeholder="Señal fotoluminiscente 20x30cm con soporte pvc celtex 3mm"
+                    {...register('description')}
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="code"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Codigo</FormLabel>
-                <FormControl>
-                  <Input
-                    className="uppercase"
-                    placeholder="FHIP-123"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="unitSize"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Unidad / Medida</FormLabel>
-                <FormControl>
-                  <Input placeholder="120x60cm" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="link"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Enlace de producto</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="https://tellsenales.com/enlace-producto"
-                    value={field.value ?? ''}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="cost"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Costo</FormLabel>
-                  <FormControl>
-                    <Input placeholder="90" {...field} type="number" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  <Errors />
+                </div>
               )}
-            />
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Precio</FormLabel>
-                  <FormControl>
-                    <Input placeholder="100" {...field} type="number" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+            </Field>
 
-          <FormField
-            control={form.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Categoria</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
+            <Field name="unitSize" label="unitSize">
+              {({ Errors }) => (
+                <div className="grid gap-2">
+                  <Label className="text-muted-foreground">
+                    unidad / medida
+                  </Label>
+                  <Input
+                    id="unitSize"
+                    placeholder="30x20cm"
+                    required
+                    {...register('unitSize')}
+                  />
+                  <Errors />
+                </div>
+              )}
+            </Field>
+            <Field name="code" label="code">
+              {({ Errors }) => (
+                <div className="grid gap-2">
+                  <Label className="text-muted-foreground" htmlFor="code">
+                    Código
+                  </Label>
+                  <Input
+                    id="code"
+                    placeholder="FHP-50"
+                    required
+                    minLength={3}
+                    {...register('code')}
+                  />
+                  <Errors />
+                </div>
+              )}
+            </Field>
+
+            <div className="grid grid-cols-2 gap-4">
+              <Field name="cost" label="cost">
+                {({ Errors }) => (
+                  <div className="grid gap-2">
+                    <Label className="text-muted-foreground" htmlFor="code">
+                      Costo
+                    </Label>
+                    <Input
+                      id="cost"
+                      placeholder="100"
+                      type="number"
+                      required
+                      {...register('cost')}
+                    />
+                    <Errors />
+                  </div>
+                )}
+              </Field>
+              <Field name="price" label="price">
+                {({ Errors }) => (
+                  <div className="grid gap-2">
+                    <Label className="text-muted-foreground" htmlFor="price">
+                      Price
+                    </Label>
+                    <Input
+                      id="price"
+                      placeholder="100"
+                      type="number"
+                      required
+                      {...register('price')}
+                    />
+                    <Errors />
+                  </div>
+                )}
+              </Field>
+            </div>
+
+            <Field name="link" label="link">
+              {({ Errors }) => (
+                <div className="grid gap-2">
+                  <Label className="text-muted-foreground" htmlFor="link">
+                    Link
+                  </Label>
+                  <Input
+                    placeholder="http://tellsenales.com/products/product-link"
+                    required
+                    {...register('link')}
+                  />
+                  <Errors />
+                </div>
+              )}
+            </Field>
+            <Field name="categoryId" label="categoryId">
+              {({ Errors }) => (
+                <div className="grid gap-2">
+                  <Label className="text-muted-foreground" htmlFor="categoryId">
+                    Categoria
+                  </Label>
+                  <Select {...register('categoryId')}>
                     <SelectTrigger className="capitalize">
                       <SelectValue placeholder="Seleciona una categoria" />
                     </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      {Object.values(PRODUCT_CATEGORIES).map((item) => (
-                        <SelectItem
-                          key={item}
-                          value={item}
-                          className="capitalize"
-                        >
-                          {item}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <footer className="flex items-center justify-between mt-4">
-            <Button variant="secondary" asChild>
+                    <SelectContent>
+                      <SelectGroup>
+                        {Object.entries(PRODUCT_CATEGORIES).map(
+                          ([id, category]) => (
+                            <SelectItem
+                              key={id}
+                              value={id}
+                              className="capitalize"
+                            >
+                              {category}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <Errors />
+                </div>
+              )}
+            </Field>
+            <Errors />
+            <footer className="flex items-center justify-between mt-4">
               <Link to="/products">Cancelar</Link>
-            </Button>
-            <Button type="submit">Crear</Button>
-          </footer>
-        </form>
-      </Form>
+              <Button type="submit">
+                <span>Crear</span>
+              </Button>
+            </footer>
+          </div>
+        )}
+      </SchemaForm>
     </div>
   )
 }

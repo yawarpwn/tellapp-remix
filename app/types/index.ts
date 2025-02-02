@@ -1,7 +1,7 @@
 import {
-  ProductSchema,
-  InsertProductSchema,
-  UpdateProductSchema,
+  productSchema,
+  insertProductSchema,
+  updateProductSchema,
 } from '@/lib/schemas'
 import { z } from 'zod'
 export interface QuotationClient {
@@ -39,9 +39,9 @@ export interface Customer {
   updatedAt: Date
 }
 
-export type Product = z.infer<typeof ProductSchema>
-export type InsertProduct = z.infer<typeof InsertProductSchema>
-export type UpdateProduct = z.infer<typeof UpdateProductSchema>
+export type Product = z.infer<typeof productSchema>
+export type InsertProduct = z.infer<typeof insertProductSchema>
+export type UpdateProduct = z.infer<typeof updateProductSchema>
 
 export interface QuotationItem {
   id: string
