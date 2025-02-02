@@ -1,3 +1,9 @@
+import {
+  ProductSchema,
+  InsertProductSchema,
+  UpdateProductSchema,
+} from '@/lib/schemas'
+import { z } from 'zod'
 export interface QuotationClient {
   id: string
   number: number
@@ -33,19 +39,9 @@ export interface Customer {
   updatedAt: Date
 }
 
-export interface Product {
-  id: string
-  description: string
-  code: string
-  unitSize: string
-  category: string
-  link?: string
-  rank: number
-  price: number
-  cost: number
-  createdAt: Date
-  updatedAt: Date
-}
+export type Product = z.infer<typeof ProductSchema>
+export type InsertProduct = z.infer<typeof InsertProductSchema>
+export type UpdateProduct = z.infer<typeof UpdateProductSchema>
 
 export interface QuotationItem {
   id: string

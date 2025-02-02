@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { DataTablePagination } from "@/components/data-table-pagination";
-import { Input } from "@/components/ui/input";
+import * as React from 'react'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { DataTablePagination } from '@/components/data-table-pagination'
+import { Input } from '@/components/ui/input'
 import {
   type ColumnDef,
   type SortingState,
@@ -13,7 +13,7 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table'
 
 import {
   Table,
@@ -22,27 +22,26 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { PlugIcon, PlusIcon } from "lucide-react";
-import { Link } from "react-router";
+} from '@/components/ui/table'
+import { PlugIcon, PlusIcon } from 'lucide-react'
+import { Link } from 'react-router'
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  createPath: string
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  createPath,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [globalFilter, setGlobalFilter] = React.useState("");
-  // const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-  //   []
-  // );
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [globalFilter, setGlobalFilter] = React.useState('')
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+    React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
     data,
@@ -61,10 +60,10 @@ export function DataTable<TData, TValue>({
       rowSelection,
       globalFilter: globalFilter,
     },
-  });
+  })
 
   return (
-    <div className="flex flex-col justify-between gap-6 ">
+    <div className="flex flex-col justify-between gap-6 pb-7 ">
       <div className="flex items-center justify-between ">
         <Input
           placeholder="Nro Cotización"
@@ -72,10 +71,12 @@ export function DataTable<TData, TValue>({
           onChange={(event) => setGlobalFilter(event.target.value)}
           className="w-[200px]"
         />
-        <Link className={buttonVariants()} to="/quotations/create">
-          <PlusIcon />
-          Crear
-        </Link>
+        <Button asChild>
+          <Link to={createPath}>
+            <PlusIcon />
+            Crear
+          </Link>
+        </Button>
         {/* <DropdownMenu> */}
         {/*   <DropdownMenuTrigger asChild> */}
         {/*     <Button variant="outline" className="ml-auto"> */}
@@ -118,7 +119,7 @@ export function DataTable<TData, TValue>({
                             header.getContext()
                           )}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -128,7 +129,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -155,5 +156,5 @@ export function DataTable<TData, TValue>({
       </div>
       <DataTablePagination table={table} />
     </div>
-  );
+  )
 }
