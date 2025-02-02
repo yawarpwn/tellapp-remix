@@ -20,7 +20,12 @@ import { DataTableColumnHeader } from '@/components/data-table-column-header'
 export const columns: ColumnDef<QuotationClient>[] = [
   {
     id: 'select',
-    cell: ({ row }) => <StarIcon className="size-4" />,
+    cell: ({ row }) =>
+      row.original?.customer?.isRegular ? (
+        <StarIcon className="size-4 text-primary" />
+      ) : (
+        ''
+      ),
     enableSorting: false,
     enableHiding: false,
   },
@@ -28,7 +33,7 @@ export const columns: ColumnDef<QuotationClient>[] = [
     accessorKey: 'number',
     enableGlobalFilter: true,
     header: ({ column }) => {
-      return <DataTableColumnHeader column={column} title="#Nro" />
+      return <DataTableColumnHeader column={column} title="Nro" />
     },
   },
   {

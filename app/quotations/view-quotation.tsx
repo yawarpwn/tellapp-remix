@@ -1,7 +1,7 @@
 import { CopyText } from '@/quotations/copy-text'
 import { Link } from 'react-router'
 import { buttonVariants } from '@/components/ui/button'
-import { EditIcon, ExternalLinkIcon } from 'lucide-react'
+import { EditIcon, ExternalLinkIcon, FilesIcon, TrashIcon } from 'lucide-react'
 import { formatDateToLocal, formatNumberToLocal, getIgv } from '@/lib/utils'
 import {
   Table,
@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/table'
 import { DownloadAndShareButtons } from '@/quotations/download-and-share-buttons'
 import { DuplicateQuotationButton } from '@/quotations/duplicate-quotation-button'
-import { DeleteQuotationButton } from '@/quotations/delete-quotation-button'
+import { ActionButton } from '@/components/action-button'
 import type { QuotationClient } from '@/types'
 import React from 'react'
 import { ToggleRegularCustomerButton } from './toggle-rregular-customer-button'
@@ -41,16 +41,24 @@ export default function ViewQuotation({ quotationPromise }: Props) {
         <header className="flex justify-end gap-x-2">
           <div className="flex gap-2">
             <Link
-              to={`/new-quos/${quotation.number}/update`}
+              to={`/quotations/${quotation.number}/update`}
               className={buttonVariants({ size: 'sm', variant: 'outline' })}
             >
               <EditIcon size={18} />
               <span className="hidden lg:block">Editar</span>
             </Link>
             <DownloadAndShareButtons quotation={quotation} />
-            <DuplicateQuotationButton />
-            <DeleteQuotationButton quotationNumber={quotation.number} />
-            {quotation.customerId && (
+            <ActionButton
+              action={`/quotations/${quotation.number}/duplicate`}
+              text="Duplicar"
+              icon={<FilesIcon size={18} />}
+            />
+            <ActionButton
+              action={`/quotations/${quotation.number}/delete`}
+              text="Eliminar"
+              icon={<TrashIcon size={18} />}
+            />
+            {quotation?.customerId && (
               <ToggleRegularCustomerButton id={quotation.customerId} />
             )}
           </div>
@@ -61,7 +69,9 @@ export default function ViewQuotation({ quotationPromise }: Props) {
             <h2 className="text-2xl font-semibold md:text-3xl">Cotización</h2>
             <div className="mt-1 flex justify-end gap-1 text-xl text-primary">
               <span>#</span>
-              <span className="font-bold">{quotation.number}</span>
+              <span className="font-bold">
+                {String(quotation.number).padStart(4, '0')}
+              </span>
             </div>
           </div>
         </div>
@@ -72,10 +82,10 @@ export default function ViewQuotation({ quotationPromise }: Props) {
               {quotation?.customer?.name ?? 'SIN NOMBRE'}
             </h3>
             <address className="mt-2 not-italic text-muted-foreground ">
-              {quotation?.customer?.address ?? ''}
+              {quotation?.customer?.address ?? 'SIN DIRECCION'}
             </address>
             <p className="mt-2 text-muted-foreground">
-              {quotation.customer.ruc ?? 'SIN RUC'}
+              {quotation?.customer?.ruc ?? 'SIN RUC'}
             </p>
           </div>
           <div className="space-y-2 sm:text-right">
