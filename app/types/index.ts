@@ -2,7 +2,12 @@ import {
   productSchema,
   insertProductSchema,
   updateProductSchema,
+  productCategoriesSchema,
 } from '@/lib/schemas'
+
+type Prettyfy<T> = {
+  [K in keyof T]: T[K]
+}
 import { z } from 'zod'
 export interface QuotationClient {
   id: string
@@ -42,6 +47,7 @@ export interface Customer {
 export type Product = z.infer<typeof productSchema>
 export type InsertProduct = z.infer<typeof insertProductSchema>
 export type UpdateProduct = z.infer<typeof updateProductSchema>
+export type ProductCategory = z.infer<typeof productCategoriesSchema>
 
 export interface QuotationItem {
   id: string

@@ -18,7 +18,9 @@ import { formatNumberToLocal } from '@/lib/utils'
 
 export const columns: ColumnDef<Product>[] = [
   {
+    accessorKey: 'description',
     header: 'Descripcion',
+    enableGlobalFilter: true,
     cell: (props) => (
       <div className="min-w-[250px]">
         <p>{props.row.original.description}</p>
@@ -26,6 +28,8 @@ export const columns: ColumnDef<Product>[] = [
     ),
   },
   {
+    enableGlobalFilter: false,
+    accessorKey: 'link',
     header: 'Link',
     cell: (props) =>
       props.row.original.link ? (
@@ -41,27 +45,36 @@ export const columns: ColumnDef<Product>[] = [
       ),
   },
   {
+    enableGlobalFilter: false,
+    accessorKey: 'unitSize',
     header: 'U/M',
     cell: (props) => props.row.original.unitSize,
   },
   {
+    enableGlobalFilter: false,
+    accessorKey: 'cost',
     header: 'Costo',
     cell: (props) => formatNumberToLocal(props.row.original.cost),
   },
   {
     header: 'Precio',
+    accessorKey: 'price',
     cell: (props) => formatNumberToLocal(props.row.original.price),
+    enableGlobalFilter: false,
   },
   {
     header: 'Código',
+    accessorKey: 'code',
     cell: (props) => (
       <div className="min-w-[150px]">
         {props.row.original.code.toUpperCase()}
       </div>
     ),
+    enableGlobalFilter: true,
   },
   {
     id: 'actions',
+    enableGlobalFilter: false,
     cell: ({ row }) => {
       const product = row.original
       return (
@@ -76,11 +89,11 @@ export const columns: ColumnDef<Product>[] = [
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link to={`/quotations/${product.id}/update`}>Editar</Link>
+              <Link to={`/products/${product.id}/update`}>Editar</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Form
-                action={`/quotations/${product.id}/delete`}
+                action={`/products/${product.id}/delete`}
                 method="post"
                 onSubmit={(ev) => {
                   let response = confirm('¿Deseas Eliminar la cotización?')
@@ -94,7 +107,7 @@ export const columns: ColumnDef<Product>[] = [
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Form
-                action={`/quotations/${product.id}/duplicate`}
+                action={`/products/${product.id}/duplicate`}
                 method="post"
                 onSubmit={(ev) => {
                   let response = confirm('¿Deseas duplicar la cotización?')

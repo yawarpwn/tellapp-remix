@@ -1,6 +1,12 @@
 import { BASE_URL } from '@/lib/constants'
 
-import type { DataResponse, QuotationClient, Customer, Product } from '@/types'
+import type {
+  DataResponse,
+  QuotationClient,
+  Customer,
+  Product,
+  ProductCategory,
+} from '@/types'
 import { fetchData } from '@/lib/utils'
 import { getCompanybyRuc } from '@/lib/services/sunat'
 import { HTTPRequestError } from '@/lib/errors'
@@ -10,7 +16,6 @@ export async function fetchQuotations(): Promise<QuotationClient[]> {
   console.log('fetch quotations')
   const url = `${BASE_URL}/api/quotations`
   const data = await fetchData<DataResponse<QuotationClient>>(url)
-  console.log(data.items)
   return data.items
 }
 
@@ -34,11 +39,17 @@ export async function fetchCustomers(
     : data.items
 }
 
+//Products
 export async function fetchProducts(): Promise<Product[]> {
-  await fakePromise(2000)
   const url = `${BASE_URL}/api/products`
   const data = await fetchData<DataResponse<Product>>(url)
   return data.items
+}
+
+export async function fetchProductById(id: string): Promise<Product> {
+  const url = `${BASE_URL}/api/products/${id}`
+  const data = await fetchData<Product>(url)
+  return data
 }
 
 type CustomerFromService = {
@@ -75,4 +86,10 @@ export async function fetchCustomerByRuc(
       address: customerFromSunat.address,
     }
   }
+}
+
+export async function fetchProductCategories() {
+  const url = `${BASE_URL}/api/product-categories`
+  const data = await fetchData<DataResponse<ProductCategory>>(url)
+  return data.items
 }

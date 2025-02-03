@@ -23,6 +23,7 @@ export default [
     //products
     route('/products', 'routes/products.tsx'),
     route('/products/create', 'routes/create-product.tsx'),
+    route('/products/:id/update', 'routes/update-product.tsx'),
     route('/test-page', 'routes/test-page.tsx'),
   ]),
 ] satisfies RouteConfig

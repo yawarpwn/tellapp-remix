@@ -57,7 +57,7 @@ export function CreateUpdateQuotation({
   return (
     <div className="pb-8">
       <header className="flex justify-between">
-        <BackTo to="/quotations" compact />
+        <BackTo to="/quotations" />
         <div className="">
           <React.Suspense fallback="cargando...">
             <CustomerPickerDialog

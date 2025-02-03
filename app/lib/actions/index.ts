@@ -2,12 +2,14 @@ import { HTTPRequestError } from '@/lib/errors'
 import { fakePromise, fetchData } from '@/lib/utils'
 import type {
   CreateQuotationClient,
+  Product,
   QuotationClient,
+  UpdateProduct,
   UpdateQuotationClient,
 } from '@/types'
 import { fetchQuotaitonByNumber } from '@/lib/data'
 import { BASE_URL } from '@/lib/constants'
-import type { Customer } from '@/types'
+import type { Customer, InsertProduct } from '@/types'
 
 export async function deleteQuotationAction(quotationNumber: number) {
   const url = `${BASE_URL}/api/quotations/${quotationNumber}`
@@ -48,4 +50,27 @@ export async function duplicateQuotationAction(quotationNumber: number) {
     ...quotation,
   })
   return insertedQuotationNumber
+}
+
+export async function createProductAction(productToInsert: InsertProduct) {
+  const url = `${BASE_URL}/api/products`
+  const data = await fetchData<Product>(url, {
+    method: 'POST',
+    body: JSON.stringify(productToInsert),
+  })
+  return data
+}
+
+export async function updateProductAction(
+  id: string,
+  productToUpdate: UpdateProduct
+) {
+  console.log('update product action')
+  const url = `${BASE_URL}/api/products/${id}`
+  const updatedProduct = await fetchData<Product>(url, {
+    method: 'PUT',
+    body: JSON.stringify(productToUpdate),
+  })
+
+  return updatedProduct
 }
