@@ -17,7 +17,7 @@ export const productCategories = [
 ] as const
 
 export const productCategoriesSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   name: z.enum(productCategories),
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -26,23 +26,29 @@ export const productCategoriesSchema = z.object({
 export const productSchema = z.object({
   id: z.string(),
   description: z.string().min(10, 'Campo requerido, mínimo 10 caracteres'),
-  price: z
+  price: z.coerce
     .number({ message: 'Campo requerido' })
+    .int()
     .positive('Debe ser número positivo'),
-  cost: z
+  cost: z.coerce
     .number({
       message: 'Campo requerido',
     })
+    .int()
     .positive('Debe se número positivo'),
-  link: z.string().url().optional(),
+  link: z.string().url().optional().or(z.literal('')),
   category: z.enum(productCategories),
   code: z.string().min(3, 'Campo requerido, mínimo 3 caracteres'),
   unitSize: z.string().min(3, 'Campo requerido, mínimo 3 caracteres'),
   rank: z.coerce.number().optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
-  productId: z.number(),
-  categoryId: z.string(),
+  categoryId: z.coerce
+    .number({
+      message: 'Campo requerido',
+    })
+    .int()
+    .positive(),
 })
 
 export const insertProductSchema = productSchema.omit({
