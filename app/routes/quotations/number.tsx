@@ -1,5 +1,5 @@
 import { fetchQuotaitonByNumber } from '@/lib/data'
-import type { Route } from './+types/quotation-by-number'
+import type { Route } from './+types/number'
 import ViewQuotation from '@/quotations/view-quotation'
 import { QuotationSkeleton } from '@/components/skeletons/quotations'
 

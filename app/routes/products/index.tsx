@@ -1,5 +1,5 @@
 import { fetchProducts, fetchQuotations } from '@/lib/data'
-import type { Route } from './+types/products'
+import type { Route } from './+types/index'
 import { DataTable } from '@/components/data-table'
 import { columns } from '@/products/columns'
 

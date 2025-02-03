@@ -1,3 +1,4 @@
+import { FieldErrors as Errors } from '@/components/field-errors'
 import { Textarea } from '@/components/ui/textarea'
 import { BackTo } from '@/components/back-to'
 import { Button } from '@/components/ui/button'
@@ -14,19 +15,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { insertProductSchema, updateProductSchema } from '@/lib/schemas'
 import type { Product, ProductCategory } from '@/types'
 import React, { useEffect } from 'react'
 type Props = {
   product: Product | undefined
   productCategories: ProductCategory[]
-}
-
-function Errors({ errors, name }) {
-  if (!errors[name]) {
-    return null
-  }
-  return <div className="text-destructive ">{errors[name][0]}</div>
 }
 
 export default function CreateUpdateProduct({
@@ -45,8 +38,6 @@ export default function CreateUpdateProduct({
     }
   }, [fetcher.data])
 
-  console.log(errors)
-
   return (
     <div className="pb-8">
       <div className="mb-4">
@@ -59,8 +50,10 @@ export default function CreateUpdateProduct({
               Descripcion
             </Label>
             <Textarea
+              required
               name="description"
               id="description"
+              defaultValue={product?.description || ''}
               placeholder="Señal fotoluminiscente 20x30cm con soporte pvc celtex 3mm"
             />
             <Errors errors={errors} name="description" />
@@ -68,14 +61,27 @@ export default function CreateUpdateProduct({
           <div className="grid gap-4 md:grid-cols-2">
             <div className="grid gap-2">
               <Label className="text-muted-foreground">Unidad/Medida</Label>
-              <Input name="unitSize" id="unitSize" placeholder="20x30cm" />
+              <Input
+                required
+                value={product?.unitSize ?? ''}
+                name="unitSize"
+                id="unitSize"
+                placeholder="20x30cm"
+              />
               <Errors errors={errors} name="unitSize" />
             </div>
             <div className="grid gap-2">
               <Label className="text-muted-foreground" htmlFor="code">
                 Código
               </Label>
-              <Input id="code" placeholder="FHP-50" name="code" minLength={3} />
+              <Input
+                required
+                value={product?.code ?? ''}
+                id="code"
+                placeholder="FHP-50"
+                name="code"
+                minLength={3}
+              />
               <Errors errors={errors} name="code" />
             </div>
           </div>
@@ -86,6 +92,7 @@ export default function CreateUpdateProduct({
                 Costo
               </Label>
               <Input
+                required
                 name="cost"
                 id="cost"
                 placeholder="100"
@@ -98,7 +105,14 @@ export default function CreateUpdateProduct({
               <Label className="text-muted-foreground" htmlFor="price">
                 Price
               </Label>
-              <Input id="price" name="price" placeholder="100" type="number" />
+              <Input
+                required
+                value={product?.price || ''}
+                id="price"
+                name="price"
+                placeholder="100"
+                type="number"
+              />
               <Errors errors={errors} name="price" />
             </div>
           </div>
@@ -122,7 +136,7 @@ export default function CreateUpdateProduct({
             <Label className="text-muted-foreground" htmlFor="categoryId">
               Categoria
             </Label>
-            <Select name="categoryId">
+            <Select value={String(product?.categoryId || '')} name="categoryId">
               <SelectTrigger className="capitalize">
                 <SelectValue placeholder="Seleciona una categoria" />
               </SelectTrigger>

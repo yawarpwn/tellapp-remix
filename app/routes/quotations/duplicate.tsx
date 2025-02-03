@@ -1,5 +1,5 @@
 import { duplicateQuotationAction } from '@/lib/actions'
-import type { Route } from './+types/duplicate-quotation'
+import type { Route } from './+types/duplicate'
 import { redirect } from 'react-router'
 
 export async function action({ params }: Route.ActionArgs) {

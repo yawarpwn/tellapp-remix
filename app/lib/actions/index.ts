@@ -74,3 +74,11 @@ export async function updateProductAction(
 
   return updatedProduct
 }
+
+export async function deleteProductAction(id: string) {
+  const url = `${BASE_URL}/api/products/${id}`
+  const data = await fetchData<Product>(url, {
+    method: 'DELETE',
+  })
+  return data
+}

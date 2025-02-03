@@ -3,7 +3,7 @@ import { handleError } from '@/lib/utils'
 import { QuotationSkeleton } from '@/components/skeletons/quotations'
 
 import React from 'react'
-import type { Route } from './+types/update-quotation'
+import type { Route } from './+types/update'
 import {
   fetchCustomers,
   fetchProducts,

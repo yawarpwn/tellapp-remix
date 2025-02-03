@@ -1,7 +1,7 @@
 import { redirect, useFetcher } from 'react-router'
 
 import React, { useState } from 'react'
-import type { Route } from './+types/create-quotation'
+import type { Route } from './+types/create'
 import { fetchCustomers, fetchProducts } from '@/lib/data'
 import { createQuotationAction } from '@/lib/actions'
 import { toast } from 'sonner'

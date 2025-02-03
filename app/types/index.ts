@@ -70,3 +70,10 @@ export interface Links {}
 export interface Meta {
   totalItems: number
 }
+
+export type FieldErrorsProps = {
+  errors: {
+    [key: string]: string[]
+  }
+  name: string
+}
