@@ -4,6 +4,7 @@ import type {
   CreateQuotationClient,
   Product,
   QuotationClient,
+  UpdateCustomer,
   UpdateProduct,
   UpdateQuotationClient,
 } from '@/types'

@@ -59,6 +59,24 @@ export const insertProductSchema = productSchema.omit({
   category: true,
 })
 
-export const updateProductSchema = insertProductSchema
-  .partial()
-  .omit({ productId: true })
+export const updateProductSchema = insertProductSchema.partial()
+
+export const customerSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  ruc: z.string(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  email: z.string().email().optional(),
+  isRegular: z.boolean(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+})
+
+export const insertCustomerSchema = customerSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+})
+
+export const updateCustomerSchema = insertCustomerSchema.partial()

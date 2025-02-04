@@ -4,6 +4,9 @@ import {
   insertProductSchema,
   updateProductSchema,
   productCategoriesSchema,
+  customerSchema,
+  insertCustomerSchema,
+  updateCustomerSchema,
 } from '@/lib/schemas'
 
 type Prettyfy<T> = {
@@ -39,22 +42,16 @@ export type UpdateQuotationClient = Partial<CreateQuotationClient> & {
   id: string
 }
 
-export interface Customer {
-  id: string
-  name: string
-  ruc: string
-  phone?: string | null
-  address?: string | null
-  email?: string | null
-  isRegular: boolean
-  createdAt: Date
-  updatedAt: Date
-}
-
+// Products ---------------------------------------------------------------->
 export type Product = z.infer<typeof productSchema>
 export type InsertProduct = z.infer<typeof insertProductSchema>
 export type UpdateProduct = z.infer<typeof updateProductSchema>
 export type ProductCategory = z.infer<typeof productCategoriesSchema>
+
+//Customer ----------------------------------------------------------------->
+export type Customer = z.infer<typeof customerSchema>
+export type InsertCustomer = z.infer<typeof insertCustomerSchema>
+export type UpdateCustomer = z.infer<typeof updateCustomerSchema>
 
 export interface QuotationItem {
   id: string

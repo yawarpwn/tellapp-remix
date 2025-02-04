@@ -17,7 +17,7 @@ import { DuplicateQuotationButton } from '@/quotations/duplicate-quotation-butto
 import { ActionButton } from '@/components/action-button'
 import type { QuotationClient } from '@/types'
 import React from 'react'
-import { ToggleRegularCustomerButton } from './toggle-rregular-customer-button'
+import { ToggleRegularCustomerButton } from './toggle-regular-customer-button'
 import { BackTo } from '@/components/back-to'
 
 type Props = {
@@ -35,7 +35,7 @@ export default function ViewQuotation({ quotationPromise }: Props) {
   return (
     <div>
       <div className="mb-2">
-        <BackTo to="/quotations" compact />
+        <BackTo to="/quotations" />
       </div>
       <div className="flex flex-col gap-6">
         <header className="flex justify-end gap-x-2">
@@ -59,7 +59,10 @@ export default function ViewQuotation({ quotationPromise }: Props) {
               icon={<TrashIcon size={18} />}
             />
             {quotation?.customerId && (
-              <ToggleRegularCustomerButton id={quotation.customerId} />
+              <ToggleRegularCustomerButton
+                isRegular={quotation.customer.isRegular}
+                customerId={quotation.customerId}
+              />
             )}
           </div>
         </header>

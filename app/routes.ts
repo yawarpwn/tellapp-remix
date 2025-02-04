@@ -18,10 +18,6 @@ export default [
       route('/:number/duplicate', 'routes/quotations/duplicate.tsx'),
       route('/:number/update', 'routes/quotations/update.tsx'),
       route('/:number/delete', 'routes/quotations/delete.tsx'),
-      route(
-        '/:number/toggle-regular-customer',
-        'routes/quotations/toggle-regular-customer.tsx'
-      ),
     ]),
     //Products ---->
     ...prefix('products', [
@@ -30,6 +26,14 @@ export default [
       route('/:id/update', 'routes/products/update.tsx'),
       route('/:id/delete', 'routes/products/delete.tsx'),
       route('/:id/duplicate', 'routes/products/duplicate.tsx'),
+    ]),
+    //Customers ---->
+    ...prefix('customers', [
+      index('routes/customers/home.tsx'),
+      route(
+        '/:id/toggle-regular-customer',
+        'routes/customers/toggle-regular-customer.tsx'
+      ),
     ]),
     route('/test-page', 'routes/test-page.tsx'),
   ]),

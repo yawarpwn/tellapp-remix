@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
       sorting,
       columnVisibility,
       rowSelection,
-      pagination: { pageIndex: 0, pageSize: 16 },
+      pagination: { pageIndex: 0, pageSize: 12 },
       globalFilter: globalFilter,
     },
   })

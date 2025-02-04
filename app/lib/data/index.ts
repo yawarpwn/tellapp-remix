@@ -7,12 +7,14 @@ import type {
   Product,
   ProductCategory,
   CustomerFromService,
+  UpdateCustomer,
 } from '@/types'
 import { fetchData } from '@/lib/utils'
 import { getCompanybyRuc } from '@/lib/services/sunat'
 import { HTTPRequestError } from '@/lib/errors'
 import { fakePromise } from '@/lib/utils'
 
+//----------------------------- Quotations ----------------------------->
 export async function fetchQuotations(): Promise<QuotationClient[]> {
   console.log('fetch quotations')
   const url = `${BASE_URL}/api/quotations`
@@ -29,6 +31,8 @@ export async function fetchQuotaitonByNumber(quotationNumber: number) {
 type FetchCustomerOptions = {
   onlyRegular?: boolean
 }
+
+//----------------------------- Customers ----------------------------->
 export async function fetchCustomers(
   options?: FetchCustomerOptions
 ): Promise<Customer[]> {
@@ -40,19 +44,6 @@ export async function fetchCustomers(
     : data.items
 }
 
-//Products
-export async function fetchProducts(): Promise<Product[]> {
-  const url = `${BASE_URL}/api/products`
-  const data = await fetchData<DataResponse<Product>>(url)
-  return data.items
-}
-
-export async function fetchProductById(id: string): Promise<Product> {
-  const url = `${BASE_URL}/api/products/${id}`
-  const data = await fetchData<Product>(url)
-  return data
-}
-
 export async function fetchCustomerByRuc(
   ruc: string
 ): Promise<CustomerFromService> {
@@ -62,7 +53,7 @@ export async function fetchCustomerByRuc(
 
   try {
     //Search customer in Database
-    const url = `${BASE_URL}/api/customers/${ruc}`
+    const url = `${BASE_URL}/api/customers/ruc/${ruc}`
     const customerFromDatabase = await fetchData<Customer>(url)
     return {
       id: customerFromDatabase.id,
@@ -80,6 +71,37 @@ export async function fetchCustomerByRuc(
       address: customerFromSunat.address,
     }
   }
+}
+
+export async function fetchCustomerById(id: string) {
+  const url = `${BASE_URL}/api/customers/${id}`
+  const data = fetchData<Customer>(url)
+  return data
+}
+
+export async function updateCustomer(
+  id: string,
+  customerToUpdate: UpdateCustomer
+) {
+  const url = `${BASE_URL}/api/customers/${id}`
+  const data = await fetchData<Customer>(url, {
+    method: 'PUT',
+    body: JSON.stringify(customerToUpdate),
+  })
+  return data
+}
+
+//----------------------------- Products ----------------------------->
+export async function fetchProducts(): Promise<Product[]> {
+  const url = `${BASE_URL}/api/products`
+  const data = await fetchData<DataResponse<Product>>(url)
+  return data.items
+}
+
+export async function fetchProductById(id: string): Promise<Product> {
+  const url = `${BASE_URL}/api/products/${id}`
+  const data = await fetchData<Product>(url)
+  return data
 }
 
 export async function fetchProductCategories() {
