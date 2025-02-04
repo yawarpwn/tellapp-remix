@@ -1,6 +1,6 @@
 import { redirect, useFetcher } from 'react-router'
 
-import React, { useState } from 'react'
+import React from 'react'
 import type { Route } from './+types/create'
 import { fetchCustomers, fetchProducts } from '@/lib/data'
 import { createQuotationAction } from '@/lib/actions'
@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { HTTPRequestError } from '@/lib/errors'
 import { useQuotation } from '@/hooks/use-quotation'
 import { CreateUpdateQuotation } from '@/quotations/create-update-quotation'
+import { useLoaderData } from 'react-router'
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
@@ -31,15 +32,23 @@ export async function action({ request }: Route.ActionArgs) {
   }
 }
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader(_: Route.LoaderArgs) {
   return {
     productsPromise: fetchProducts(),
     customersPromise: fetchCustomers({ onlyRegular: true }),
   }
 }
 
+export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
+  const savedQuotation = JSON.parse(localStorage.get('SAVE_QUOTATION') || '{}')
+  console.log('clientLoader', savedQuotation)
+  return { savedQuotation, ...serverLoader() }
+}
+
 export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
   const { productsPromise, customersPromise } = loaderData
+  const data = useLoaderData()
+  console.log('data', data)
 
   const {
     quotation,
@@ -56,22 +65,22 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
     toggleCreditOption,
   } = useQuotation()
 
-  const createQuotationFetcher = useFetcher()
-  const pending = createQuotationFetcher.state !== 'idle'
+  const fetcher = useFetcher()
+  const pending = fetcher.state !== 'idle'
 
   const handleCreateQuotationSubmit = () => {
     const formData = new FormData()
     formData.append('quotation', JSON.stringify(quotation))
-    createQuotationFetcher.submit(formData, {
+    fetcher.submit(formData, {
       method: 'post',
     })
   }
 
   React.useEffect(() => {
-    if (createQuotationFetcher.data) {
-      toast.error(createQuotationFetcher.data.error)
+    if (fetcher.data) {
+      toast.error(fetcher.data.error)
     }
-  }, [createQuotationFetcher.data])
+  }, [fetcher.data])
 
   return (
     <CreateUpdateQuotation

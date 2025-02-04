@@ -28,6 +28,8 @@ export default [
       index('routes/products/index.tsx'),
       route('/create', 'routes/products/create.tsx'),
       route('/:id/update', 'routes/products/update.tsx'),
+      route('/:id/delete', 'routes/products/delete.tsx'),
+      route('/:id/duplicate', 'routes/products/duplicate.tsx'),
     ]),
     route('/test-page', 'routes/test-page.tsx'),
   ]),

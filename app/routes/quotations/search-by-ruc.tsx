@@ -1,4 +1,5 @@
 import { fetchCustomerByRuc } from '@/lib/data'
+import { data } from 'react-router'
 import type { Route } from './+types/search-by-ruc'
 import { handleError } from '@/lib/utils'
 

@@ -6,6 +6,7 @@ import type {
   Customer,
   Product,
   ProductCategory,
+  CustomerFromService,
 } from '@/types'
 import { fetchData } from '@/lib/utils'
 import { getCompanybyRuc } from '@/lib/services/sunat'
@@ -50,13 +51,6 @@ export async function fetchProductById(id: string): Promise<Product> {
   const url = `${BASE_URL}/api/products/${id}`
   const data = await fetchData<Product>(url)
   return data
-}
-
-type CustomerFromService = {
-  id?: string
-  ruc: string
-  name: string
-  address?: string
 }
 
 export async function fetchCustomerByRuc(

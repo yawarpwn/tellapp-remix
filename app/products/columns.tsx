@@ -96,7 +96,7 @@ export const columns: ColumnDef<Product>[] = [
                 action={`/products/${product.id}/delete`}
                 method="post"
                 onSubmit={(ev) => {
-                  let response = confirm('¿Deseas Eliminar la cotización?')
+                  let response = confirm('¿Deseas Eliminar el producto?')
                   if (!response) {
                     ev.preventDefault()
                   }

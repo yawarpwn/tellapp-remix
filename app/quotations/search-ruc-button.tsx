@@ -14,15 +14,15 @@ export function SearchRucButton({
   quotation: CreateQuotationClient | CreateQuotationClient
   updateQuotation: (quotation: CreateQuotationClient) => void
 }) {
-  const searchRucFetcher = useFetcher()
-  let pending = searchRucFetcher.state !== 'idle'
+  const fetcher = useFetcher()
+  let pending = fetcher.state !== 'idle'
 
   React.useEffect(() => {
-    if (searchRucFetcher.data) {
-      if (searchRucFetcher.data.success) {
+    if (fetcher.data) {
+      if (fetcher.data.success) {
         toast('Cliente encontrado', {
           description: (
-            <pre>{JSON.stringify(searchRucFetcher.data.customer, null, 2)}</pre>
+            <pre>{JSON.stringify(fetcher.data.customer, null, 2)}</pre>
           ),
         })
 
@@ -30,24 +30,24 @@ export function SearchRucButton({
           ...quotation,
           customer: {
             ...quotation.customer,
-            ruc: searchRucFetcher.data.customer.ruc,
-            name: searchRucFetcher.data.customer.name,
-            address: searchRucFetcher.data.customer.address,
+            ruc: fetcher.data.customer.ruc,
+            name: fetcher.data.customer.name,
+            address: fetcher.data.customer.address,
           },
-          customerId: searchRucFetcher.data.customer.id,
+          customerId: fetcher.data.customer.id,
         })
       } else {
-        toast.error(searchRucFetcher.data.error)
+        toast.error(fetcher.data.error)
       }
     }
-  }, [searchRucFetcher.data])
+  }, [fetcher.data])
   return (
     <div className="col-span-4 grid flex-grow gap-2 md:col-span-3">
       <Label className="text-muted-foreground" htmlFor="ruc">
         Ruc
       </Label>
       <div className="relative">
-        <searchRucFetcher.Form method="post" action="/quotations/search-by-ruc">
+        <fetcher.Form method="post" action="/quotations/search-by-ruc">
           <Input
             required
             id="ruc"
@@ -78,7 +78,7 @@ export function SearchRucButton({
               </span>
             )}
           </Button>
-        </searchRucFetcher.Form>
+        </fetcher.Form>
       </div>
     </div>
   )

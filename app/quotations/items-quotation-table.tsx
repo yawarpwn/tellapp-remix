@@ -131,7 +131,7 @@ export function ItemsQuotationTable(props: Props) {
         </div>
       ) : (
         <div className="flex flex-col items-center gap-4">
-          <CircleOffIcon className="mt-16 h-20 w-20" />
+          <CircleOffIcon className="mt-16 h-[30vh] w-20" />
           <h2 className="py-8 text-xl">Sin Produtos agregados</h2>
         </div>
       )}

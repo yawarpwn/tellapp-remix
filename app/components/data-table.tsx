@@ -6,6 +6,7 @@ import {
   type ColumnDef,
   type SortingState,
   type ColumnFiltersState,
+  type PaginationState,
   type VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -58,6 +59,7 @@ export function DataTable<TData, TValue>({
       sorting,
       columnVisibility,
       rowSelection,
+      pagination: { pageIndex: 0, pageSize: 16 },
       globalFilter: globalFilter,
     },
   })
@@ -145,7 +147,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-[75vh] text-center"
                 >
                   No results.
                 </TableCell>

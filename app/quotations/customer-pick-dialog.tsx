@@ -25,6 +25,7 @@ export function CustomerPickerDialog({
   onCustomerPick,
 }: Props) {
   const customers = React.use(customersPromise)
+  if (customers.length === 0) return null
   const [open, setOpen] = useState(false)
   return (
     <>

@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import {
   productSchema,
   insertProductSchema,
@@ -8,7 +9,13 @@ import {
 type Prettyfy<T> = {
   [K in keyof T]: T[K]
 }
-import { z } from 'zod'
+
+export type CustomerFromService = {
+  id?: string
+  ruc: string
+  name: string
+  address?: string
+}
 export interface QuotationClient {
   id: string
   number: number

@@ -103,11 +103,9 @@ export function CreateUpdateQuotation({
               Cliente
             </Label>
             <Input
-              id="company"
-              name="company"
+              name="customer.name"
               type="text"
               value={quotation?.customer?.name ?? ''}
-              disabled={true}
               onChange={(e) => {
                 updateQuotation({
                   ...quotation,
@@ -213,7 +211,7 @@ export function CreateUpdateQuotation({
           <Button
             onClick={handleSubmit}
             className="px-12"
-            disabled={pending || !hasItems || quotation.deadline === 0}
+            disabled={pending || !hasItems || quotation.deadline === 0 || false}
             type="submit"
           >
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
