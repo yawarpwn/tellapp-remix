@@ -36,6 +36,16 @@ type Props = {
   toggleCreditOption: (checked: boolean) => void
   handleSubmit: () => void
 }
+
+const getSavedQuotation = () => {
+  if (typeof window === 'undefined') return null
+
+  const savedQuotation = window.localStorage.getItem('SAVED_QUOTATION')
+  if (savedQuotation) {
+    return JSON.parse(savedQuotation)
+  }
+  return null
+}
 export function CreateUpdateQuotation({
   quotation,
   pending,
