@@ -46,8 +46,6 @@ export function ItemsQuotationTable(props: Props) {
   const productItem = items.find((item) => item.id == seletedProductId)
   const [openCreateEditModal, setOpenCreateEditModal] = useState(false)
 
-  console.log('render quotation tables')
-
   //functions
   const closeItemModal = () => setOpenCreateEditModal(false)
 

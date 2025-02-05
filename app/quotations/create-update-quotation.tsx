@@ -221,7 +221,7 @@ export function CreateUpdateQuotation({
           <Button
             onClick={handleSubmit}
             className="px-12"
-            disabled={pending || !hasItems || quotation.deadline === 0 || false}
+            disabled={pending ?? !hasItems ?? quotation.deadline === 0}
             type="submit"
           >
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

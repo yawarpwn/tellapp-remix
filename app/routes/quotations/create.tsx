@@ -1,6 +1,5 @@
 import { redirect, useFetcher } from 'react-router'
-
-const isBrowser = () => typeof window !== 'undefined'
+import compare from 'just-compare'
 
 import React from 'react'
 import type { Route } from './+types/create'
@@ -12,6 +11,13 @@ import { useQuotation } from '@/hooks/use-quotation'
 import { CreateUpdateQuotation } from '@/quotations/create-update-quotation'
 import { useLoaderData } from 'react-router'
 import type { CreateQuotationClient } from '@/types'
+import {
+  Dialog,
+  DialogDescription,
+  DialogContent,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
@@ -42,15 +48,25 @@ export async function loader(_: Route.LoaderArgs) {
   }
 }
 
-export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
-  const savedQuotation = JSON.parse(localStorage.get('SAVE_QUOTATION') || '{}')
-  console.log('clientLoader', savedQuotation)
-  return { savedQuotation, ...serverLoader() }
+const INITIAL_QUOTATION: CreateQuotationClient = {
+  deadline: 1,
+  includeIgv: true,
+  credit: null,
+  customerId: null,
+  isPaymentPending: false,
+  items: [],
+  customer: {
+    id: '',
+    name: '',
+    ruc: '',
+    phone: undefined,
+    address: '',
+    email: undefined,
+    isRegular: false,
+  },
 }
-
 export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
   const { productsPromise, customersPromise } = loaderData
-  const data = useLoaderData()
 
   const fetcher = useFetcher()
   const pending = fetcher.state !== 'idle'
@@ -63,6 +79,8 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
     })
   }
 
+  const [savedQuotation, setSavedQuotation] =
+    React.useState<CreateQuotationClient | null>(null)
   const [showModal, setShowModal] = React.useState(false)
 
   React.useEffect(() => {
@@ -70,14 +88,6 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
       toast.error(fetcher.data.error)
     }
   }, [fetcher.data])
-
-  React.useEffect(() => {
-    if (isBrowser()) {
-      const savedQuotation = localStorage.getItem('SAVE_QUOTATION')
-      if (!savedQuotation) return
-      setShowModal(true)
-    }
-  }, [])
 
   const {
     quotation,
@@ -92,46 +102,56 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
     hasItems,
     showCreditOption,
     toggleCreditOption,
-  } = useQuotation()
+  } = useQuotation(INITIAL_QUOTATION)
 
-  // Guarda la cotizacion en Local Storage por cada cambio en { quotation}
+  const SAVED_QUOTATION_KEY = 'SAVED_QUOTATION'
+
   React.useEffect(() => {
-    if (isBrowser() && !showModal) {
-      console.log('saveed quotation')
-      localStorage.setItem('SAVE_QUOTATION', JSON.stringify(quotation))
-    }
+    if (compare(INITIAL_QUOTATION, quotation)) return
+    console.log('saved quotation')
+    localStorage.setItem(SAVED_QUOTATION_KEY, JSON.stringify(quotation))
   }, [quotation])
+
+  React.useLayoutEffect(() => {
+    const saveQuotation = getSavedQuotation()
+    if (!saveQuotation) return
+    updateQuotation(saveQuotation)
+    setShowModal(true)
+  }, [])
+
+  const getSavedQuotation = () => {
+    const savedQuotation = localStorage.getItem(SAVED_QUOTATION_KEY)
+    if (!savedQuotation) return null
+    return JSON.parse(savedQuotation)
+  }
+
+  const clearSavedQuotation = () => {
+    localStorage.removeItem(SAVED_QUOTATION_KEY)
+  }
 
   return (
     <>
-      {showModal && (
-        <div>
-          <button
-            onClick={() => {
-              setShowModal(false)
-              const savedQuotation = localStorage.getItem('SAVE_QUOTATION')
-
-              if (!savedQuotation) return
-
-              console.log({ savedQuotation })
-              const parsedQuotation = JSON.parse(
-                savedQuotation
-              ) as CreateQuotationClient
-
-              updateQuotation({
-                ...parsedQuotation,
-                customer: {
-                  ...parsedQuotation.customer,
-                },
-                items: [...parsedQuotation.items],
-              })
-            }}
-          >
-            Aceptar
-          </button>
-          <button onClick={() => setShowModal(false)}>Cancelar</button>
-        </div>
-      )}
+      <Dialog open={showModal} onOpenChange={setShowModal}>
+        <DialogContent className="max-w-xs">
+          <DialogTitle className="text-center">Recupea Cotización!</DialogTitle>
+          <DialogDescription className="text-center">
+            Hemos recuperado una cotización, ¿Deseas restaurarla?
+          </DialogDescription>
+          <div className="flex items-center justify-between">
+            <Button
+              variant="secondary"
+              onClick={() => {
+                clearSavedQuotation()
+                updateQuotation(INITIAL_QUOTATION)
+                setShowModal(false)
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button onClick={() => setShowModal(false)}>Aceptar</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
       <CreateUpdateQuotation
         quotation={quotation}
         updateQuotation={updateQuotation}

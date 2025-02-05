@@ -6,28 +6,12 @@ import type {
 } from '@/types'
 import React from 'react'
 
-export function useQuotation(initialState?: QuotationClient) {
+export function useQuotation(
+  initialState: QuotationClient | CreateQuotationClient
+) {
   const [quotation, setQuotation] = React.useState<
-    CreateQuotationClient | QuotationClient
-  >(
-    initialState || {
-      deadline: 1,
-      includeIgv: true,
-      credit: null,
-      customerId: null,
-      isPaymentPending: false,
-      items: [],
-      customer: {
-        id: '',
-        name: '',
-        ruc: '',
-        phone: undefined,
-        address: '',
-        email: undefined,
-        isRegular: false,
-      },
-    }
-  )
+    QuotationClient | CreateQuotationClient
+  >(initialState)
 
   const [showCreditOption, setShowCreditOption] = React.useState(false)
 
