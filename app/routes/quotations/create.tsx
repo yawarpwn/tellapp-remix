@@ -1,5 +1,4 @@
 import { redirect, useFetcher } from 'react-router'
-import compare from 'just-compare'
 
 import React from 'react'
 import type { Route } from './+types/create'
@@ -9,7 +8,6 @@ import { toast } from 'sonner'
 import { HTTPRequestError } from '@/lib/errors'
 import { useQuotation } from '@/hooks/use-quotation'
 import { CreateUpdateQuotation } from '@/quotations/create-update-quotation'
-import { useLoaderData } from 'react-router'
 import type { CreateQuotationClient } from '@/types'
 import {
   Dialog,
@@ -18,6 +16,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { useAutoSave } from '@/hooks/use-autos-save'
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
@@ -79,10 +78,6 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
     })
   }
 
-  const [savedQuotation, setSavedQuotation] =
-    React.useState<CreateQuotationClient | null>(null)
-  const [showModal, setShowModal] = React.useState(false)
-
   React.useEffect(() => {
     if (fetcher.data) {
       toast.error(fetcher.data.error)
@@ -104,51 +99,29 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
     toggleCreditOption,
   } = useQuotation(INITIAL_QUOTATION)
 
-  const SAVED_QUOTATION_KEY = 'SAVED_QUOTATION'
-
-  React.useEffect(() => {
-    if (compare(INITIAL_QUOTATION, quotation)) return
-    console.log('saved quotation')
-    localStorage.setItem(SAVED_QUOTATION_KEY, JSON.stringify(quotation))
-  }, [quotation])
-
-  React.useLayoutEffect(() => {
-    const saveQuotation = getSavedQuotation()
-    if (!saveQuotation) return
-    updateQuotation(saveQuotation)
-    setShowModal(true)
-  }, [])
-
-  const getSavedQuotation = () => {
-    const savedQuotation = localStorage.getItem(SAVED_QUOTATION_KEY)
-    if (!savedQuotation) return null
-    return JSON.parse(savedQuotation)
-  }
-
-  const clearSavedQuotation = () => {
-    localStorage.removeItem(SAVED_QUOTATION_KEY)
-  }
+  const { showRecuperationModal, closeRecuperationModal, clearSavedQuotation } =
+    useAutoSave({
+      quotation,
+      updateQuotation,
+      initialQuotation: INITIAL_QUOTATION,
+    })
 
   return (
     <>
-      <Dialog open={showModal} onOpenChange={setShowModal}>
+      <Dialog
+        open={showRecuperationModal}
+        onOpenChange={closeRecuperationModal}
+      >
         <DialogContent className="max-w-xs">
           <DialogTitle className="text-center">Recupea Cotización!</DialogTitle>
           <DialogDescription className="text-center">
             Hemos recuperado una cotización, ¿Deseas restaurarla?
           </DialogDescription>
           <div className="flex items-center justify-between">
-            <Button
-              variant="secondary"
-              onClick={() => {
-                clearSavedQuotation()
-                updateQuotation(INITIAL_QUOTATION)
-                setShowModal(false)
-              }}
-            >
+            <Button variant="secondary" onClick={clearSavedQuotation}>
               Cancelar
             </Button>
-            <Button onClick={() => setShowModal(false)}>Aceptar</Button>
+            <Button onClick={closeRecuperationModal}>Aceptar</Button>
           </div>
         </DialogContent>
       </Dialog>
