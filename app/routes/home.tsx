@@ -1,52 +1,32 @@
-import type { Route } from "./+types/home";
+import type { Route } from './+types/home'
 
-import { LoginForm } from "@/components/login-form";
-import { redirect } from "react-router";
+import { LoginForm } from '@/components/login-form'
+import { login } from '@/lib/data'
+import { redirect } from 'react-router'
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
-  ];
+    { title: 'New React Router App' },
+    { name: 'description', content: 'Welcome to React Router!' },
+  ]
 }
 
-// export async function action({ request }: Route.ActionArgs) {
-//   const formData = await request.formData();
-//   const email = formData.get("email") as string;
-//   const password = formData.get("password") as string;
-//
-//   function isValidUser(email: string, password: string) {
-//     if (email === "tellsenales@gmail.com" && password === "123456") {
-//       return true;
-//     }
-//     return false;
-//   }
-//
-//   if (!isValidUser(email, password)) {
-//     return redirect("/?message=Invalid credentials");
-//   }
-//
-//   return redirect("/dashboard");
-// }
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData()
+  const email = formData.get('email') as string
+  const password = formData.get('password') as string
 
-// export async function loader({ request }: Route.LoaderArgs) {
-//   console.log("loader--->");
-//   console.log(request.url);
-//   const url = new URL(request.url);
-//   const message = url.searchParams.get("message") || "";
-//   console.log({ message });
-//   return { message };
-// }
+  console.log({ email, password })
 
-export async function clientAction({ request }: Route.ClientActionArgs) {
-  const formData = await request.formData();
-
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-
-  console.log({ email, password });
-  return redirect("/quotations");
+  try {
+    const token = await login(email, password)
+    console.log(token)
+    return redirect('/quotations')
+  } catch (error) {
+    console.log(error)
+  }
 }
+
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <div className="relative bg-black">
@@ -69,7 +49,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 Adminitra cotizaciónes, productos, clientes y más.
               </h2>
             </header>
-            <LoginForm message={""} />
+            <LoginForm message={''} />
           </div>
           {/* Image Layer */}
           <div className="relative hidden w-full justify-end md:inline-flex ">
@@ -107,5 +87,5 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }

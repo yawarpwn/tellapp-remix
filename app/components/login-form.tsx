@@ -1,12 +1,15 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Form, Link } from "react-router";
-import { Button } from "@/components/ui/button";
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Form, Link } from 'react-router'
+import { Button } from '@/components/ui/button'
+import { useFetcher } from 'react-router'
+import { Loader2Icon } from 'lucide-react'
 
 export function LoginForm({ message }: { message: string }) {
+  const fetcher = useFetcher()
   return (
     <>
-      <Form method="post">
+      <fetcher.Form method="post">
         <div className="flex flex-col gap-6">
           <div className="grid gap-4">
             <Label htmlFor="email" className="label">
@@ -16,7 +19,6 @@ export function LoginForm({ message }: { message: string }) {
               type="email"
               name="email"
               id="email"
-              className=""
               placeholder="correo@dominio.com"
               required
             />
@@ -32,7 +34,6 @@ export function LoginForm({ message }: { message: string }) {
               type="password"
               name="password"
               id="password"
-              className="input"
               placeholder="********"
               required
             />
@@ -45,12 +46,13 @@ export function LoginForm({ message }: { message: string }) {
               <a href="#">Olvidates tu contraseña ?</a>
             </p>
           </div>
-          <Button asChild type="submit">
-            <Link to="/quotations">Ingresar</Link>
+          <Button type="submit" disabled={fetcher.state !== 'idle'}>
+            {fetcher.state !== 'idle' && <Loader2Icon />}
+            Ingresar
           </Button>
           {/* <SubmitButton /> */}
           <p className="text-center text-xs">
-            Necesitas una cuenta?{" "}
+            Necesitas una cuenta?{' '}
             <a href="#" className="text-primary ">
               Registrate
             </a>
@@ -61,7 +63,7 @@ export function LoginForm({ message }: { message: string }) {
             </div>
           )}
         </div>
-      </Form>
+      </fetcher.Form>
     </>
-  );
+  )
 }

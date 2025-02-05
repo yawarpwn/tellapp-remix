@@ -17,7 +17,6 @@ export function useAutoSave({
     React.useState(false)
   React.useEffect(() => {
     if (compare(initialQuotation, quotation)) return
-    console.log('saved quotation')
     localStorage.setItem(SAVED_QUOTATION_KEY, JSON.stringify(quotation))
   }, [quotation])
 

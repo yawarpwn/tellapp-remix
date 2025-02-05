@@ -109,3 +109,18 @@ export async function fetchProductCategories() {
   const data = await fetchData<DataResponse<ProductCategory>>(url)
   return data.items
 }
+
+//Auth
+export async function login(email: string, password: string) {
+  const url = `${BASE_URL}/api/auth/login`
+  const data = await fetchData(url, {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  console.log({ data })
+  return data
+}
