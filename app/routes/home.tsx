@@ -1,8 +1,7 @@
 import type { Route } from './+types/home'
 
 import { LoginForm } from '@/components/login-form'
-import { login } from '@/lib/data'
-import { redirect } from 'react-router'
+import { data, Form, redirect } from 'react-router'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -15,16 +14,35 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
   const email = formData.get('email') as string
   const password = formData.get('password') as string
+  const cookieHeader = request.headers.get('Cookie') ?? ''
 
-  console.log({ email, password })
+  const url = `http://localhost:8787/api/auth/login`
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+    headers: { 'Content-Type': 'application/json', Cookie: cookieHeader },
+  })
 
-  try {
-    const token = await login(email, password)
-    console.log(token)
-    return redirect('/quotations')
-  } catch (error) {
-    console.log(error)
-  }
+  const setCookieHeader = response.headers.get('Set-Cookie') ?? ''
+
+  return data(null, {
+    headers: {
+      'Set-Cookie': setCookieHeader,
+    },
+  })
+
+  // console.log({ email, password })
+
+  // try {
+  //   const token = await login(email, password)
+  //   console.log(token)
+  //   return redirect('/quotations')
+  // } catch (error) {
+  //   console.log(error)
+  // }
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
@@ -39,6 +57,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         loading="lazy"
         src="/collage-johneyder.avif"
       />
+
       <div className="relative flex min-h-screen p-14">
         <div className="flex w-full overflow-hidden rounded-md">
           {/* Form */}
@@ -49,6 +68,11 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 Adminitra cotizaciónes, productos, clientes y más.
               </h2>
             </header>
+            <Form method="post">
+              <button className="bg-orange-500" type="submit">
+                enviar
+              </button>
+            </Form>
             <LoginForm message={''} />
           </div>
           {/* Image Layer */}

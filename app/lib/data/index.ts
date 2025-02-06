@@ -113,14 +113,11 @@ export async function fetchProductCategories() {
 //Auth
 export async function login(email: string, password: string) {
   const url = `${BASE_URL}/api/auth/login`
-  const data = await fetchData(url, {
+  const data = await fetch(url, {
     method: 'POST',
     body: JSON.stringify({ email, password }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+    headers: { 'Content-Type': 'application/json' },
+  }).then((res) => res.json())
 
-  console.log({ data })
   return data
 }
