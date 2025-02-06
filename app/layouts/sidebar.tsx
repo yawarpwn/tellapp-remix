@@ -1,4 +1,14 @@
-import { Form, Link, NavLink, Outlet, useNavigation } from 'react-router'
+// import { type Route } from './+types/sidebar'
+import { cn } from '@/lib/utils'
+
+import {
+  Form,
+  Link,
+  NavLink,
+  Outlet,
+  useFetcher,
+  useNavigation,
+} from 'react-router'
 import { Button } from '@/components/ui/button'
 import {
   HomeIcon,
@@ -11,8 +21,8 @@ import {
   ImageIcon,
   SplitIcon,
   ImageOffIcon,
+  Loader2Icon,
 } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 const routes = [
   {
@@ -73,6 +83,8 @@ const routes = [
 export default function SidebarLayout() {
   const navigation = useNavigation()
 
+  const fetcher = useFetcher()
+
   return (
     <div
       style={{ alignSelf: 'center' }}
@@ -99,12 +111,16 @@ export default function SidebarLayout() {
             </nav>
             <div className="h-px bg-primary my-8"></div>
             <div className="mt-4">
-              <Button asChild className="w-full" size="icon">
-                <Link to="/">
-                  <LogOutIcon />
+              <fetcher.Form method="post" action="/logout">
+                <Button className="w-full" size="icon">
+                  {fetcher.state !== 'idle' ? (
+                    <Loader2Icon className="animate-spin" />
+                  ) : (
+                    <LogOutIcon />
+                  )}
                   <span className="hidden md:block">Salir</span>
-                </Link>
-              </Button>
+                </Button>
+              </fetcher.Form>
             </div>
           </div>
         </div>

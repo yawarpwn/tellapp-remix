@@ -121,3 +121,14 @@ export async function login(email: string, password: string) {
 
   return data
 }
+
+export async function validateCredentials({
+  email,
+  password,
+}: {
+  email: string
+  password: string
+}) {
+  await new Promise((res) => setTimeout(res, 3000))
+  return 'f0038320087zd'
+}

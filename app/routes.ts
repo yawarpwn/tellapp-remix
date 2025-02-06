@@ -37,4 +37,5 @@ export default [
     ]),
     route('/test-page', 'routes/test-page.tsx'),
   ]),
+  route('/logout', 'routes/logout.tsx'),
 ] satisfies RouteConfig

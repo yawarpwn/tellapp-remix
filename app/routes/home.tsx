@@ -1,7 +1,11 @@
+import { Label } from '@/components/ui/label'
 import type { Route } from './+types/home'
-
-import { LoginForm } from '@/components/login-form'
-import { data, Form, redirect } from 'react-router'
+import { validateCredentials } from '@/lib/data'
+import { commitSession, getSession } from '@/sessions.server'
+import { data, Form, redirect, useFetcher } from 'react-router'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Loader2Icon } from 'lucide-react'
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -10,42 +14,57 @@ export function meta({}: Route.MetaArgs) {
   ]
 }
 
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get('Cookie'))
+
+  if (session.has('userId')) {
+    // Redirect to the home page if they are already signed in.
+    return redirect('/quotations')
+  }
+
+  return data(
+    {
+      error: session.get('error'),
+    },
+    {
+      headers: {
+        'Set-Cookie': await commitSession(session),
+      },
+    }
+  )
+}
 export async function action({ request }: Route.ActionArgs) {
+  const session = await getSession(request.headers.get('Cookie'))
+
   const formData = await request.formData()
   const email = formData.get('email') as string
   const password = formData.get('password') as string
-  const cookieHeader = request.headers.get('Cookie') ?? ''
+  const userId = await validateCredentials({ email, password })
 
-  const url = `http://localhost:8787/api/auth/login`
-  const response = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-    headers: { 'Content-Type': 'application/json', Cookie: cookieHeader },
-  })
+  if (!userId) {
+    session.flash('error', 'Email/Contraseña inválido')
 
-  const setCookieHeader = response.headers.get('Set-Cookie') ?? ''
+    // Redirect back to the login page with errors.
+    return redirect('/login', {
+      headers: {
+        'Set-Cookie': await commitSession(session),
+      },
+    })
+  }
 
-  return data(null, {
+  session.set('userId', userId)
+
+  // Login succeeded, send them to the home page.
+  return redirect('/quotations', {
     headers: {
-      'Set-Cookie': setCookieHeader,
+      'Set-Cookie': await commitSession(session),
     },
   })
-
-  // console.log({ email, password })
-
-  // try {
-  //   const token = await login(email, password)
-  //   console.log(token)
-  //   return redirect('/quotations')
-  // } catch (error) {
-  //   console.log(error)
-  // }
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
+  const fetcher = useFetcher()
+  const { error } = loaderData
   return (
     <div className="relative bg-black">
       <div className="absolute h-full min-h-screen w-full"></div>
@@ -68,12 +87,62 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 Adminitra cotizaciónes, productos, clientes y más.
               </h2>
             </header>
-            <Form method="post">
-              <button className="bg-orange-500" type="submit">
-                enviar
-              </button>
-            </Form>
-            <LoginForm message={''} />
+
+            <fetcher.Form method="post">
+              <div className="flex flex-col gap-6">
+                <div className="grid gap-4">
+                  <Label htmlFor="email" className="label">
+                    Correo
+                  </Label>
+                  <Input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="correo@dominio.com"
+                    required
+                  />
+                  {/* {state?.errors?.email && ( */}
+                  {/*   <p className="text-xs text-destructive">{state?.errors?.email[0]}</p> */}
+                  {/* )} */}
+                </div>
+                <div className="grid gap-4">
+                  <Label htmlFor="password" className="label">
+                    <span className="label-text">Constraseña</span>
+                  </Label>
+                  <Input
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="********"
+                    required
+                  />
+
+                  {/* {state?.errors?.password && ( */}
+                  {/*   <p className=" text-xs text-destructive">{state?.errors?.password[0]}</p> */}
+                  {/* )} */}
+                  {/* {state?.message && <p className=" text-xs text-destructive">*{state.message}</p>} */}
+                  <p className="text-xs text-primary">
+                    <a href="#">Olvidates tu contraseña ?</a>
+                  </p>
+                </div>
+                <Button type="submit" disabled={fetcher.state !== 'idle'}>
+                  {fetcher.state !== 'idle' && <Loader2Icon />}
+                  Ingresar
+                </Button>
+                {/* <SubmitButton /> */}
+                <p className="text-center text-xs">
+                  Necesitas una cuenta?{' '}
+                  <a href="#" className="text-primary ">
+                    Registrate
+                  </a>
+                </p>
+                {error && (
+                  <div className="rounded-sm border border-destructive p-2 text-destructive">
+                    <p className="text-center text-xs">{error}</p>
+                  </div>
+                )}
+              </div>
+            </fetcher.Form>
           </div>
           {/* Image Layer */}
           <div className="relative hidden w-full justify-end md:inline-flex ">
