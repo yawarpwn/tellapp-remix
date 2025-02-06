@@ -129,6 +129,19 @@ export async function validateCredentials({
   email: string
   password: string
 }) {
-  await new Promise((res) => setTimeout(res, 3000))
-  return 'f0038320087zd'
+  try {
+    const url = `${BASE_URL}/api/auth`
+    const data = await fetchData<{ userId: string; ok: boolean }>(url, {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    return data.userId
+  } catch (error) {
+    console.log('error in validateCredentials', error)
+    return null
+  }
 }

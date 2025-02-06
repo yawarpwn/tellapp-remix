@@ -3,7 +3,7 @@ import type { Route } from './+types/index'
 import { DataTable } from '@/components/data-table'
 import { columns } from '@/quotations/columns'
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   const quotations = await fetchQuotations()
   return { quotations }
 }

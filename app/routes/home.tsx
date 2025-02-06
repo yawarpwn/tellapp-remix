@@ -17,10 +17,7 @@ export function meta({}: Route.MetaArgs) {
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get('Cookie'))
 
-  if (session.has('userId')) {
-    // Redirect to the home page if they are already signed in.
-    return redirect('/quotations')
-  }
+  if (session.has('userId')) return redirect('/quotations')
 
   return data(
     {
@@ -45,7 +42,7 @@ export async function action({ request }: Route.ActionArgs) {
     session.flash('error', 'Email/Contraseña inválido')
 
     // Redirect back to the login page with errors.
-    return redirect('/login', {
+    return redirect('/', {
       headers: {
         'Set-Cookie': await commitSession(session),
       },
