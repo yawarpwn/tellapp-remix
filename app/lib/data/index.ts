@@ -14,7 +14,7 @@ import type {
   CreateLabel,
 } from '@/types'
 import { fetchData } from '@/lib/utils'
-import { getCompanybyRuc } from '@/lib/services/sunat'
+import { getCompanybyRuc, getCustomerByDni } from '@/lib/services/sunat'
 import { HTTPRequestError } from '@/lib/errors'
 import { fakePromise } from '@/lib/utils'
 
@@ -50,30 +50,42 @@ export async function fetchCustomers(
 export async function fetchCustomerByRuc(
   ruc: string
 ): Promise<CustomerFromService> {
-  if (ruc.length !== 11) {
-    throw new HTTPRequestError('El Ruc Debe tener 11 digitos')
+  if (ruc.length === 11) {
+    try {
+      //Search customer in Database
+      const url = `${BASE_URL}/api/customers/ruc/${ruc}`
+      const customerFromDatabase = await fetchData<Customer>(url)
+      return {
+        id: customerFromDatabase.id,
+        ruc: customerFromDatabase.ruc,
+        name: customerFromDatabase.name,
+        address: customerFromDatabase.address ?? undefined,
+      }
+    } catch (error) {
+      //Search customer in Sunat
+      const customerFromSunat = await getCompanybyRuc(ruc)
+      return {
+        id: undefined,
+        ruc: customerFromSunat.ruc,
+        name: customerFromSunat.company,
+        address: customerFromSunat.address,
+      }
+    }
   }
 
-  try {
-    //Search customer in Database
-    const url = `${BASE_URL}/api/customers/ruc/${ruc}`
-    const customerFromDatabase = await fetchData<Customer>(url)
-    return {
-      id: customerFromDatabase.id,
-      ruc: customerFromDatabase.ruc,
-      name: customerFromDatabase.name,
-      address: customerFromDatabase.address ?? undefined,
-    }
-  } catch (error) {
-    //Search customer in Sunat
-    const customerFromSunat = await getCompanybyRuc(ruc)
-    return {
-      id: undefined,
-      ruc: customerFromSunat.ruc,
-      name: customerFromSunat.company,
-      address: customerFromSunat.address,
+  if (ruc.length === 8) {
+    try {
+      const customer = await getCustomerByDni(ruc)
+      return {
+        ruc: customer.ruc,
+        name: customer.company,
+        address: customer.address,
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
+  throw new HTTPRequestError('El Ruc Debe tener 11 digitos')
 }
 
 export async function fetchCustomerById(id: string) {

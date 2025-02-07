@@ -26,17 +26,18 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
       agencyId: undefined,
     }
   )
+
   const fetcher = useFetcher()
+  const searchFetcher = useFetcher()
 
   const [errors, setErrors] = React.useState([])
 
-  useEffect(() => {
-    if (fetcher.data) {
-      setErrors(fetcher.data)
-    } else {
-      setErrors([])
-    }
-  }, [fetcher.data])
+  const handleSearchCustomerByDniOrRuc = () => {
+    searchFetcher.submit(label, {
+      method: 'post',
+      action: '/quotations/search-by-ruc',
+    })
+  }
 
   const handleChange = (
     ev:
@@ -53,9 +54,25 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
 
   const handleSubmit = (ev: React.FormEvent) => {
     ev.preventDefault()
+    fetcher.submit(label, {
+      method: 'post',
+      action: '/',
+    })
   }
 
   const pending = false
+
+  React.useEffect(() => {
+    console.log(searchFetcher.data)
+  }, [searchFetcher.data])
+
+  useEffect(() => {
+    if (fetcher.data) {
+      setErrors(fetcher.data)
+    } else {
+      setErrors([])
+    }
+  }, [fetcher.data])
 
   return (
     <div className="pb-8">
@@ -85,6 +102,7 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
                 disabled={pending}
                 className="absolute right-1.5 top-1 size-7"
                 variant="outline"
+                onClick={handleSearchCustomerByDniOrRuc}
               >
                 {pending ? (
                   <Loader2Icon className="size-4 animate-spin" />
