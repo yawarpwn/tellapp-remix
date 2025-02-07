@@ -61,6 +61,7 @@ export const insertProductSchema = productSchema.omit({
 
 export const updateProductSchema = insertProductSchema.partial()
 
+// ---------------------------------Customers -------------------------------------
 export const customerSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -80,3 +81,16 @@ export const insertCustomerSchema = customerSchema.omit({
 })
 
 export const updateCustomerSchema = insertCustomerSchema.partial()
+
+// --------------------------------- Agencies -------------------------------------
+export const agencySchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  ruc: z.string(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  email: z.string().email().optional(),
+  isRegular: z.boolean(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+})

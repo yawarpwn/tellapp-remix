@@ -59,7 +59,6 @@ export function DataTable<TData, TValue>({
       sorting,
       columnVisibility,
       rowSelection,
-      pagination: { pageIndex: 0, pageSize: 12 },
       globalFilter: globalFilter,
     },
   })
@@ -68,7 +67,7 @@ export function DataTable<TData, TValue>({
     <div className="flex flex-col justify-between gap-6 pb-7 ">
       <div className="flex items-center justify-between ">
         <Input
-          placeholder="Nro Cotización"
+          placeholder="buscar..."
           value={globalFilter}
           onChange={(event) => setGlobalFilter(event.target.value)}
           className="w-[200px]"

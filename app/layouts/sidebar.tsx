@@ -22,7 +22,16 @@ import {
   SplitIcon,
   ImageOffIcon,
   Loader2Icon,
+  MoreHorizontal,
 } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 const routes = [
   {
@@ -84,6 +93,9 @@ export default function SidebarLayout() {
   const navigation = useNavigation()
 
   const fetcher = useFetcher()
+  const logout = () => {
+    fetcher.submit(null, { method: 'post', action: '/logout' })
+  }
 
   return (
     <div
@@ -140,18 +152,43 @@ export default function SidebarLayout() {
       </main>
       <div className="h-[3rem] fixed bottom-0 z-50  right-0 left-0 bg-background md:hidden border-t border-primary">
         <div className="w-full  h-full px-3  flex items-center justify-center">
-          <nav className="flex  gap-5">
-            {routes.map((route) => (
+          <nav className="flex items-center  gap-5">
+            {routes.slice(0, 5).map((route) => (
               <NavLink
                 key={route.path}
                 className={({ isActive }) => (isActive ? 'text-primary' : '')}
                 to={route.path}
               >
                 <div className={cn('flex items-center gap-2')}>
-                  <route.Icon size={22} />
+                  <route.Icon size={24} />
                 </div>
               </NavLink>
             ))}
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {/* <DropdownMenuLabel>Acciones</DropdownMenuLabel> */}
+                {/* <DropdownMenuSeparator /> */}
+                <DropdownMenuItem>
+                  <Link to={'/watermark'}>Marca de agua</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link to={'/signals'}>Señales</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <button className="w-full" onClick={logout} type="submit">
+                    Salir
+                  </button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
         </div>
       </div>

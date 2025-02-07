@@ -35,6 +35,14 @@ export default [
         'routes/customers/toggle-regular-customer.tsx'
       ),
     ]),
+
+    //Customers ---->
+    ...prefix('agencies', [
+      index('routes/agencies/home.tsx'),
+      route('/create', 'routes/agencies/create.tsx'),
+      route('/:id/update', 'routes/agencies/update.tsx'),
+      route('/:id/delete', 'routes/agencies/delete.tsx'),
+    ]),
     route('/test-page', 'routes/test-page.tsx'),
   ]),
   route('/logout', 'routes/logout.tsx'),

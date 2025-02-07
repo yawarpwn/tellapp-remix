@@ -42,13 +42,13 @@ export type UpdateQuotationClient = Partial<CreateQuotationClient> & {
   id: string
 }
 
-// Products ---------------------------------------------------------------->
+// ------------------------- Products --------------------------------------->
 export type Product = z.infer<typeof productSchema>
 export type InsertProduct = z.infer<typeof insertProductSchema>
 export type UpdateProduct = z.infer<typeof updateProductSchema>
 export type ProductCategory = z.infer<typeof productCategoriesSchema>
 
-//Customer ----------------------------------------------------------------->
+//------------------------- Customer ---------------------------------------->
 export type Customer = z.infer<typeof customerSchema>
 export type InsertCustomer = z.infer<typeof insertCustomerSchema>
 export type UpdateCustomer = z.infer<typeof updateCustomerSchema>
@@ -81,3 +81,47 @@ export type FieldErrorsProps = {
   }
   name: string
 }
+
+//---------------------------- Agencies  -------------------------------------->
+
+// export const agenciesTable = sqliteTable('agencies', {
+//   id: text('id')
+//     .primaryKey()
+//     .notNull()
+//     .$defaultFn(() => crypto.randomUUID()),
+//   name: text('name').notNull().unique(),
+//   ruc: text('ruc').notNull().unique(),
+//   phone: text('phone'),
+//   address: text('address'),
+//   createdAt: integer('create_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
+//   updatedAt: integer('updated_at', { mode: 'timestamp' }).$onUpdate(() => new Date()),
+// })
+export interface Agency {
+  id: string
+  name: string
+  ruc: string
+  phone: string
+  address: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type CreateAgency = Omit<Agency, 'id' | 'createdAt' | 'updatedAt'>
+export type UpdateAgency = Partial<CreateAgency>
+
+// -------------------------- Labels  -------------------------------------->0ww
+export interface Label {
+  id: string
+  recipient: string
+  destination: string
+  dniRuc: string
+  phone: string
+  address: string
+  observations: string
+  agencyId: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type CreateLabel = Omit<Label, 'id' | 'createdAt' | 'updatedAt'>
+export type UpdateLabel = Partial<CreateLabel>

@@ -8,6 +8,10 @@ import type {
   ProductCategory,
   CustomerFromService,
   UpdateCustomer,
+  Agency,
+  Label,
+  CreateAgency,
+  CreateLabel,
 } from '@/types'
 import { fetchData } from '@/lib/utils'
 import { getCompanybyRuc } from '@/lib/services/sunat'
@@ -16,7 +20,6 @@ import { fakePromise } from '@/lib/utils'
 
 //----------------------------- Quotations ----------------------------->
 export async function fetchQuotations(): Promise<QuotationClient[]> {
-  console.log('fetch quotations')
   const url = `${BASE_URL}/api/quotations`
   const data = await fetchData<DataResponse<QuotationClient>>(url)
   return data.items
@@ -122,6 +125,85 @@ export async function login(email: string, password: string) {
   return data
 }
 
+//----------------------------- Agencies ----------------------------->
+export async function fetchAgencies(): Promise<Agency[]> {
+  const url = `${BASE_URL}/api/agencies`
+  const data = await fetchData<DataResponse<Agency>>(url)
+  return data.items
+}
+
+export async function fetchAgencyById(id: string) {
+  const url = `${BASE_URL}/api/agencies/${id}`
+  const data = await fetchData<Agency>(url)
+  return data
+}
+
+export async function createAgency(agencyToCreate: CreateAgency) {
+  const url = `${BASE_URL}/api/agencies`
+  const data = await fetchData<Agency>(url, {
+    method: 'POST',
+    body: JSON.stringify(agencyToCreate),
+  })
+  return data
+}
+
+export async function updateAgency(id: string, agencyToUpdate: Agency) {
+  const url = `${BASE_URL}/api/agencies/${id}`
+  const data = await fetchData<Agency>(url, {
+    method: 'PUT',
+    body: JSON.stringify(agencyToUpdate),
+  })
+  return data
+}
+
+export async function deleteAgency(id: string) {
+  const url = `${BASE_URL}/api/agencies/${id}`
+  const data = await fetchData<Agency>(url, {
+    method: 'DELETE',
+  })
+  return data
+}
+
+//----------------------------- Labels ----------------------------->
+export async function fetchLabels(): Promise<Label[]> {
+  const url = `${BASE_URL}/api/labels`
+  const data = await fetchData<DataResponse<Label>>(url)
+  return data.items
+}
+
+export async function fetchLabelById(id: string) {
+  const url = `${BASE_URL}/api/labels/${id}`
+  const data = await fetchData<Label>(url)
+  return data
+}
+
+export async function createLabel(labelToCreate: CreateLabel) {
+  const url = `${BASE_URL}/api/labels`
+  const data = await fetchData<Label>(url, {
+    method: 'POST',
+    body: JSON.stringify(labelToCreate),
+  })
+  return data
+}
+
+export async function updateLabel(id: string, labelToUpdate: Label) {
+  const url = `${BASE_URL}/api/labels/${id}`
+  const data = await fetchData<Label>(url, {
+    method: 'PUT',
+    body: JSON.stringify(labelToUpdate),
+  })
+  return data
+}
+
+export async function deleteLabel(id: string) {
+  const url = `${BASE_URL}/api/labels/${id}`
+  const data = await fetchData<Label>(url, {
+    method: 'DELETE',
+  })
+  return data
+}
+
+//----------------------------- Auth ----------------------------->
 export async function validateCredentials({
   email,
   password,
@@ -139,6 +221,7 @@ export async function validateCredentials({
       },
     })
 
+    console.log({ data })
     return data.userId
   } catch (error) {
     console.log('error in validateCredentials', error)

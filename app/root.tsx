@@ -13,7 +13,6 @@ import { Toaster } from '@/components/ui/sonner'
 import type { Route } from './+types/root'
 import stylesheet from './app.css?url'
 import { getSession } from './sessions.server'
-// import { commitSession, getSession } from './sessions.server'
 
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url)

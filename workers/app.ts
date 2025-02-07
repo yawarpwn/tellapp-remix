@@ -20,7 +20,6 @@ const requestHandler = createRequestHandler(
 
 export default {
   async fetch(request, env) {
-    console.log('cookie', request.headers.get('Cookie'))
     return requestHandler(request, {
       VALUE_FROM_CLOUDFLARE: 'Hello from Cloudflare',
     })

@@ -1,3 +1,4 @@
+import { PRODUCTION_URL } from './lib/constants'
 import { createCookieSessionStorage } from 'react-router'
 
 type SessionData = {
@@ -15,7 +16,7 @@ const { getSession, commitSession, destroySession } =
       name: '__session',
 
       // all of these are optional
-      // domain: 'http://localhost:5173',
+      domain: import.meta.env.PROD ? PRODUCTION_URL : undefined,
       // Expires can also be set (although maxAge overrides it when used in combination).
       // Note that this method is NOT recommended as `new Date` creates only one date on each server deployment, not a dynamic date in the future!
       //
