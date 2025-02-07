@@ -1,18 +1,27 @@
 import pdfMake from 'pdfmake/build/pdfmake'
 import { useMemo } from 'react'
 // import * as pdfFonts from 'pdfmake/build/vfs_fonts'
-import { Label } from '@/types'
-import { CustomTableLayout, TDocumentDefinitions } from 'pdfmake/interfaces'
+import type { LabelType } from '@/types'
+import type {
+  CustomTableLayout,
+  TDocumentDefinitions,
+} from 'pdfmake/interfaces'
 import { gelLabelColumn } from './label-column'
 
-export function generateLabelPdf(label: Label) {
+export function generateLabelPdf(label: LabelType) {
   const docPdf: TDocumentDefinitions = {
     content: [
       {
         table: {
           widths: ['*', '*', '*'],
           heights: [570, 'auto', 'auto'],
-          body: [[gelLabelColumn(label), gelLabelColumn(label), gelLabelColumn(label)]],
+          body: [
+            [
+              gelLabelColumn(label),
+              gelLabelColumn(label),
+              gelLabelColumn(label),
+            ],
+          ],
         },
         layout: {
           defaultBorder: false,
@@ -55,7 +64,7 @@ export function generateLabelPdf(label: Label) {
         bolditalics:
           'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf',
       },
-    },
+    }
   )
 
   return {

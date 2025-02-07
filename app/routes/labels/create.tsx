@@ -1,20 +1,26 @@
 import type { Route } from './+types/create'
 import { redirect, data } from 'react-router'
 import { handleError } from '@/lib/utils'
-import { CreateUpdateAgency } from '@/agencies/create-update-agency'
-import { createAgency } from '@/lib/data'
+import { CreateUpdateLabel } from '@/labels/create-update-label'
+import { createLabel, fetchAgencies } from '@/lib/data'
+
+export async function loader(_: Route.LoaderArgs) {
+  const agencies = await fetchAgencies()
+  return { agencies }
+}
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
   const entries = Object.fromEntries(formData)
   try {
-    await createAgency(entries)
+    await createLabel(entries)
     return redirect('/agencies')
   } catch (error) {
     handleError(error)
   }
 }
 
-export default function CreateAgency({ loaderData }: Route.ComponentProps) {
-  return <CreateUpdateAgency agency={undefined} />
+export default function CreateLabelRoute({ loaderData }: Route.ComponentProps) {
+  const { agencies } = loaderData
+  return <CreateUpdateLabel label={undefined} agencies={agencies} />
 }

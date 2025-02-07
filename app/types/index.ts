@@ -110,7 +110,7 @@ export type CreateAgency = Omit<Agency, 'id' | 'createdAt' | 'updatedAt'>
 export type UpdateAgency = Partial<CreateAgency>
 
 // -------------------------- Labels  -------------------------------------->0ww
-export interface Label {
+export interface LabelType {
   id: string
   recipient: string
   destination: string
@@ -118,10 +118,14 @@ export interface Label {
   phone: string
   address: string
   observations: string
-  agencyId: string
+  agencyId?: string | null
   createdAt: Date
   updatedAt: Date
+  agency: Agency
 }
 
-export type CreateLabel = Omit<Label, 'id' | 'createdAt' | 'updatedAt'>
+export type CreateLabel = Omit<
+  LabelType,
+  'id' | 'createdAt' | 'updatedAt' | 'agency'
+>
 export type UpdateLabel = Partial<CreateLabel>

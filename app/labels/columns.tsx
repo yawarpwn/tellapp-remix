@@ -1,5 +1,5 @@
 import { type ColumnDef } from '@tanstack/react-table'
-import type { Label } from '@/types'
+import type { LabelType } from '@/types'
 import { Form } from 'react-router'
 import { ExternalLink, MoreHorizontal, StarIcon } from 'lucide-react'
 import { Link } from 'react-router'
@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-export const columns: ColumnDef<Label>[] = [
+export const columns: ColumnDef<LabelType>[] = [
   {
     accessorKey: 'recipient',
     header: 'Destinatario',

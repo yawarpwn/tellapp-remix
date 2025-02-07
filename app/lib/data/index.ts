@@ -9,7 +9,7 @@ import type {
   CustomerFromService,
   UpdateCustomer,
   Agency,
-  Label,
+  LabelType,
   CreateAgency,
   CreateLabel,
 } from '@/types'
@@ -165,30 +165,30 @@ export async function deleteAgency(id: string) {
 }
 
 //----------------------------- Labels ----------------------------->
-export async function fetchLabels(): Promise<Label[]> {
+export async function fetchLabels(): Promise<LabelType[]> {
   const url = `${BASE_URL}/api/labels`
-  const data = await fetchData<DataResponse<Label>>(url)
+  const data = await fetchData<DataResponse<LabelType>>(url)
   return data.items
 }
 
 export async function fetchLabelById(id: string) {
   const url = `${BASE_URL}/api/labels/${id}`
-  const data = await fetchData<Label>(url)
+  const data = await fetchData<LabelType>(url)
   return data
 }
 
 export async function createLabel(labelToCreate: CreateLabel) {
   const url = `${BASE_URL}/api/labels`
-  const data = await fetchData<Label>(url, {
+  const data = await fetchData<LabelType>(url, {
     method: 'POST',
     body: JSON.stringify(labelToCreate),
   })
   return data
 }
 
-export async function updateLabel(id: string, labelToUpdate: Label) {
+export async function updateLabel(id: string, labelToUpdate: LabelType) {
   const url = `${BASE_URL}/api/labels/${id}`
-  const data = await fetchData<Label>(url, {
+  const data = await fetchData<LabelType>(url, {
     method: 'PUT',
     body: JSON.stringify(labelToUpdate),
   })
@@ -197,7 +197,7 @@ export async function updateLabel(id: string, labelToUpdate: Label) {
 
 export async function deleteLabel(id: string) {
   const url = `${BASE_URL}/api/labels/${id}`
-  const data = await fetchData<Label>(url, {
+  const data = await fetchData<LabelType>(url, {
     method: 'DELETE',
   })
   return data

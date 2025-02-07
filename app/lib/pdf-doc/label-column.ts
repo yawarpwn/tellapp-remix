@@ -1,8 +1,8 @@
-import { Label } from '@/types'
-import { Column, Table } from 'pdfmake/interfaces'
+import type { LabelType } from '@/types'
+import type { Column, Table } from 'pdfmake/interfaces'
 import { getFragileSvg, getLogo } from './constants'
 
-export const gelLabelColumn = (label: Label) => {
+export const gelLabelColumn = (label: LabelType) => {
   const column: Column = {
     table: {
       widths: '*',
