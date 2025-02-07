@@ -36,12 +36,20 @@ export default [
       ),
     ]),
 
-    //Customers ---->
+    //Agencies ---->
     ...prefix('agencies', [
       index('routes/agencies/home.tsx'),
       route('/create', 'routes/agencies/create.tsx'),
       route('/:id/update', 'routes/agencies/update.tsx'),
       route('/:id/delete', 'routes/agencies/delete.tsx'),
+    ]),
+
+    //Labels ---->
+    ...prefix('labels', [
+      index('routes/labels/home.tsx'),
+      route('/create', 'routes/labels/create.tsx'),
+      route('/:id/update', 'routes/labels/update.tsx'),
+      route('/:id/delete', 'routes/labels/delete.tsx'),
     ]),
     route('/test-page', 'routes/test-page.tsx'),
   ]),
