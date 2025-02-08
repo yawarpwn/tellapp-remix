@@ -1,7 +1,7 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import type { LabelType } from '@/types'
 import { Form } from 'react-router'
-import { ExternalLink, MoreHorizontal, StarIcon } from 'lucide-react'
+import { MoreHorizontal } from 'lucide-react'
 import { Link } from 'react-router'
 
 import { Button } from '@/components/ui/button'
@@ -44,16 +44,17 @@ export const columns: ColumnDef<LabelType>[] = [
       </div>
     ),
   },
-
   {
     enableGlobalFilter: false,
     accessorKey: 'observations',
     header: 'Observaciones',
+    cell: ({ row }) => <div>{row.original.observations ?? ''}</div>,
   },
   {
     enableGlobalFilter: false,
-    accessorKey: 'observations',
+    accessorKey: 'phone',
     header: 'Teléfono',
+    cell: ({ row }) => <div>{row.original.phone ?? ''}</div>,
   },
   {
     id: 'actions',

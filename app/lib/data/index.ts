@@ -194,6 +194,9 @@ export async function createLabel(labelToCreate: CreateLabel) {
   const data = await fetchData<LabelType>(url, {
     method: 'POST',
     body: JSON.stringify(labelToCreate),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
   return data
 }
@@ -203,6 +206,9 @@ export async function updateLabel(id: string, labelToUpdate: LabelType) {
   const data = await fetchData<LabelType>(url, {
     method: 'PUT',
     body: JSON.stringify(labelToUpdate),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
   return data
 }

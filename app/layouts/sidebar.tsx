@@ -68,6 +68,12 @@ const routes = [
   },
 
   {
+    path: '/watermark',
+    label: 'Marca de agua',
+    active: false,
+    Icon: ImageOffIcon,
+  },
+  {
     path: '/gallery',
     label: 'Galeria',
     active: false,
@@ -79,13 +85,6 @@ const routes = [
     label: 'Señales',
     active: false,
     Icon: SplitIcon,
-  },
-
-  {
-    path: '/watermark',
-    label: 'Marca de agua',
-    active: false,
-    Icon: ImageOffIcon,
   },
 ]
 
@@ -153,7 +152,7 @@ export default function SidebarLayout() {
       <div className="h-[3rem] fixed bottom-0 z-50  right-0 left-0 bg-background md:hidden border-t border-primary">
         <div className="w-full  h-full px-3  flex items-center justify-center">
           <nav className="flex items-center  gap-5">
-            {routes.slice(0, 5).map((route) => (
+            {routes.slice(0, 6).map((route) => (
               <NavLink
                 key={route.path}
                 className={({ isActive }) => (isActive ? 'text-primary' : '')}
@@ -176,7 +175,7 @@ export default function SidebarLayout() {
                 {/* <DropdownMenuLabel>Acciones</DropdownMenuLabel> */}
                 {/* <DropdownMenuSeparator /> */}
                 <DropdownMenuItem>
-                  <Link to={'/watermark'}>Marca de agua</Link>
+                  <Link to={'/watermark'}>Galeria</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link to={'/signals'}>Señales</Link>

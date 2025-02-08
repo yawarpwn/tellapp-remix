@@ -5,6 +5,7 @@ import { columns } from '@/labels/columns'
 
 export async function loader() {
   const labels = await fetchLabels()
+  console.log({ labels })
   return { labels }
 }
 

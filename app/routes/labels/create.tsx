@@ -14,7 +14,7 @@ export async function action({ request }: Route.ActionArgs) {
   const entries = Object.fromEntries(formData)
   try {
     await createLabel(entries)
-    return redirect('/agencies')
+    return redirect('/labels')
   } catch (error) {
     handleError(error)
   }

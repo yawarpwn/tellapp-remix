@@ -1,4 +1,4 @@
-import { FieldErrors as Errors } from '@/components/field-errors'
+// import { FieldErrors as Errors } from '@/components/field-errors'
 import { Textarea } from '@/components/ui/textarea'
 import { BackTo } from '@/components/back-to'
 import { Button } from '@/components/ui/button'
@@ -6,16 +6,16 @@ import { Link, useFetcher } from 'react-router'
 import { Label } from '@radix-ui/react-label'
 import { Loader2Icon, SearchIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import type { Agency, CreateLabel, LabelType } from '@/types'
+import type { Agency, CreateLabel, LabelType, UpdateLabel } from '@/types'
 import React, { useEffect } from 'react'
 import { PickAgencyDialog } from '@/components/pick-agency-dialog'
 type Props = {
-  label: LabelType | undefined
+  label: UpdateLabel | undefined
   agencies: Agency[]
 }
 
 export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
-  const [label, setLabel] = React.useState<CreateLabel>(
+  const [label, setLabel] = React.useState<CreateLabel | UpdateLabel>(
     labelToUpdate || {
       dniRuc: '',
       recipient: '',
@@ -33,7 +33,10 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
   const [errors, setErrors] = React.useState([])
 
   const handleSearchCustomerByDniOrRuc = () => {
-    searchFetcher.submit(label, {
+    const formData = new FormData()
+    if (!label.dniRuc) return
+    formData.append('ruc', label.dniRuc)
+    searchFetcher.submit(formData, {
       method: 'post',
       action: '/quotations/search-by-ruc',
     })
@@ -56,14 +59,21 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
     ev.preventDefault()
     fetcher.submit(label, {
       method: 'post',
-      action: '/',
     })
   }
 
-  const pending = false
+  const pending = fetcher.state !== 'idle' || searchFetcher.state !== 'idle'
 
   React.useEffect(() => {
     console.log(searchFetcher.data)
+    if (searchFetcher.data) {
+      const customer = searchFetcher.data.customer
+      setLabel((prev) => ({
+        ...prev,
+        dniRuc: customer.ruc,
+        recipient: customer.name,
+      }))
+    }
   }, [searchFetcher.data])
 
   useEffect(() => {
@@ -87,7 +97,10 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
             </Label>
             <div className="relative">
               <Input
+                disabled={pending}
                 required
+                minLength={8}
+                maxLength={11}
                 name="dniRuc"
                 typeof="number"
                 id="dniRuc"
@@ -120,6 +133,7 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
               Razón Social
             </Label>
             <Input
+              disabled={pending}
               required
               name="recipient"
               id="recipient"
@@ -136,6 +150,7 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
             </Label>
             <Input
               required
+              disabled={pending}
               name="destination"
               id="destination"
               value={label?.destination || ''}
@@ -149,8 +164,8 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
               Direccion
             </Label>
             <Input
-              required
               name="address"
+              disabled={pending}
               id="address"
               value={label?.address || ''}
               onChange={handleChange}
@@ -164,9 +179,10 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
               Teléfono
             </Label>
             <Input
-              required
               typeof="number"
               name="phone"
+              disabled={pending}
+              minLength={9}
               id="phone"
               value={label?.phone || ''}
               onChange={handleChange}
@@ -180,9 +196,9 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
               Observaciones
             </Label>
             <Textarea
-              required
               name="observations"
               id="observations"
+              disabled={pending}
               value={label?.observations || ''}
               onChange={handleChange}
               placeholder="Atención: Juan Roman Riquelme con DNI: 344323908"
@@ -196,8 +212,8 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
           />
 
           <footer className="flex items-center justify-between mt-4">
-            <Link to="/products">Cancelar</Link>
-            <Button type="submit">
+            <Link to="/labels">Cancelar</Link>
+            <Button disabled={pending} type="submit">
               {fetcher.state !== 'idle' && <Loader2Icon />}
               <span>{labelToUpdate ? 'Actualizar' : 'Crear'}</span>
             </Button>

@@ -51,6 +51,16 @@ export default [
       route('/:id/update', 'routes/labels/update.tsx'),
       route('/:id/delete', 'routes/labels/delete.tsx'),
     ]),
+
+    //Gallery ---->
+    ...prefix('gallery', [index('routes/gallery/home.tsx')]),
+
+    //Gallery ---->
+    ...prefix('signals', [index('routes/signals/home.tsx')]),
+
+    //Watermark ---->
+    ...prefix('watermark', [index('routes/watermark/home.tsx')]),
+
     route('/test-page', 'routes/test-page.tsx'),
   ]),
   route('/logout', 'routes/logout.tsx'),
