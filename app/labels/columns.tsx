@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { generateLabelPdf } from '@/lib/pdf-doc/generate-label-pdf'
 
 export const columns: ColumnDef<LabelType>[] = [
   {
@@ -72,6 +73,14 @@ export const columns: ColumnDef<LabelType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
             <DropdownMenuSeparator />
+
+            <DropdownMenuItem
+              onSelect={() => {
+                generateLabelPdf(label).print()
+              }}
+            >
+              Imprimir
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <Link to={`/labels/${label.id}/update`}>Editar</Link>
             </DropdownMenuItem>

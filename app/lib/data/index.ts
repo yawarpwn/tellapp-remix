@@ -155,6 +155,9 @@ export async function createAgency(agencyToCreate: CreateAgency) {
   const data = await fetchData<Agency>(url, {
     method: 'POST',
     body: JSON.stringify(agencyToCreate),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
   return data
 }
@@ -164,6 +167,9 @@ export async function updateAgency(id: string, agencyToUpdate: Agency) {
   const data = await fetchData<Agency>(url, {
     method: 'PUT',
     body: JSON.stringify(agencyToUpdate),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
   return data
 }

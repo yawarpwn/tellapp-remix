@@ -43,7 +43,7 @@ export function CreateUpdateAgency({ agency }: Props) {
               defaultValue={agency?.name || ''}
               placeholder="Nombre de cliente"
             />
-            <Errors errors={errors} name="name" />
+            {/* <Errors errors={errors} name="name" /> */}
           </div>
 
           <div className="grid gap-2">
@@ -57,7 +57,7 @@ export function CreateUpdateAgency({ agency }: Props) {
               defaultValue={agency?.ruc || ''}
               placeholder="20610555536"
             />
-            <Errors errors={errors} name="ruc" />
+            {/* <Errors errors={errors} name="ruc" /> */}
           </div>
 
           <div className="grid gap-2">
@@ -71,7 +71,7 @@ export function CreateUpdateAgency({ agency }: Props) {
               defaultValue={agency?.address || ''}
               placeholder="Av. Maquinarias 325 - Urb. Los Eucaliptos"
             />
-            <Errors errors={errors} name="address" />
+            {/* <Errors errors={errors} name="address" /> */}
           </div>
 
           <div className="grid gap-2">
@@ -85,7 +85,7 @@ export function CreateUpdateAgency({ agency }: Props) {
               defaultValue={agency?.phone || ''}
               placeholder="992536019"
             />
-            <Errors errors={errors} name="address" />
+            {/* <Errors errors={errors} name="address" /> */}
           </div>
 
           <footer className="flex items-center justify-between mt-4">

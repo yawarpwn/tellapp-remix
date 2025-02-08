@@ -15,7 +15,7 @@ export async function action({ request, params }: Route.ActionArgs) {
   const entries = Object.fromEntries(formData)
   try {
     await updateAgency(params.id, entries)
-    return redirect('/agencys')
+    return redirect('/agencies')
   } catch (error) {
     return handleError(error)
   }
