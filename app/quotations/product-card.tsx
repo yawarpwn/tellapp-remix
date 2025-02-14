@@ -37,10 +37,8 @@ export function ProductCard(props: Props) {
     onDeleteItem,
   } = props
 
-  console.log('render product card')
-
   return (
-    <li>
+    <div>
       <Card className="border-border">
         <CardContent className="grid gap-4 p-4">
           <div className="flex items-center justify-between [&_button]:size-7 [&_button]:shrink-0 [&_button_svg]:size-4 ">
@@ -162,6 +160,6 @@ export function ProductCard(props: Props) {
           </div>
         </CardContent>
       </Card>
-    </li>
+    </div>
   )
 }

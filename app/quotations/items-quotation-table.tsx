@@ -1,5 +1,6 @@
 //utils
 import { getIgv } from '@/lib/utils'
+import { createSwapy, utils, type Swapy, type SlotItemMapArray } from 'swapy'
 
 //ui
 import { Button } from '@/components/ui/button'
@@ -40,6 +41,16 @@ export function ItemsQuotationTable(props: Props) {
     onMoveUpItem,
   } = props
 
+  const [slotItemMap, setSlotItemMap] = useState<SlotItemMapArray>(
+    utils.initSlotItemMap(items, 'id')
+  )
+  const slottedItems = React.useMemo(
+    () => utils.toSlottedItems(items, 'id', slotItemMap),
+    [items, slotItemMap]
+  )
+  const swapyRef = React.useRef<Swapy | null>(null)
+  const containerRef = React.useRef<HTMLDivElement>(null)
+
   const products = React.use(productsPromise)
   //States
   const [seletedProductId, setSelectedProductId] = useState<string | null>(null)
@@ -57,6 +68,37 @@ export function ItemsQuotationTable(props: Props) {
   const { formatedIgv, formatedTotal, formatedSubTotal, totalItems } =
     getIgv(items)
 
+  React.useEffect(
+    () =>
+      utils.dynamicSwapy(
+        swapyRef.current,
+        items,
+        'id',
+        slotItemMap,
+        setSlotItemMap
+      ),
+    [items]
+  )
+
+  React.useEffect(() => {
+    swapyRef.current = createSwapy(containerRef.current!, {
+      manualSwap: true,
+      // animation: 'dynamic'
+      // autoScrollOnDrag: true,
+      // swapMode: 'drop',
+      // enabled: true,
+      // dragAxis: 'x',
+      // dragOnHold: true
+    })
+
+    swapyRef.current.onSwap((event) => {
+      setSlotItemMap(event.newSlotItemMap.asArray)
+    })
+
+    return () => {
+      swapyRef.current?.destroy()
+    }
+  }, [])
   return (
     <section>
       {openCreateEditModal && (
@@ -90,23 +132,31 @@ export function ItemsQuotationTable(props: Props) {
           </Button>
         </div>
       </header>
-      {items.length > 0 ? (
+      {slottedItems.length > 0 ? (
         <div>
-          <ul className="flex flex-col gap-4">
-            {items.map((item, index) => (
-              <ProductCard
-                onDuplicateItem={onDuplicateItem}
-                item={item}
-                key={item.id}
-                onEditItem={onEditItem}
-                index={index}
-                onOpenCreateEditItemModal={onOpenCreateEditItemModal}
-                moveUpItem={onMoveUpItem}
-                moveDownItem={onMoveDownItem}
-                onDeleteItem={onDeleteItem}
-              />
-            ))}
-          </ul>
+          <div className="items" ref={containerRef}>
+            <div className="flex flex-col gap-4">
+              {slottedItems.map(({ slotId, itemId, item }, index) => (
+                <div className="slot" key={slotId} data-swapy-slot={slotId}>
+                  {item && (
+                    <div className="item" data-swapy-item={itemId} key={itemId}>
+                      <ProductCard
+                        onDuplicateItem={onDuplicateItem}
+                        item={item}
+                        key={slotId}
+                        onEditItem={onEditItem}
+                        index={index}
+                        onOpenCreateEditItemModal={onOpenCreateEditItemModal}
+                        moveUpItem={onMoveUpItem}
+                        moveDownItem={onMoveDownItem}
+                        onDeleteItem={onDeleteItem}
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div className="mt-2 flex justify-start sm:flex sm:justify-end">
             <div className="w-full space-y-2 sm:w-auto sm:text-right">
