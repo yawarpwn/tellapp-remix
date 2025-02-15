@@ -1,11 +1,11 @@
-import { deleteQuotationAction } from '@/lib/actions'
+import { deleteQuotation } from '@/lib/data'
 import type { Route } from './+types/delete'
 import { redirect } from 'react-router'
 import { HTTPRequestError } from '@/lib/errors'
 
 export async function action({ params }: Route.ActionArgs) {
   try {
-    await deleteQuotationAction(+params.number)
+    await deleteQuotation(+params.number)
     return redirect('/quotations/')
   } catch (error) {
     if (error instanceof HTTPRequestError) {

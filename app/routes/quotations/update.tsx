@@ -9,7 +9,7 @@ import {
   fetchProducts,
   fetchQuotaitonByNumber,
 } from '@/lib/data'
-import { updateQuotationAction } from '@/lib/actions'
+import { updateQuotation } from '@/lib/data'
 import { UpdateQuotationView } from '@/quotations/update-quotation-view'
 
 export async function action({ request }: Route.ActionArgs) {
@@ -17,7 +17,7 @@ export async function action({ request }: Route.ActionArgs) {
   const quotation = JSON.parse(formData.get('quotation') as string)
   // const quotation = JSON.parse(formData.get('quotation') as string)
   try {
-    await updateQuotationAction(quotation)
+    await updateQuotation(quotation)
     return redirect('/quotations')
   } catch (error) {
     return handleError(error)

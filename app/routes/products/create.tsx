@@ -1,7 +1,7 @@
-import type { Route } from './+types/create-product'
+import type { Route } from './+types/create'
 import { insertProductSchema } from '@/lib/schemas'
 import { redirect, data } from 'react-router'
-import { createProductAction } from '@/lib/actions'
+import { createProduct } from '@/lib/data'
 import { handleError } from '@/lib/utils'
 import CreateUpdateProduct from '@/products/create-update-product'
 import { PRODUCT_CATEGORIES } from '@/lib/constants'
@@ -25,7 +25,7 @@ export async function action({ request }: Route.ActionArgs) {
       })
     }
 
-    await createProductAction({ ...result.data })
+    await createProduct({ ...result.data })
     return redirect('/products')
   } catch (error) {
     handleError(error)

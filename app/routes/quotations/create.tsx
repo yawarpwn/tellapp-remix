@@ -2,8 +2,7 @@ import { redirect, useFetcher } from 'react-router'
 
 import React from 'react'
 import type { Route } from './+types/create'
-import { fetchCustomers, fetchProducts } from '@/lib/data'
-import { createQuotationAction } from '@/lib/actions'
+import { fetchCustomers, fetchProducts, createQuotation } from '@/lib/data'
 import { toast } from 'sonner'
 import { HTTPRequestError } from '@/lib/errors'
 import { useQuotation } from '@/hooks/use-quotation'
@@ -23,7 +22,7 @@ export async function action({ request }: Route.ActionArgs) {
   const quotation = JSON.parse(formData.get('quotation') as string)
   // const quotation = JSON.parse(formData.get('quotation') as string)
   try {
-    await createQuotationAction(quotation)
+    await createQuotation(quotation)
     return redirect('/quotations')
   } catch (error) {
     if (error instanceof HTTPRequestError) {

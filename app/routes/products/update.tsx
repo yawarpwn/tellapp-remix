@@ -1,8 +1,8 @@
-import type { Route } from './+types/update-product'
+import type { Route } from './+types/update'
 import { updateProductSchema } from '@/lib/schemas'
 import { redirect } from 'react-router'
 import { data } from 'react-router'
-import { updateProductAction } from '@/lib/actions'
+import { updateProduct } from '@/lib/data'
 import { handleError } from '@/lib/utils'
 import CreateUpdateProduct from '@/products/create-update-product'
 import { fetchProductById, fetchProductCategories } from '@/lib/data'
@@ -23,7 +23,7 @@ export async function action({ request, params }: Route.ActionArgs) {
         status: 400,
       })
     }
-    await updateProductAction(params.id, result.data)
+    await updateProduct(params.id, result.data)
     return redirect('/products')
   } catch (error) {
     return handleError(error)

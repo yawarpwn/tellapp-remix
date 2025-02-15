@@ -1,8 +1,12 @@
 import { BASE_URL } from '@/lib/constants'
-
+import type {} from '@/types'
 import type {
   DataResponse,
   QuotationClient,
+  CreateQuotationClient,
+  UpdateProduct,
+  InsertProduct,
+  UpdateQuotationClient,
   Customer,
   Product,
   ProductCategory,
@@ -29,6 +33,45 @@ export async function fetchQuotaitonByNumber(quotationNumber: number) {
   const url = `${BASE_URL}/api/quotations/${quotationNumber}`
   const data = await fetchData<QuotationClient>(url)
   return data
+}
+
+export async function deleteQuotation(quotationNumber: number) {
+  const url = `${BASE_URL}/api/quotations/${quotationNumber}`
+  const data = await fetchData<Customer>(url, {
+    method: 'DELETE',
+  })
+  return data
+}
+
+export async function createQuotation(newQuotation: CreateQuotationClient) {
+  const url = `${BASE_URL}/api/quotations`
+  const data = await fetchData<{ insertedNumber: number }>(url, {
+    method: 'POST',
+    body: JSON.stringify(newQuotation),
+  })
+
+  return data.insertedNumber
+}
+
+export async function updateQuotation(
+  quotationToUpdate: UpdateQuotationClient
+) {
+  const url = `${BASE_URL}/api/quotations/${quotationToUpdate.id}`
+  console.log({ url, quotationToUpdate })
+  const updateQuotation = await fetchData<QuotationClient>(url, {
+    method: 'PUT',
+    body: JSON.stringify(quotationToUpdate),
+  })
+
+  return updateQuotation
+}
+
+export async function duplicateQuotation(quotationNumber: number) {
+  const quotation = await fetchQuotaitonByNumber(quotationNumber)
+  const insertedQuotationNumber = await createQuotation({
+    ...quotation,
+  })
+  return insertedQuotationNumber
 }
 
 type FetchCustomerOptions = {
@@ -125,15 +168,34 @@ export async function fetchProductCategories() {
   return data.items
 }
 
-//Auth
-export async function login(email: string, password: string) {
-  const url = `${BASE_URL}/api/auth/login`
-  const data = await fetch(url, {
+export async function createProduct(productToInsert: InsertProduct) {
+  const url = `${BASE_URL}/api/products`
+  const data = await fetchData<Product>(url, {
     method: 'POST',
-    body: JSON.stringify({ email, password }),
-    headers: { 'Content-Type': 'application/json' },
-  }).then((res) => res.json())
+    body: JSON.stringify(productToInsert),
+  })
+  return data
+}
 
+export async function updateProduct(
+  id: string,
+  productToUpdate: UpdateProduct
+) {
+  console.log('update product ')
+  const url = `${BASE_URL}/api/products/${id}`
+  const updatedProduct = await fetchData<Product>(url, {
+    method: 'PUT',
+    body: JSON.stringify(productToUpdate),
+  })
+
+  return updatedProduct
+}
+
+export async function deleteProduct(id: string) {
+  const url = `${BASE_URL}/api/products/${id}`
+  const data = await fetchData<Product>(url, {
+    method: 'DELETE',
+  })
   return data
 }
 
@@ -251,4 +313,15 @@ export async function validateCredentials({
     console.log('error in validateCredentials', error)
     return null
   }
+}
+
+export async function login(email: string, password: string) {
+  const url = `${BASE_URL}/api/auth/login`
+  const data = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+    headers: { 'Content-Type': 'application/json' },
+  }).then((res) => res.json())
+
+  return data
 }

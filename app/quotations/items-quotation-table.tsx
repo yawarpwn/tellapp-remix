@@ -81,6 +81,7 @@ export function ItemsQuotationTable(props: Props) {
   )
 
   React.useEffect(() => {
+    if (!containerRef.current) return
     swapyRef.current = createSwapy(containerRef.current!, {
       manualSwap: true,
       // animation: 'dynamic'
