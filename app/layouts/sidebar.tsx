@@ -103,8 +103,8 @@ export default function SidebarLayout() {
     >
       <div className="fixed size-px hidden"></div>
       {/* Sidebar */}
-      <div className="w-[3rem] shrink-0 md:w-[15rem] hidden md:block">
-        <div className="w-[3rem] md:w-[15rem]  h-screen border-r fixed z-50 left-0 flex justify-center">
+      <div className="w-[3rem] shrink-0 lg:w-[15rem] hidden lg:block">
+        <div className="w-[3rem] lg:w-[15rem]  h-screen border-r fixed z-50 left-0 flex justify-center">
           <div className="">
             <nav className="flex flex-col gap-8  pt-8">
               {routes.map((route) => (
@@ -115,7 +115,7 @@ export default function SidebarLayout() {
                 >
                   <div className={cn('flex items-center gap-2')}>
                     <route.Icon size={22} />
-                    <span className="hidden md:block">{route.label}</span>
+                    <span className="hidden lg:block">{route.label}</span>
                   </div>
                 </NavLink>
               ))}
@@ -129,7 +129,7 @@ export default function SidebarLayout() {
                   ) : (
                     <LogOutIcon />
                   )}
-                  <span className="hidden md:block">Salir</span>
+                  <span className="hidden lg:block">Salir</span>
                 </Button>
               </fetcher.Form>
             </div>
@@ -144,12 +144,12 @@ export default function SidebarLayout() {
         )}
       >
         <div className="w-full relative max-h-[calc(0px+100vh)] pb-[3rem]">
-          <div className="px-3 py-6 md:px-6">
+          <div className="px-3 py-6 lg:px-6">
             <Outlet />
           </div>
         </div>
       </main>
-      <div className="h-[3rem] fixed bottom-0 z-50  right-0 left-0 bg-background md:hidden border-t border-primary">
+      <div className="h-[3rem] fixed bottom-0 z-50  right-0 left-0 bg-background lg:hidden border-t border-primary">
         <div className="w-full  h-full px-3  flex items-center justify-center">
           <nav className="flex items-center  gap-5">
             {routes.slice(0, 6).map((route) => (
