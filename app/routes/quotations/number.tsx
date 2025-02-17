@@ -4,10 +4,12 @@ import ViewQuotation from '@/quotations/view-quotation'
 import { QuotationSkeleton } from '@/components/skeletons/quotations'
 
 import React from 'react'
+import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params, request }: Route.LoaderArgs) {
+  const token = await getTokenFromSession(request)
   return {
-    quotationPromise: fetchQuotaitonByNumber(+params.number),
+    quotationPromise: fetchQuotaitonByNumber(+params.number, token),
   }
 }
 

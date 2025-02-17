@@ -1,8 +1,8 @@
 import { PRODUCTION_URL } from './lib/constants'
-import { createCookieSessionStorage } from 'react-router'
+import { createCookieSessionStorage, redirect } from 'react-router'
 
 type SessionData = {
-  userId: string
+  authToken: string
 }
 
 type SessionFlashData = {
@@ -22,12 +22,19 @@ const { getSession, commitSession, destroySession } =
       //
       // expires: new Date(Date.now() + 60_000),
       httpOnly: true,
-      maxAge: 3600,
+      maxAge: 60 * 60 * 24, // 1 day
       path: '/',
       sameSite: 'lax',
       secrets: ['s3cret1'],
       secure: false,
     },
   })
+
+export async function getTokenFromSession(request: Request) {
+  const session = await getSession(request.headers.get('Cookie'))
+  const token = session.get('authToken')
+  if (!token) throw redirect('/')
+  return token
+}
 
 export { getSession, commitSession, destroySession }

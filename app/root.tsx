@@ -14,12 +14,13 @@ import type { Route } from './+types/root'
 import stylesheet from './app.css?url'
 import { getSession } from './sessions.server'
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request, context }: Route.LoaderArgs) {
   const url = new URL(request.url)
   const session = await getSession(request.headers.get('Cookie'))
-  const userId = session.get('userId')
+  const authToken = session.get('authToken')
+  console.log(authToken)
 
-  if (url.pathname !== '/' && !userId) {
+  if (url.pathname !== '/' && !authToken) {
     return redirect('/')
   }
 }

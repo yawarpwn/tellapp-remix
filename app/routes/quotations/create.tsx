@@ -16,13 +16,15 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { useAutoSave } from '@/hooks/use-autos-save'
+import { getTokenFromSession } from '@/sessions.server'
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
+  const token = await getTokenFromSession(request)
   const quotation = JSON.parse(formData.get('quotation') as string)
   // const quotation = JSON.parse(formData.get('quotation') as string)
   try {
-    await createQuotation(quotation)
+    await createQuotation(quotation, token)
     return redirect('/quotations')
   } catch (error) {
     if (error instanceof HTTPRequestError) {
@@ -39,10 +41,11 @@ export async function action({ request }: Route.ActionArgs) {
   }
 }
 
-export async function loader(_: Route.LoaderArgs) {
+export async function loader({ request }: Route.LoaderArgs) {
+  const token = await getTokenFromSession(request)
   return {
-    productsPromise: fetchProducts(),
-    customersPromise: fetchCustomers({ onlyRegular: true }),
+    productsPromise: fetchProducts(token),
+    customersPromise: fetchCustomers(token, { onlyRegular: true }),
   }
 }
 

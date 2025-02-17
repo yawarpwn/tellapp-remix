@@ -23,54 +23,88 @@ import { HTTPRequestError } from '@/lib/errors'
 import { fakePromise } from '@/lib/utils'
 
 //----------------------------- Quotations ----------------------------->
-export async function fetchQuotations(): Promise<QuotationClient[]> {
+export async function fetchQuotations(
+  token: string
+): Promise<QuotationClient[]> {
   const url = `${BASE_URL}/api/quotations`
-  const data = await fetchData<DataResponse<QuotationClient>>(url)
+  const data = await fetchData<DataResponse<QuotationClient>>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return data.items
 }
 
-export async function fetchQuotaitonByNumber(quotationNumber: number) {
+export async function fetchQuotaitonByNumber(
+  quotationNumber: number,
+  token: string
+) {
   const url = `${BASE_URL}/api/quotations/${quotationNumber}`
-  const data = await fetchData<QuotationClient>(url)
-  return data
-}
-
-export async function deleteQuotation(quotationNumber: number) {
-  const url = `${BASE_URL}/api/quotations/${quotationNumber}`
-  const data = await fetchData<Customer>(url, {
-    method: 'DELETE',
+  const data = await fetchData<QuotationClient>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
   return data
 }
 
-export async function createQuotation(newQuotation: CreateQuotationClient) {
+export async function deleteQuotation(quotationNumber: number, token: string) {
+  const url = `${BASE_URL}/api/quotations/${quotationNumber}`
+  const data = await fetchData<Customer>(url, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return data
+}
+
+export async function createQuotation(
+  newQuotation: CreateQuotationClient,
+  token: string
+) {
   const url = `${BASE_URL}/api/quotations`
   const data = await fetchData<{ insertedNumber: number }>(url, {
     method: 'POST',
     body: JSON.stringify(newQuotation),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
   })
 
   return data.insertedNumber
 }
 
 export async function updateQuotation(
-  quotationToUpdate: UpdateQuotationClient
+  quotationToUpdate: UpdateQuotationClient,
+  token: string
 ) {
   const url = `${BASE_URL}/api/quotations/${quotationToUpdate.id}`
   console.log({ url, quotationToUpdate })
   const updateQuotation = await fetchData<QuotationClient>(url, {
     method: 'PUT',
     body: JSON.stringify(quotationToUpdate),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
   })
 
   return updateQuotation
 }
 
-export async function duplicateQuotation(quotationNumber: number) {
-  const quotation = await fetchQuotaitonByNumber(quotationNumber)
-  const insertedQuotationNumber = await createQuotation({
-    ...quotation,
-  })
+export async function duplicateQuotation(
+  quotationNumber: number,
+  token: string
+) {
+  const quotation = await fetchQuotaitonByNumber(quotationNumber, token)
+  const insertedQuotationNumber = await createQuotation(
+    {
+      ...quotation,
+    },
+    token
+  )
   return insertedQuotationNumber
 }
 
@@ -80,24 +114,34 @@ type FetchCustomerOptions = {
 
 //----------------------------- Customers ----------------------------->
 export async function fetchCustomers(
+  token: string,
   options?: FetchCustomerOptions
 ): Promise<Customer[]> {
   const { onlyRegular = false } = options ?? {}
   const url = `${BASE_URL}/api/customers`
-  const data = await fetchData<DataResponse<Customer>>(url)
+  const data = await fetchData<DataResponse<Customer>>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return onlyRegular
     ? data.items.filter((customer) => customer.isRegular)
     : data.items
 }
 
 export async function fetchCustomerByRuc(
-  ruc: string
+  ruc: string,
+  token: string
 ): Promise<CustomerFromService> {
   if (ruc.length === 11) {
     try {
       //Search customer in Database
       const url = `${BASE_URL}/api/customers/ruc/${ruc}`
-      const customerFromDatabase = await fetchData<Customer>(url)
+      const customerFromDatabase = await fetchData<Customer>(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       return {
         id: customerFromDatabase.id,
         ruc: customerFromDatabase.ruc,
@@ -131,197 +175,255 @@ export async function fetchCustomerByRuc(
   throw new HTTPRequestError('El Ruc Debe tener 11 digitos')
 }
 
-export async function fetchCustomerById(id: string) {
+export async function fetchCustomerById(id: string, token: string) {
   const url = `${BASE_URL}/api/customers/${id}`
-  const data = fetchData<Customer>(url)
+  const data = fetchData<Customer>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return data
 }
 
 export async function updateCustomer(
   id: string,
-  customerToUpdate: UpdateCustomer
+  customerToUpdate: UpdateCustomer,
+  token: string
 ) {
   const url = `${BASE_URL}/api/customers/${id}`
   const data = await fetchData<Customer>(url, {
     method: 'PUT',
     body: JSON.stringify(customerToUpdate),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
   })
   return data
 }
 
 //----------------------------- Products ----------------------------->
-export async function fetchProducts(): Promise<Product[]> {
+export async function fetchProducts(token: string): Promise<Product[]> {
   const url = `${BASE_URL}/api/products`
-  const data = await fetchData<DataResponse<Product>>(url)
+  const data = await fetchData<DataResponse<Product>>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return data.items
 }
 
-export async function fetchProductById(id: string): Promise<Product> {
+export async function fetchProductById(
+  id: string,
+  token: string
+): Promise<Product> {
   const url = `${BASE_URL}/api/products/${id}`
-  const data = await fetchData<Product>(url)
+  const data = await fetchData<Product>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return data
 }
 
-export async function fetchProductCategories() {
+export async function fetchProductCategories(token: string) {
   const url = `${BASE_URL}/api/product-categories`
-  const data = await fetchData<DataResponse<ProductCategory>>(url)
+  const data = await fetchData<DataResponse<ProductCategory>>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return data.items
 }
 
-export async function createProduct(productToInsert: InsertProduct) {
+export async function createProduct(
+  productToInsert: InsertProduct,
+  token: string
+) {
   const url = `${BASE_URL}/api/products`
   const data = await fetchData<Product>(url, {
     method: 'POST',
     body: JSON.stringify(productToInsert),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
   })
   return data
 }
 
 export async function updateProduct(
   id: string,
-  productToUpdate: UpdateProduct
+  productToUpdate: UpdateProduct,
+  token: string
 ) {
   console.log('update product ')
   const url = `${BASE_URL}/api/products/${id}`
   const updatedProduct = await fetchData<Product>(url, {
     method: 'PUT',
     body: JSON.stringify(productToUpdate),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
   })
 
   return updatedProduct
 }
 
-export async function deleteProduct(id: string) {
+export async function deleteProduct(id: string, token: string) {
   const url = `${BASE_URL}/api/products/${id}`
   const data = await fetchData<Product>(url, {
     method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
   return data
 }
 
 //----------------------------- Agencies ----------------------------->
-export async function fetchAgencies(): Promise<Agency[]> {
+export async function fetchAgencies(token: string): Promise<Agency[]> {
   const url = `${BASE_URL}/api/agencies`
-  const data = await fetchData<DataResponse<Agency>>(url)
+  const data = await fetchData<DataResponse<Agency>>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return data.items
 }
 
-export async function fetchAgencyById(id: string) {
+export async function fetchAgencyById(id: string, token: string) {
   const url = `${BASE_URL}/api/agencies/${id}`
-  const data = await fetchData<Agency>(url)
+  const data = await fetchData<Agency>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return data
 }
 
-export async function createAgency(agencyToCreate: CreateAgency) {
+export async function createAgency(
+  agencyToCreate: CreateAgency,
+  token: string
+) {
   const url = `${BASE_URL}/api/agencies`
   const data = await fetchData<Agency>(url, {
     method: 'POST',
     body: JSON.stringify(agencyToCreate),
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   })
   return data
 }
 
-export async function updateAgency(id: string, agencyToUpdate: Agency) {
+export async function updateAgency(
+  id: string,
+  agencyToUpdate: Agency,
+  token: string
+) {
   const url = `${BASE_URL}/api/agencies/${id}`
   const data = await fetchData<Agency>(url, {
     method: 'PUT',
     body: JSON.stringify(agencyToUpdate),
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   })
   return data
 }
 
-export async function deleteAgency(id: string) {
+export async function deleteAgency(id: string, token: string) {
   const url = `${BASE_URL}/api/agencies/${id}`
   const data = await fetchData<Agency>(url, {
     method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
   return data
 }
 
 //----------------------------- Labels ----------------------------->
-export async function fetchLabels(): Promise<LabelType[]> {
+export async function fetchLabels(token: string): Promise<LabelType[]> {
   const url = `${BASE_URL}/api/labels`
-  const data = await fetchData<DataResponse<LabelType>>(url)
+  const data = await fetchData<DataResponse<LabelType>>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return data.items
 }
 
-export async function fetchLabelById(id: string) {
+export async function fetchLabelById(id: string, token: string) {
   const url = `${BASE_URL}/api/labels/${id}`
-  const data = await fetchData<LabelType>(url)
+  const data = await fetchData<LabelType>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
   return data
 }
 
-export async function createLabel(labelToCreate: CreateLabel) {
+export async function createLabel(labelToCreate: CreateLabel, token: string) {
   const url = `${BASE_URL}/api/labels`
   const data = await fetchData<LabelType>(url, {
     method: 'POST',
     body: JSON.stringify(labelToCreate),
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   })
   return data
 }
 
-export async function updateLabel(id: string, labelToUpdate: LabelType) {
+export async function updateLabel(
+  id: string,
+  labelToUpdate: LabelType,
+  token: string
+) {
   const url = `${BASE_URL}/api/labels/${id}`
   const data = await fetchData<LabelType>(url, {
     method: 'PUT',
     body: JSON.stringify(labelToUpdate),
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   })
   return data
 }
 
-export async function deleteLabel(id: string) {
+export async function deleteLabel(id: string, token: string) {
   const url = `${BASE_URL}/api/labels/${id}`
   const data = await fetchData<LabelType>(url, {
     method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
   return data
 }
 
 //----------------------------- Auth ----------------------------->
-export async function validateCredentials({
+
+export async function login({
   email,
   password,
 }: {
   email: string
   password: string
 }) {
-  try {
-    const url = `${BASE_URL}/api/auth`
-    const data = await fetchData<{ userId: string; ok: boolean }>(url, {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    console.log({ data })
-    return data.userId
-  } catch (error) {
-    console.log('error in validateCredentials', error)
-    return null
-  }
-}
-
-export async function login(email: string, password: string) {
-  const url = `${BASE_URL}/api/auth/login`
-  const data = await fetch(url, {
+  const url = `${BASE_URL}/auth/login`
+  const data = await fetchData<{ token: string }>(url, {
     method: 'POST',
     body: JSON.stringify({ email, password }),
     headers: { 'Content-Type': 'application/json' },
-  }).then((res) => res.json())
+  })
 
-  return data
+  return data.token
 }

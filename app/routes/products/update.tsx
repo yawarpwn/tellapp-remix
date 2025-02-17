@@ -6,14 +6,17 @@ import { updateProduct } from '@/lib/data'
 import { handleError } from '@/lib/utils'
 import CreateUpdateProduct from '@/products/create-update-product'
 import { fetchProductById, fetchProductCategories } from '@/lib/data'
+import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader({ params }: Route.LoaderArgs) {
-  const product = await fetchProductById(params.id)
-  const productCategories = await fetchProductCategories()
+export async function loader({ params, request }: Route.LoaderArgs) {
+  const token = await getTokenFromSession(request)
+  const product = await fetchProductById(params.id, token)
+  const productCategories = await fetchProductCategories(token)
   return { product, productCategories }
 }
 
 export async function action({ request, params }: Route.ActionArgs) {
+  const token = await getTokenFromSession(request)
   const formData = await request.formData()
   const entries = Object.fromEntries(formData)
   try {
@@ -23,7 +26,7 @@ export async function action({ request, params }: Route.ActionArgs) {
         status: 400,
       })
     }
-    await updateProduct(params.id, result.data)
+    await updateProduct(params.id, result.data, token)
     return redirect('/products')
   } catch (error) {
     return handleError(error)

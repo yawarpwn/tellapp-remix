@@ -75,7 +75,13 @@ export async function fetchData<T>(
   url: string,
   options?: RequestInit
 ): Promise<T> {
-  const response = await fetch(url, options)
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      'X-API-KEY': 'supersecretkey',
+      ...options?.headers,
+    },
+  })
   console.log(`OK:${response.ok} - ${response.url} - ${response.statusText}`)
   if (!response.ok) {
     throw new HTTPRequestError(

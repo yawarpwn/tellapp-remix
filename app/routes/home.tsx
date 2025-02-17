@@ -1,6 +1,6 @@
 import { Label } from '@/components/ui/label'
 import type { Route } from './+types/home'
-import { validateCredentials } from '@/lib/data'
+import { login } from '@/lib/data'
 import { commitSession, getSession } from '@/sessions.server'
 import { data, Form, redirect, useFetcher } from 'react-router'
 import { Input } from '@/components/ui/input'
@@ -17,7 +17,7 @@ export function meta({}: Route.MetaArgs) {
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get('Cookie'))
 
-  if (session.has('userId')) return redirect('/quotations')
+  if (session.has('authToken')) return redirect('/quotations')
 
   return data(
     {
@@ -37,9 +37,9 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
   const email = formData.get('email') as string
   const password = formData.get('password') as string
-  const userId = await validateCredentials({ email, password })
+  const authToken = await login({ email, password })
 
-  if (!userId) {
+  if (!authToken) {
     session.flash('error', 'Email/Contraseña inválido')
 
     // Redirect back to the login page with errors.
@@ -50,7 +50,7 @@ export async function action({ request }: Route.ActionArgs) {
     })
   }
 
-  session.set('userId', userId)
+  session.set('authToken', authToken)
 
   // Login succeeded, send them to the home page.
   return redirect('/quotations', {

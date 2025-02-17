@@ -6,13 +6,16 @@ import { handleError } from '@/lib/utils'
 import CreateUpdateProduct from '@/products/create-update-product'
 import { PRODUCT_CATEGORIES } from '@/lib/constants'
 import { fetchProductCategories } from '@/lib/data'
+import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader(_: Route.LoaderArgs) {
-  const productCategories = await fetchProductCategories()
+export async function loader({ request }: Route.LoaderArgs) {
+  const token = await getTokenFromSession(request)
+  const productCategories = await fetchProductCategories(token)
   return { productCategories }
 }
 
 export async function action({ request }: Route.ActionArgs) {
+  const token = await getTokenFromSession(request)
   const formData = await request.formData()
   const entries = Object.fromEntries(formData)
   try {
@@ -25,7 +28,7 @@ export async function action({ request }: Route.ActionArgs) {
       })
     }
 
-    await createProduct({ ...result.data })
+    await createProduct({ ...result.data }, token)
     return redirect('/products')
   } catch (error) {
     handleError(error)

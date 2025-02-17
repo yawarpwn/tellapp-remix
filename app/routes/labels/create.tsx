@@ -3,17 +3,20 @@ import { redirect, data } from 'react-router'
 import { handleError } from '@/lib/utils'
 import { CreateUpdateLabel } from '@/labels/create-update-label'
 import { createLabel, fetchAgencies } from '@/lib/data'
+import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader(_: Route.LoaderArgs) {
-  const agencies = await fetchAgencies()
+export async function loader({ request }: Route.LoaderArgs) {
+  const token = await getTokenFromSession(request)
+  const agencies = await fetchAgencies(token)
   return { agencies }
 }
 
 export async function action({ request }: Route.ActionArgs) {
+  const token = await getTokenFromSession(request)
   const formData = await request.formData()
   const entries = Object.fromEntries(formData)
   try {
-    await createLabel(entries)
+    await createLabel(entries, token)
     return redirect('/labels')
   } catch (error) {
     handleError(error)
