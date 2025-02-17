@@ -18,9 +18,6 @@ import type {
   CreateLabel,
 } from '@/types'
 import { fetchData } from '@/lib/utils'
-import { getCompanybyRuc, getCustomerByDni } from '@/lib/services/sunat'
-import { HTTPRequestError } from '@/lib/errors'
-import { fakePromise } from '@/lib/utils'
 
 //----------------------------- Quotations ----------------------------->
 export async function fetchQuotations(
@@ -129,50 +126,20 @@ export async function fetchCustomers(
     : data.items
 }
 
-export async function fetchCustomerByRuc(
-  ruc: string,
-  token: string
-): Promise<CustomerFromService> {
-  if (ruc.length === 11) {
-    try {
-      //Search customer in Database
-      const url = `${BASE_URL}/api/customers/ruc/${ruc}`
-      const customerFromDatabase = await fetchData<Customer>(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      return {
-        id: customerFromDatabase.id,
-        ruc: customerFromDatabase.ruc,
-        name: customerFromDatabase.name,
-        address: customerFromDatabase.address ?? undefined,
-      }
-    } catch (error) {
-      //Search customer in Sunat
-      const customerFromSunat = await getCompanybyRuc(ruc)
-      return {
-        id: undefined,
-        ruc: customerFromSunat.ruc,
-        name: customerFromSunat.company,
-        address: customerFromSunat.address,
-      }
-    }
+export async function searchCustomerByDniOrRuc(dniRuc: string, token: string) {
+  //Search customer in Database
+  const url = `${BASE_URL}/api/customers/search/${dniRuc}`
+  const customer = await fetchData<CustomerFromService>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return {
+    id: customer.id,
+    ruc: customer.ruc,
+    name: customer.name,
+    address: customer.address,
   }
-
-  if (ruc.length === 8) {
-    try {
-      const customer = await getCustomerByDni(ruc)
-      return {
-        ruc: customer.ruc,
-        name: customer.company,
-        address: customer.address,
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  throw new HTTPRequestError('El Ruc Debe tener 11 digitos')
 }
 
 export async function fetchCustomerById(id: string, token: string) {
