@@ -436,6 +436,25 @@ export async function deleteWatermark(id: string, token: string) {
   })
   return data
 }
+type Signature = {
+  timestamp: number
+  source: string
+  folder: string
+  signature: string
+  api_key: string
+}
+
+export async function fetchCloudinarySignature(token: string) {
+  const signData = await fetchData<Signature>(
+    `${BASE_URL}/api/signuploadform`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+  return signData
+}
 
 //----------------------------- Auth ----------------------------->
 
