@@ -18,7 +18,6 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   const url = new URL(request.url)
   const session = await getSession(request.headers.get('Cookie'))
   const authToken = session.get('authToken')
-  console.log(authToken)
 
   if (url.pathname !== '/' && !authToken) {
     return redirect('/')

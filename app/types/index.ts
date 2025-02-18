@@ -27,8 +27,8 @@ export interface QuotationClient {
   includeIgv: boolean
   isPaymentPending: boolean
   items: QuotationItem[]
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
   customer: Omit<Customer, 'createdAt' | 'updatedAt'>
   customerId?: string | null
 }
@@ -90,14 +90,14 @@ export interface Agency {
   ruc: string
   phone: string
   address: string
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
 }
 
 export type CreateAgency = Omit<Agency, 'id' | 'createdAt' | 'updatedAt'>
 export type UpdateAgency = Partial<CreateAgency>
 
-// -------------------------- Labels  -------------------------------------->0ww
+// -------------------------- Labels  --------------------------------------//
 export interface LabelType {
   id: string
   recipient: string
@@ -107,8 +107,8 @@ export interface LabelType {
   address: string
   observations: string
   agencyId?: string | null
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
   agency: Agency
 }
 
@@ -117,3 +117,18 @@ export type CreateLabel = Omit<
   'id' | 'createdAt' | 'updatedAt' | 'agency'
 >
 export type UpdateLabel = Partial<CreateLabel>
+
+// -------------------------- Watermark  --------------------------------------//
+export type Watermark = {
+  id: string
+  width: number
+  height: number
+  url: string
+  publicId: string
+  format: string
+  createdAt: string
+  updatedAt: string
+  thumbUrl: string
+}
+export type CreateWatermark = Omit<Watermark, 'id' | 'createdAt' | 'updatedAt'>
+export type UpdateWatermark = Partial<CreateWatermark>

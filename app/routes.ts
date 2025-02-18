@@ -59,7 +59,12 @@ export default [
     ...prefix('signals', [index('routes/signals/home.tsx')]),
 
     //Watermark ---->
-    ...prefix('watermark', [index('routes/watermark/home.tsx')]),
+    ...prefix('watermarks', [
+      index('routes/watermarks/home.tsx'),
+      route('/create', 'routes/watermarks/create.tsx'),
+      // route('/:id/update', 'routes/watermarks/update.tsx'),
+      route('/:id/delete', 'routes/watermarks/delete.tsx'),
+    ]),
 
     route('/test-page', 'routes/test-page.tsx'),
   ]),

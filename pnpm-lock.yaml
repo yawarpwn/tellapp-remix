@@ -53,6 +53,12 @@ importers:
       cmdk:
         specifier: 1.0.0
         version: 1.0.0(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      filepond-plugin-image-exif-orientation:
+        specifier: ^1.0.11
+        version: 1.0.11(filepond@4.32.7)
+      filepond-plugin-image-preview:
+        specifier: ^4.6.12
+        version: 4.6.12(filepond@4.32.7)
       fuse.js:
         specifier: ^7.0.0
         version: 7.0.0
@@ -77,6 +83,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
+      react-filepond:
+        specifier: ^7.1.3
+        version: 7.1.3(filepond@4.32.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-router:
         specifier: ^7.1.5
         version: 7.1.5(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -1829,6 +1838,19 @@ packages:
   fastq@1.19.0:
     resolution: {integrity: sha512-7SFSRCNjBQIZH/xZR3iy5iQYR8aGBE0h3VG6/cwlbrpdciNYBMotQav8c1XI3HjHH+NikUpP53nPdlZSdWmFzA==}
 
+  filepond-plugin-image-exif-orientation@1.0.11:
+    resolution: {integrity: sha512-hLBc12Fk6Zkj3L8mSAn+elugHOqT5rLUbgVXQQIQjMe0FsGjtpoxqeVR6jt4IWHGat2L9sFAgU2TGmd1mqosCg==}
+    peerDependencies:
+      filepond: '>=3.x <5.x'
+
+  filepond-plugin-image-preview@4.6.12:
+    resolution: {integrity: sha512-Y8ETX5QVV0mbPB0586UH8AUmG9tZg8PuN5bdEAIlZVJFTct5ebViJ7+Am94/VhTPjLqZjBf1zmDq5JU6XRsZKw==}
+    peerDependencies:
+      filepond: '>=4.x <5.x'
+
+  filepond@4.32.7:
+    resolution: {integrity: sha512-L2idUfC31Qb2ZuFn8yAjX+Km6Ouq0kQn6JHcwhqrl5Ee9cB7xctLa0nkbbAeCML2+a1/cUsd0TqBgVcxYW08GA==}
+
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
     engines: {node: '>=8'}
@@ -2406,6 +2428,13 @@ packages:
     resolution: {integrity: sha512-4GV5sHFG0e/0AD4X+ySy6UJd3jVl1iNsNHdpad0qhABJ11twS3TTBnseqsKurKcsNqCEFeGL3uLpVChpIO3QfQ==}
     peerDependencies:
       react: ^19.0.0
+
+  react-filepond@7.1.3:
+    resolution: {integrity: sha512-uQOCZt+YXnBfYn6OxK6vsgSoUROkBu/ZahcfIJnK94c1ZeSAS84L/XKDADq/8Adx/Lz88VtVWvUpTXnNpmjHFQ==}
+    peerDependencies:
+      filepond: '>=3.7.x < 5.x'
+      react: 16 - 19
+      react-dom: 16 - 19
 
   react-refresh@0.14.2:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
@@ -4622,6 +4651,16 @@ snapshots:
     dependencies:
       reusify: 1.0.4
 
+  filepond-plugin-image-exif-orientation@1.0.11(filepond@4.32.7):
+    dependencies:
+      filepond: 4.32.7
+
+  filepond-plugin-image-preview@4.6.12(filepond@4.32.7):
+    dependencies:
+      filepond: 4.32.7
+
+  filepond@4.32.7: {}
+
   fill-range@7.1.1:
     dependencies:
       to-regex-range: 5.0.1
@@ -5153,6 +5192,12 @@ snapshots:
     dependencies:
       react: 19.0.0
       scheduler: 0.25.0
+
+  react-filepond@7.1.3(filepond@4.32.7)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      filepond: 4.32.7
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
 
   react-refresh@0.14.2: {}
 

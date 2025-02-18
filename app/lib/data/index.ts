@@ -1,5 +1,5 @@
 import { BASE_URL } from '@/lib/constants'
-import type {} from '@/types'
+import type { CreateWatermark, UpdateWatermark, Watermark } from '@/types'
 import type {
   DataResponse,
   QuotationClient,
@@ -368,6 +368,67 @@ export async function updateLabel(
 export async function deleteLabel(id: string, token: string) {
   const url = `${BASE_URL}/api/labels/${id}`
   const data = await fetchData<LabelType>(url, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return data
+}
+
+//----------------------------- Watermarks -----------------------------\\
+export async function fetchWatermarks(token: string): Promise<Watermark[]> {
+  const url = `${BASE_URL}/api/watermarks`
+  const data = await fetchData<DataResponse<Watermark>>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return data.items
+}
+
+export async function fetchWatermarkById(id: string, token: string) {
+  const url = `${BASE_URL}/api/watermarks/${id}`
+  const data = await fetchData<Watermark>(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return data
+}
+
+export async function createWatermark(formData: FormData, token: string) {
+  const url = `${BASE_URL}/api/watermarks`
+  const data = await fetchData<Watermark>(url, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return data
+}
+
+export async function updateWatermarkl(
+  id: string,
+  labelToUpdate: UpdateWatermark,
+  token: string
+) {
+  const url = `${BASE_URL}/api/watermarks/${id}`
+  const data = await fetchData<Watermark>(url, {
+    method: 'PUT',
+    body: JSON.stringify(labelToUpdate),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  return data
+}
+
+export async function deleteWatermark(id: string, token: string) {
+  const url = `${BASE_URL}/api/watermarks/${id}`
+  const data = await fetchData<Watermark>(url, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`,

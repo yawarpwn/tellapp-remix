@@ -68,9 +68,9 @@ const routes = [
   },
 
   {
-    path: '/watermark',
+    path: '/watermarks',
     label: 'Marca de agua',
-    active: false,
+    active: true,
     Icon: ImageOffIcon,
   },
   {
@@ -123,7 +123,7 @@ export default function SidebarLayout() {
             <div className="h-px bg-primary my-8"></div>
             <div className="mt-4">
               <fetcher.Form method="post" action="/logout">
-                <Button className="w-full" size="icon">
+                <Button className="w-full" size="icon" type="submit">
                   {fetcher.state !== 'idle' ? (
                     <Loader2Icon className="animate-spin" />
                   ) : (

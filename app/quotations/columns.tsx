@@ -2,7 +2,7 @@ import { type ColumnDef } from '@tanstack/react-table'
 import type { QuotationClient } from '@/types'
 import { getIgv, formatDateToLocal } from '@/lib/utils'
 import { Form } from 'react-router'
-import { MoreHorizontal, StarIcon } from 'lucide-react'
+import { MoreHorizontal, StarIcon, StarOffIcon } from 'lucide-react'
 import { Link } from 'react-router'
 import { Checkbox } from '@/components/ui/checkbox'
 
@@ -22,9 +22,9 @@ export const columns: ColumnDef<QuotationClient>[] = [
     id: 'select',
     cell: ({ row }) =>
       row.original?.customer?.isRegular ? (
-        <StarIcon className="size-4 text-primary" />
+        <StarIcon fill="hsl(var(--primary))" className="size-4 text-primary" />
       ) : (
-        ''
+        <StarIcon className="text-muted-foreground size-4" />
       ),
     enableSorting: false,
     enableHiding: false,
