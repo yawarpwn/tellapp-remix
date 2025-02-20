@@ -1,5 +1,10 @@
 import { BASE_URL } from '@/lib/constants'
-import type { CreateWatermark, UpdateWatermark, Watermark } from '@/types'
+import type {
+  CloudinarySignature,
+  CreateWatermark,
+  UpdateWatermark,
+  Watermark,
+} from '@/types'
 import type {
   DataResponse,
   QuotationClient,
@@ -436,16 +441,9 @@ export async function deleteWatermark(id: string, token: string) {
   })
   return data
 }
-type Signature = {
-  timestamp: number
-  source: string
-  folder: string
-  signature: string
-  api_key: string
-}
 
 export async function fetchCloudinarySignature(token: string) {
-  const signData = await fetchData<Signature>(
+  const signData = await fetchData<CloudinarySignature>(
     `${BASE_URL}/api/signuploadform`,
     {
       headers: {

@@ -130,5 +130,15 @@ export type Watermark = {
   updatedAt: string
   thumbUrl: string
 }
-export type CreateWatermark = Omit<Watermark, 'id' | 'createdAt' | 'updatedAt'>
+export type CreateWatermark = Omit<
+  Watermark,
+  'id' | 'createdAt' | 'updatedAt' | 'thumbUrl'
+>
 export type UpdateWatermark = Partial<CreateWatermark>
+
+export type CloudinarySignature = {
+  timestamp: number
+  signature: string
+  apikey: string
+  cloudname: string
+}

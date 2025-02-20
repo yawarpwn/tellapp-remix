@@ -142,6 +142,7 @@ export function MasonryLayout({ items }: Props) {
               {photos.map((photo, index) => {
                 return (
                   <WatermarkCard
+                    publicId={photo.publicId}
                     isSelected={selectedPhotos.includes(photo.id)}
                     width={photo.width}
                     toggleSelectedPhoto={toggleSelectedPhoto}
@@ -166,6 +167,7 @@ export function MasonryLayout({ items }: Props) {
               {photos.map((photo, index) => {
                 return (
                   <WatermarkCard
+                    publicId={photo.publicId}
                     isSelected={selectedPhotos.includes(photo.id)}
                     toggleSelectedPhoto={toggleSelectedPhoto}
                     width={photo.width}

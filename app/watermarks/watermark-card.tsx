@@ -12,7 +12,7 @@ import {
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { useTransition } from 'react'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { useFetcher } from 'react-router'
 
 interface Props {
@@ -21,6 +21,7 @@ interface Props {
   id: string
   width: number
   height: number
+  publicId: string
   isSelected: boolean
   toggleSelectedPhoto: (id: string) => void
 }
@@ -30,6 +31,7 @@ export function WatermarkCard({
   id,
   width,
   height,
+  publicId,
   toggleSelectedPhoto,
   isSelected,
 }: Props) {
@@ -75,10 +77,15 @@ export function WatermarkCard({
   const deleteFetcher = useFetcher()
 
   const deleteAction = async (id: string) => {
-    deleteFetcher.submit(null, {
-      method: 'post',
-      action: `/watermarks/${id}/delete`,
-    })
+    deleteFetcher.submit(
+      {
+        publicId,
+      },
+      {
+        method: 'post',
+        action: `/watermarks/${id}/delete`,
+      }
+    )
     // startTransition(() => {
     //   toast.promise(deleteWatermarkAction({ id }), {
     //     loading: 'Eliminando...',
@@ -95,6 +102,7 @@ export function WatermarkCard({
       {openModal && (
         <Dialog open={openModal} onOpenChange={setOpenModal}>
           <DialogContent className="">
+            <DialogTitle className="sr-only">View modal</DialogTitle>
             <div className="border">
               <img src={url} className="h-full w-full object-cover" />
             </div>
