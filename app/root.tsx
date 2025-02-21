@@ -84,7 +84,6 @@ export default function AppWithProviders() {
 export function App() {
   const data = useLoaderData()
   const [theme] = useTheme()
-  console.log({ data, theme })
   return (
     <html lang="es" className={theme ?? ''}>
       <head>

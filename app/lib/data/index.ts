@@ -25,6 +25,7 @@ export async function fetchQuotations(
   token: string
 ): Promise<QuotationClient[]> {
   const url = `${BASE_URL}/api/quotations`
+  console.log('fetch quotations')
   const data = await fetchData<DataResponse<QuotationClient>>(url, {
     headers: {
       Authorization: `Bearer ${token}`,

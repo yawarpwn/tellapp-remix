@@ -1,6 +1,6 @@
 // import { type Route } from './+types/sidebar'
 import { cn } from '@/lib/utils'
-
+import { Theme } from 'remix-themes'
 import {
   Form,
   Link,
@@ -95,11 +95,13 @@ const routes = [
 
 const ToggleThemeButton = () => {
   const [theme, setTheme] = useTheme()
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light')
-  }
   return (
-    <Button variant="secondary" onClick={toggleTheme}>
+    <Button
+      variant="secondary"
+      onClick={() =>
+        setTheme((prev) => (prev === Theme.DARK ? 'ligth' : 'dark'))
+      }
+    >
       <span>{theme == 'light' ? 'Oscuro' : 'Claro'}</span>
       {theme == 'light' ? <MoonIcon /> : <SunIcon />}
     </Button>
