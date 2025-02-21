@@ -8,12 +8,14 @@ import {
   ShareIcon,
   XIcon,
   DownloadIcon,
+  Loader2Icon,
 } from 'lucide-react'
 import { useState } from 'react'
-import { toast } from 'sonner'
+import { toast, useSonner } from 'sonner'
 import { useTransition } from 'react'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { useFetcher } from 'react-router'
+import React from 'react'
 
 interface Props {
   url: string
@@ -35,7 +37,6 @@ export function WatermarkCard({
   toggleSelectedPhoto,
   isSelected,
 }: Props) {
-  const [pending, startTransition] = useTransition()
   const [openModal, setOpenModal] = useState(false)
 
   const handleDownload = async () => {
@@ -86,16 +87,9 @@ export function WatermarkCard({
         action: `/watermarks/${id}/delete`,
       }
     )
-    // startTransition(() => {
-    //   toast.promise(deleteWatermarkAction({ id }), {
-    //     loading: 'Eliminando...',
-    //     success: () => {
-    //       return 'Eliminado'
-    //     },
-    //     error: 'Error eliminando',
-    //   })
-    // })
   }
+
+  const pending = deleteFetcher.state !== 'idle'
 
   return (
     <>
@@ -110,6 +104,7 @@ export function WatermarkCard({
               <div className="flex gap-4 rounded-md bg-background px-6 py-2">
                 <Button
                   className="h-8 w-8"
+                  variant="outline"
                   size={'icon'}
                   onClick={handleDownload}
                 >
@@ -117,6 +112,7 @@ export function WatermarkCard({
                 </Button>
                 <Button
                   onClick={handleShare}
+                  variant="outline"
                   className="h-8 w-8 "
                   size={'icon'}
                 >
@@ -129,7 +125,11 @@ export function WatermarkCard({
                   size={'icon'}
                   disabled={pending}
                 >
-                  <TrashIcon size={20} />
+                  {pending ? (
+                    <Loader2Icon className="animate-spin" size={20} />
+                  ) : (
+                    <TrashIcon size={20} />
+                  )}
                 </Button>
               </div>
             </div>
