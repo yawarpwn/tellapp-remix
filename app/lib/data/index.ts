@@ -1,11 +1,7 @@
 import { BASE_URL } from '@/lib/constants'
 import type {
-  CloudinarySignature,
-  CreateWatermark,
   UpdateWatermark,
   Watermark,
-} from '@/types'
-import type {
   DataResponse,
   QuotationClient,
   CreateQuotationClient,
@@ -442,19 +438,7 @@ export async function deleteWatermark(id: string, token: string) {
   return data
 }
 
-export async function fetchCloudinarySignature(token: string) {
-  const signData = await fetchData<CloudinarySignature>(
-    `${BASE_URL}/api/signuploadform`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  )
-  return signData
-}
-
-//----------------------------- Auth ----------------------------->
+//----------------------------- Auth -----------------------------\
 
 export async function login({
   email,
