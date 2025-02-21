@@ -18,14 +18,14 @@ import stylesheet from './app.css?url'
 import { getSession } from './sessions.server'
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const url = new URL(request.url)
-  const session = await getSession(request.headers.get('Cookie'))
-  const authToken = session.get('authToken')
+  // const url = new URL(request.url)
+  // const session = await getSession(request.headers.get('Cookie'))
+  // const authToken = session.get('authToken')
   const { getTheme } = await themeSessionResolver(request)
 
-  if (url.pathname !== '/' && !authToken) {
-    return redirect('/')
-  }
+  // if (url.pathname !== '/' && !authToken) {
+  //   return redirect('/')
+  // }
 
   return {
     theme: getTheme(),
