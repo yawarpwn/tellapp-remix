@@ -66,6 +66,7 @@ export default [
       route('/:id/delete', 'routes/watermarks/delete.tsx'),
     ]),
 
+    route('/action/set-theme', 'routes/action/set-theme.ts'),
     route('/test-page', 'routes/test-page.tsx'),
   ]),
   route('/logout', 'routes/logout.tsx'),

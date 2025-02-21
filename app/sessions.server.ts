@@ -1,5 +1,6 @@
 import { PRODUCTION_URL } from './lib/constants'
 import { createCookieSessionStorage, redirect } from 'react-router'
+import { createThemeSessionResolver } from 'remix-themes'
 
 type SessionData = {
   authToken: string
@@ -37,4 +38,17 @@ export async function getTokenFromSession(request: Request) {
   return token
 }
 
-export { getSession, commitSession, destroySession }
+const sessionStorage = createCookieSessionStorage({
+  cookie: {
+    name: '__remix-themes',
+    // domain: 'remix.run',
+    path: '/',
+    httpOnly: true,
+    sameSite: 'lax',
+    secrets: ['s3cr3t'],
+    // secure: true,
+  },
+})
+
+const themeSessionResolver = createThemeSessionResolver(sessionStorage)
+export { getSession, commitSession, destroySession, themeSessionResolver }

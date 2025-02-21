@@ -23,6 +23,8 @@ import {
   ImageOffIcon,
   Loader2Icon,
   MoreHorizontal,
+  MoonIcon,
+  SunIcon,
 } from 'lucide-react'
 import {
   DropdownMenu,
@@ -32,6 +34,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useTheme } from 'remix-themes'
+import { set } from 'zod'
+import { Switch } from '@/components/ui/switch'
 
 const routes = [
   {
@@ -88,6 +93,19 @@ const routes = [
   },
 ]
 
+const ToggleThemeButton = () => {
+  const [theme, setTheme] = useTheme()
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light')
+  }
+  return (
+    <Button variant="secondary" onClick={toggleTheme}>
+      <span>{theme == 'light' ? 'Oscuro' : 'Claro'}</span>
+      {theme == 'light' ? <MoonIcon /> : <SunIcon />}
+    </Button>
+  )
+}
+
 export default function SidebarLayout() {
   const navigation = useNavigation()
 
@@ -121,7 +139,8 @@ export default function SidebarLayout() {
               ))}
             </nav>
             <div className="h-px bg-primary my-8"></div>
-            <div className="mt-4">
+            <div className="mt-4 flex flex-col gap-4">
+              <ToggleThemeButton />
               <fetcher.Form method="post" action="/logout">
                 <Button className="w-full" size="icon" type="submit">
                   {fetcher.state !== 'idle' ? (
@@ -181,6 +200,7 @@ export default function SidebarLayout() {
                   <Link to={'/signals'}>Señales</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
+                <ToggleThemeButton isMobile />
                 <DropdownMenuItem asChild>
                   <button className="w-full" onClick={logout} type="submit">
                     Salir
