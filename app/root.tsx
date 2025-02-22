@@ -10,7 +10,7 @@ import {
 } from 'react-router'
 
 import { ThemeProvider, useTheme, PreventFlashOnWrongTheme } from 'remix-themes'
-import { themeSessionResolver } from './sessions.server'
+import { getSession, themeSessionResolver } from './sessions.server'
 import { Toaster } from '@/components/ui/sonner'
 
 import type { Route } from './+types/root'
@@ -18,14 +18,14 @@ import stylesheet from './app.css?url'
 import { HTTPRequestError } from './lib/errors'
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  // const url = new URL(request.url)
-  // const session = await getSession(request.headers.get('Cookie'))
-  // const authToken = session.get('authToken')
+  const url = new URL(request.url)
+  const session = await getSession(request.headers.get('Cookie'))
+  const authToken = session.get('authToken')
   const { getTheme } = await themeSessionResolver(request)
 
-  // if (url.pathname !== '/' && !authToken) {
-  //   return redirect('/')
-  // }
+  if (url.pathname !== '/' && !authToken) {
+    return redirect('/')
+  }
 
   return {
     theme: getTheme(),
@@ -92,10 +92,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       error.status === 404
         ? 'The requested page could not be found.'
         : error.statusText || details
-  } else if (error instanceof HTTPRequestError) {
-    if (error.statusCode === 401) {
-      return redirect('/')
-    }
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message
     stack = error.stack

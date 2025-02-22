@@ -143,7 +143,7 @@ export default function SidebarLayout() {
             <div className="h-px bg-primary my-8"></div>
             <div className="mt-4 flex flex-col gap-4">
               <ToggleThemeButton />
-              <fetcher.Form method="post" action="/logout">
+              <fetcher.Form method="post" action="/action/logout">
                 <Button className="w-full" size="icon" type="submit">
                   {fetcher.state !== 'idle' ? (
                     <Loader2Icon className="animate-spin" />

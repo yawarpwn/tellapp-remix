@@ -3,12 +3,13 @@ import type { Route } from './+types/duplicate'
 import { createProduct } from '@/lib/data'
 import { handleError } from '@/lib/utils'
 import { redirect } from 'react-router'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function action({ params, request }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
+export async function action({ params, context }: Route.ActionArgs) {
   try {
-    const product = await fetchProductById(params.id, token)
+    const product = await fetchProductById(
+      params.id,
+      context.cloudflare.env.TELL_API_KEY
+    )
     await createProduct(
       {
         description: product.description,
@@ -19,7 +20,7 @@ export async function action({ params, request }: Route.ActionArgs) {
         categoryId: product.categoryId,
         unitSize: product.unitSize,
       },
-      token
+      context.cloudflare.env.TELL_API_KEY
     )
     return redirect('/products')
   } catch (error) {

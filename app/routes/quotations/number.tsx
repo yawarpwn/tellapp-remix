@@ -4,12 +4,13 @@ import ViewQuotation from '@/quotations/view-quotation'
 import { QuotationSkeleton } from '@/components/skeletons/quotations'
 
 import React from 'react'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = await getTokenFromSession(request)
+export async function loader({ params, context }: Route.LoaderArgs) {
   return {
-    quotationPromise: fetchQuotaitonByNumber(+params.number, token),
+    quotationPromise: fetchQuotaitonByNumber(
+      +params.number,
+      context.cloudflare.env.TELL_API_KEY
+    ),
   }
 }
 

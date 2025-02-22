@@ -1,10 +1,11 @@
 import { fetchCustomerById, updateCustomer } from '@/lib/data'
 import type { Route } from './+types/toggle-regular-customer'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function action({ params, request }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
-  const customer = await fetchCustomerById(params.id, token)
+export async function action({ params, request, context }: Route.ActionArgs) {
+  const customer = await fetchCustomerById(
+    params.id,
+    context.cloudflare.env.TELL_API_KEY
+  )
   const formData = await request.formData()
   const status = formData.get('status') as string
 
@@ -14,7 +15,7 @@ export async function action({ params, request }: Route.ActionArgs) {
       ...customer,
       isRegular: status !== 'is-regular',
     },
-    token
+    context.cloudflare.env.TELL_API_KEY
   )
 
   return { updatedCustomer }

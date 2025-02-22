@@ -3,20 +3,17 @@ import { redirect, data } from 'react-router'
 import { handleError } from '@/lib/utils'
 import { CreateUpdateLabel } from '@/labels/create-update-label'
 import { createLabel, fetchAgencies } from '@/lib/data'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const token = await getTokenFromSession(request)
-  const agencies = await fetchAgencies(token)
+export async function loader({ context }: Route.LoaderArgs) {
+  const agencies = await fetchAgencies(context.cloudflare.env.TELL_API_KEY)
   return { agencies }
 }
 
-export async function action({ request }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
+export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData()
   const entries = Object.fromEntries(formData)
   try {
-    await createLabel(entries, token)
+    await createLabel(entries, context.cloudflare.env.TELL_API_KEY)
     return redirect('/labels')
   } catch (error) {
     handleError(error)

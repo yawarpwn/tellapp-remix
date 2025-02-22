@@ -16,15 +16,13 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { useAutoSave } from '@/hooks/use-autos-save'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData()
-  const token = await getTokenFromSession(request)
   const quotation = JSON.parse(formData.get('quotation') as string)
   // const quotation = JSON.parse(formData.get('quotation') as string)
   try {
-    await createQuotation(quotation, token)
+    await createQuotation(quotation, context.cloudflare.env.TELL_API_KEY)
     return redirect('/quotations')
   } catch (error) {
     if (error instanceof HTTPRequestError) {
@@ -41,11 +39,12 @@ export async function action({ request }: Route.ActionArgs) {
   }
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const token = await getTokenFromSession(request)
+export async function loader({ context }: Route.LoaderArgs) {
   return {
-    productsPromise: fetchProducts(token),
-    customersPromise: fetchCustomers(token, { onlyRegular: true }),
+    productsPromise: fetchProducts(context.cloudflare.env.TELL_API_KEY),
+    customersPromise: fetchCustomers(context.cloudflare.env.TELL_API_KEY, {
+      onlyRegular: true,
+    }),
   }
 }
 

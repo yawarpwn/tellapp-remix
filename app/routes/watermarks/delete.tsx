@@ -1,13 +1,10 @@
 import { handleError } from '@/lib/utils'
 import type { Route } from './+types/delete'
-import { deleteWatermark, fetchCloudinarySignature } from '@/lib/data'
-import { data, redirect } from 'react-router'
-import { getTokenFromSession } from '@/sessions.server'
+import { deleteWatermark } from '@/lib/data'
 
-export async function action({ params, request }: Route.ActionArgs) {
+export async function action({ params, context }: Route.ActionArgs) {
   try {
-    const token = await getTokenFromSession(request)
-    await deleteWatermark(params.id, token)
+    await deleteWatermark(params.id, context.cloudflare.env.TELL_API_KEY)
   } catch (error) {
     return handleError(error)
   }

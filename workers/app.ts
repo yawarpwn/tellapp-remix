@@ -1,15 +1,13 @@
 import { createRequestHandler } from 'react-router'
-import type { ExecutionContext } from '@cloudflare/workers-types'
 
 declare global {
-  interface CloudflareEnvironment {
-    API: Service
+  interface CloudflareEnvironment extends Env {
+    TELL_API_KEY: string
   }
 }
 
 declare module 'react-router' {
   export interface AppLoadContext {
-    VALUE_FROM_CLOUDFLARE: string
     cloudflare: {
       env: CloudflareEnvironment
       ctx: ExecutionContext
@@ -24,10 +22,9 @@ const requestHandler = createRequestHandler(
 )
 
 export default {
-  async fetch(request, env, ctx) {
+  fetch(request, env, ctx) {
     return requestHandler(request, {
       cloudflare: { env, ctx },
-      VALUE_FROM_CLOUDFLARE: 'Hello from Cloudflare',
     })
   },
 } satisfies ExportedHandler<CloudflareEnvironment>

@@ -6,17 +6,19 @@ import { updateProduct } from '@/lib/data'
 import { handleError } from '@/lib/utils'
 import CreateUpdateProduct from '@/products/create-update-product'
 import { fetchProductById, fetchProductCategories } from '@/lib/data'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = await getTokenFromSession(request)
-  const product = await fetchProductById(params.id, token)
-  const productCategories = await fetchProductCategories(token)
+export async function loader({ params, context }: Route.LoaderArgs) {
+  const product = await fetchProductById(
+    params.id,
+    context.cloudflare.env.TELL_API_KEY
+  )
+  const productCategories = await fetchProductCategories(
+    context.cloudflare.env.TELL_API_KEY
+  )
   return { product, productCategories }
 }
 
-export async function action({ request, params }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
+export async function action({ request, params, context }: Route.ActionArgs) {
   const formData = await request.formData()
   const entries = Object.fromEntries(formData)
   try {
@@ -26,7 +28,11 @@ export async function action({ request, params }: Route.ActionArgs) {
         status: 400,
       })
     }
-    await updateProduct(params.id, result.data, token)
+    await updateProduct(
+      params.id,
+      result.data,
+      context.cloudflare.env.TELL_API_KEY
+    )
     return redirect('/products')
   } catch (error) {
     return handleError(error)

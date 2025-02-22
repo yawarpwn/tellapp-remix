@@ -22,13 +22,12 @@ import { fetchData } from '@/lib/utils'
 
 //----------------------------- Quotations ----------------------------->
 export async function fetchQuotations(
-  token: string
+  apiKey: string
 ): Promise<QuotationClient[]> {
   const url = `${BASE_URL}/api/quotations`
-  console.log('fetch quotations')
   const data = await fetchData<DataResponse<QuotationClient>>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data.items
@@ -36,23 +35,23 @@ export async function fetchQuotations(
 
 export async function fetchQuotaitonByNumber(
   quotationNumber: number,
-  token: string
+  apiKey: string
 ) {
   const url = `${BASE_URL}/api/quotations/${quotationNumber}`
   const data = await fetchData<QuotationClient>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
-export async function deleteQuotation(quotationNumber: number, token: string) {
+export async function deleteQuotation(quotationNumber: number, apiKey: string) {
   const url = `${BASE_URL}/api/quotations/${quotationNumber}`
   const data = await fetchData<Customer>(url, {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
@@ -60,7 +59,7 @@ export async function deleteQuotation(quotationNumber: number, token: string) {
 
 export async function createQuotation(
   newQuotation: CreateQuotationClient,
-  token: string
+  apiKey: string
 ) {
   const url = `${BASE_URL}/api/quotations`
   const data = await fetchData<{ insertedNumber: number }>(url, {
@@ -68,7 +67,7 @@ export async function createQuotation(
     body: JSON.stringify(newQuotation),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
 
@@ -77,7 +76,7 @@ export async function createQuotation(
 
 export async function updateQuotation(
   quotationToUpdate: UpdateQuotationClient,
-  token: string
+  apiKey: string
 ) {
   const url = `${BASE_URL}/api/quotations/${quotationToUpdate.id}`
   console.log({ url, quotationToUpdate })
@@ -86,7 +85,7 @@ export async function updateQuotation(
     body: JSON.stringify(quotationToUpdate),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
 
@@ -95,14 +94,14 @@ export async function updateQuotation(
 
 export async function duplicateQuotation(
   quotationNumber: number,
-  token: string
+  apiKey: string
 ) {
-  const quotation = await fetchQuotaitonByNumber(quotationNumber, token)
+  const quotation = await fetchQuotaitonByNumber(quotationNumber, apiKey)
   const insertedQuotationNumber = await createQuotation(
     {
       ...quotation,
     },
-    token
+    apiKey
   )
   return insertedQuotationNumber
 }
@@ -113,14 +112,14 @@ type FetchCustomerOptions = {
 
 //----------------------------- Customers ----------------------------->
 export async function fetchCustomers(
-  token: string,
+  apiKey: string,
   options?: FetchCustomerOptions
 ): Promise<Customer[]> {
   const { onlyRegular = false } = options ?? {}
   const url = `${BASE_URL}/api/customers`
   const data = await fetchData<DataResponse<Customer>>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return onlyRegular
@@ -128,12 +127,12 @@ export async function fetchCustomers(
     : data.items
 }
 
-export async function searchCustomerByDniOrRuc(dniRuc: string, token: string) {
+export async function searchCustomerByDniOrRuc(dniRuc: string, apiKey: string) {
   //Search customer in Database
   const url = `${BASE_URL}/api/customers/search/${dniRuc}`
   const customer = await fetchData<CustomerFromService>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return {
@@ -144,11 +143,11 @@ export async function searchCustomerByDniOrRuc(dniRuc: string, token: string) {
   }
 }
 
-export async function fetchCustomerById(id: string, token: string) {
+export async function fetchCustomerById(id: string, apiKey: string) {
   const url = `${BASE_URL}/api/customers/${id}`
   const data = fetchData<Customer>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
@@ -157,7 +156,7 @@ export async function fetchCustomerById(id: string, token: string) {
 export async function updateCustomer(
   id: string,
   customerToUpdate: UpdateCustomer,
-  token: string
+  apiKey: string
 ) {
   const url = `${BASE_URL}/api/customers/${id}`
   const data = await fetchData<Customer>(url, {
@@ -165,18 +164,18 @@ export async function updateCustomer(
     body: JSON.stringify(customerToUpdate),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
 //----------------------------- Products ----------------------------->
-export async function fetchProducts(token: string): Promise<Product[]> {
+export async function fetchProducts(apiKey: string): Promise<Product[]> {
   const url = `${BASE_URL}/api/products`
   const data = await fetchData<DataResponse<Product>>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data.items
@@ -184,22 +183,22 @@ export async function fetchProducts(token: string): Promise<Product[]> {
 
 export async function fetchProductById(
   id: string,
-  token: string
+  apiKey: string
 ): Promise<Product> {
   const url = `${BASE_URL}/api/products/${id}`
   const data = await fetchData<Product>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
-export async function fetchProductCategories(token: string) {
+export async function fetchProductCategories(apiKey: string) {
   const url = `${BASE_URL}/api/product-categories`
   const data = await fetchData<DataResponse<ProductCategory>>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data.items
@@ -207,7 +206,7 @@ export async function fetchProductCategories(token: string) {
 
 export async function createProduct(
   productToInsert: InsertProduct,
-  token: string
+  apiKey: string
 ) {
   const url = `${BASE_URL}/api/products`
   const data = await fetchData<Product>(url, {
@@ -215,7 +214,7 @@ export async function createProduct(
     body: JSON.stringify(productToInsert),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
@@ -224,7 +223,7 @@ export async function createProduct(
 export async function updateProduct(
   id: string,
   productToUpdate: UpdateProduct,
-  token: string
+  apiKey: string
 ) {
   console.log('update product ')
   const url = `${BASE_URL}/api/products/${id}`
@@ -233,40 +232,40 @@ export async function updateProduct(
     body: JSON.stringify(productToUpdate),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
 
   return updatedProduct
 }
 
-export async function deleteProduct(id: string, token: string) {
+export async function deleteProduct(id: string, apiKey: string) {
   const url = `${BASE_URL}/api/products/${id}`
   const data = await fetchData<Product>(url, {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
 //----------------------------- Agencies ----------------------------->
-export async function fetchAgencies(token: string): Promise<Agency[]> {
+export async function fetchAgencies(apiKey: string): Promise<Agency[]> {
   const url = `${BASE_URL}/api/agencies`
   const data = await fetchData<DataResponse<Agency>>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data.items
 }
 
-export async function fetchAgencyById(id: string, token: string) {
+export async function fetchAgencyById(id: string, apiKey: string) {
   const url = `${BASE_URL}/api/agencies/${id}`
   const data = await fetchData<Agency>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
@@ -274,7 +273,7 @@ export async function fetchAgencyById(id: string, token: string) {
 
 export async function createAgency(
   agencyToCreate: CreateAgency,
-  token: string
+  apiKey: string
 ) {
   const url = `${BASE_URL}/api/agencies`
   const data = await fetchData<Agency>(url, {
@@ -282,7 +281,7 @@ export async function createAgency(
     body: JSON.stringify(agencyToCreate),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
@@ -291,7 +290,7 @@ export async function createAgency(
 export async function updateAgency(
   id: string,
   agencyToUpdate: Agency,
-  token: string
+  apiKey: string
 ) {
   const url = `${BASE_URL}/api/agencies/${id}`
   const data = await fetchData<Agency>(url, {
@@ -299,52 +298,52 @@ export async function updateAgency(
     body: JSON.stringify(agencyToUpdate),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
-export async function deleteAgency(id: string, token: string) {
+export async function deleteAgency(id: string, apiKey: string) {
   const url = `${BASE_URL}/api/agencies/${id}`
   const data = await fetchData<Agency>(url, {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
 //----------------------------- Labels ----------------------------->
-export async function fetchLabels(token: string): Promise<LabelType[]> {
+export async function fetchLabels(apiKey: string): Promise<LabelType[]> {
   const url = `${BASE_URL}/api/labels`
   const data = await fetchData<DataResponse<LabelType>>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data.items
 }
 
-export async function fetchLabelById(id: string, token: string) {
+export async function fetchLabelById(id: string, apiKey: string) {
   const url = `${BASE_URL}/api/labels/${id}`
   const data = await fetchData<LabelType>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
-export async function createLabel(labelToCreate: CreateLabel, token: string) {
+export async function createLabel(labelToCreate: CreateLabel, apiKey: string) {
   const url = `${BASE_URL}/api/labels`
   const data = await fetchData<LabelType>(url, {
     method: 'POST',
     body: JSON.stringify(labelToCreate),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
@@ -353,7 +352,7 @@ export async function createLabel(labelToCreate: CreateLabel, token: string) {
 export async function updateLabel(
   id: string,
   labelToUpdate: LabelType,
-  token: string
+  apiKey: string
 ) {
   const url = `${BASE_URL}/api/labels/${id}`
   const data = await fetchData<LabelType>(url, {
@@ -361,51 +360,51 @@ export async function updateLabel(
     body: JSON.stringify(labelToUpdate),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
-export async function deleteLabel(id: string, token: string) {
+export async function deleteLabel(id: string, apiKey: string) {
   const url = `${BASE_URL}/api/labels/${id}`
   const data = await fetchData<LabelType>(url, {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
 //----------------------------- Watermarks -----------------------------\\
-export async function fetchWatermarks(token: string): Promise<Watermark[]> {
+export async function fetchWatermarks(apiKey: string): Promise<Watermark[]> {
   const url = `${BASE_URL}/api/watermarks`
   const data = await fetchData<DataResponse<Watermark>>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data.items
 }
 
-export async function fetchWatermarkById(id: string, token: string) {
+export async function fetchWatermarkById(id: string, apiKey: string) {
   const url = `${BASE_URL}/api/watermarks/${id}`
   const data = await fetchData<Watermark>(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
-export async function createWatermark(formData: FormData, token: string) {
+export async function createWatermark(formData: FormData, apiKey: string) {
   const url = `${BASE_URL}/api/watermarks`
   const data = await fetchData<Watermark>(url, {
     method: 'POST',
     body: formData,
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
@@ -414,7 +413,7 @@ export async function createWatermark(formData: FormData, token: string) {
 export async function updateWatermarkl(
   id: string,
   labelToUpdate: UpdateWatermark,
-  token: string
+  apiKey: string
 ) {
   const url = `${BASE_URL}/api/watermarks/${id}`
   const data = await fetchData<Watermark>(url, {
@@ -422,18 +421,18 @@ export async function updateWatermarkl(
     body: JSON.stringify(labelToUpdate),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data
 }
 
-export async function deleteWatermark(id: string, token: string) {
+export async function deleteWatermark(id: string, apiKey: string) {
   const url = `${BASE_URL}/api/watermarks/${id}`
   const data = await fetchData<Watermark>(url, {
     method: 'DELETE',
     headers: {
-      Authorization: `Bearer ${token}`,
+      'TELL-API-KEY': apiKey,
     },
   })
   return data

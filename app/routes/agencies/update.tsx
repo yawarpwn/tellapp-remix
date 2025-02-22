@@ -3,21 +3,21 @@ import { redirect } from 'react-router'
 import { handleError } from '@/lib/utils'
 import { fetchAgencyById, updateAgency } from '@/lib/data'
 import { CreateUpdateAgency } from '@/agencies/create-update-agency'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = await getTokenFromSession(request)
-  const agency = await fetchAgencyById(params.id, token)
+export async function loader({ params, context }: Route.LoaderArgs) {
+  const agency = await fetchAgencyById(
+    params.id,
+    context.cloudflare.env.TELL_API_KEY
+  )
 
   return { agency }
 }
 
-export async function action({ request, params }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
+export async function action({ request, params, context }: Route.ActionArgs) {
   const formData = await request.formData()
   const entries = Object.fromEntries(formData)
   try {
-    await updateAgency(params.id, entries, token)
+    await updateAgency(params.id, entries, context.cloudflare.env.TELL_API_KEY)
     return redirect('/agencies')
   } catch (error) {
     return handleError(error)

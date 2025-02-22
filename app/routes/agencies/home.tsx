@@ -2,11 +2,9 @@ import { fetchAgencies } from '@/lib/data'
 import type { Route } from './+types/home'
 import { DataTable } from '@/components/data-table'
 import { columns } from '@/agencies/columns'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const token = await getTokenFromSession(request)
-  const agencies = await fetchAgencies(token)
+export async function loader({ context }: Route.LoaderArgs) {
+  const agencies = await fetchAgencies(context.cloudflare.env.TELL_API_KEY)
   return { agencies }
 }
 

@@ -2,12 +2,10 @@ import { handleError } from '@/lib/utils'
 import type { Route } from './+types/delete'
 import { deleteAgency } from '@/lib/data'
 import { redirect } from 'react-router'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function action({ params, request }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
+export async function action({ params, context }: Route.ActionArgs) {
   try {
-    await deleteAgency(params.id, token)
+    await deleteAgency(params.id, context.cloudflare.env.TELL_API_KEY)
     return redirect('/agencies')
   } catch (error) {
     return handleError(error)

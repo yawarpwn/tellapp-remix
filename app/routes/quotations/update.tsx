@@ -11,27 +11,29 @@ import {
 } from '@/lib/data'
 import { updateQuotation } from '@/lib/data'
 import { UpdateQuotationView } from '@/quotations/update-quotation-view'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function action({ request }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
+export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData()
   const quotation = JSON.parse(formData.get('quotation') as string)
   // const quotation = JSON.parse(formData.get('quotation') as string)
   try {
-    await updateQuotation(quotation, token)
+    await updateQuotation(quotation, context.cloudflare.env.TELL_API_KEY)
     return redirect('/quotations')
   } catch (error) {
     return handleError(error)
   }
 }
 
-export async function loader({ params, request }: Route.LoaderArgs) {
-  const token = await getTokenFromSession(request)
+export async function loader({ params, context }: Route.LoaderArgs) {
   return {
-    productsPromise: fetchProducts(token),
-    customersPromise: fetchCustomers(token, { onlyRegular: true }),
-    quotationPromise: fetchQuotaitonByNumber(+params.number, token),
+    productsPromise: fetchProducts(context.cloudflare.env.TELL_API_KEY),
+    customersPromise: fetchCustomers(context.cloudflare.env.TELL_API_KEY, {
+      onlyRegular: true,
+    }),
+    quotationPromise: fetchQuotaitonByNumber(
+      +params.number,
+      context.cloudflare.env.TELL_API_KEY
+    ),
   }
 }
 

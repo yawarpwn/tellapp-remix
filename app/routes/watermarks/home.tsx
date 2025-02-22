@@ -1,11 +1,9 @@
 import { fetchWatermarks } from '@/lib/data'
 import type { Route } from './+types/home'
-import { getTokenFromSession } from '@/sessions.server'
 import { MasonryLayout } from '@/watermarks/masonry-layout'
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const token = await getTokenFromSession(request)
-  const watermarks = await fetchWatermarks(token)
+export async function loader({ context }: Route.LoaderArgs) {
+  const watermarks = await fetchWatermarks(context.cloudflare.env.TELL_API_KEY)
   return { watermarks }
 }
 

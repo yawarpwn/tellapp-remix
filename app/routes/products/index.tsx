@@ -2,11 +2,9 @@ import { fetchProducts } from '@/lib/data'
 import type { Route } from './+types/index'
 import { DataTable } from '@/components/data-table'
 import { columns } from '@/products/columns'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const token = await getTokenFromSession(request)
-  const products = await fetchProducts(token)
+export async function loader({ context }: Route.LoaderArgs) {
+  const products = await fetchProducts(context.cloudflare.env.TELL_API_KEY)
   return { products }
 }
 

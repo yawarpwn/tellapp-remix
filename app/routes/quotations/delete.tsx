@@ -2,12 +2,10 @@ import { deleteQuotation } from '@/lib/data'
 import type { Route } from './+types/delete'
 import { redirect } from 'react-router'
 import { HTTPRequestError } from '@/lib/errors'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function action({ params, request }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
+export async function action({ params, context }: Route.ActionArgs) {
   try {
-    await deleteQuotation(+params.number, token)
+    await deleteQuotation(+params.number, context.cloudflare.env.TELL_API_KEY)
     return redirect('/quotations/')
   } catch (error) {
     if (error instanceof HTTPRequestError) {

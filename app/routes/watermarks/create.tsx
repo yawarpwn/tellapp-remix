@@ -1,6 +1,5 @@
 import type { Route } from './+types/create'
 import { createWatermark } from '@/lib/data'
-import { getTokenFromSession } from '@/sessions.server'
 import CreateWatermark from '@/watermarks/create-watermark'
 import { data, redirect } from 'react-router'
 
@@ -20,12 +19,11 @@ export const links: Route.LinksFunction = () => [
   // },
 ]
 
-export async function action({ request }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
+export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData()
 
   try {
-    await createWatermark(formData, token)
+    await createWatermark(formData, context.cloudflare.env.TELL_API_KEY)
     return redirect('/watermarks')
   } catch (error) {
     return data({

@@ -4,18 +4,16 @@ import { redirect, data } from 'react-router'
 import { createProduct } from '@/lib/data'
 import { handleError } from '@/lib/utils'
 import CreateUpdateProduct from '@/products/create-update-product'
-import { PRODUCT_CATEGORIES } from '@/lib/constants'
 import { fetchProductCategories } from '@/lib/data'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const token = await getTokenFromSession(request)
-  const productCategories = await fetchProductCategories(token)
+export async function loader({ context }: Route.LoaderArgs) {
+  const productCategories = await fetchProductCategories(
+    context.cloudflare.env.TELL_API_KEY
+  )
   return { productCategories }
 }
 
-export async function action({ request }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
+export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData()
   const entries = Object.fromEntries(formData)
   try {
@@ -28,7 +26,7 @@ export async function action({ request }: Route.ActionArgs) {
       })
     }
 
-    await createProduct({ ...result.data }, token)
+    await createProduct({ ...result.data }, context.cloudflare.env.TELL_API_KEY)
     return redirect('/products')
   } catch (error) {
     handleError(error)

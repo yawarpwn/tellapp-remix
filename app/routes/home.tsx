@@ -1,11 +1,11 @@
 import { Label } from '@/components/ui/label'
 import type { Route } from './+types/home'
-import { login } from '@/lib/data'
 import { commitSession, getSession } from '@/sessions.server'
-import { data, Form, redirect, useFetcher } from 'react-router'
+import { data, Form, Link, redirect, useFetcher } from 'react-router'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Loader2Icon } from 'lucide-react'
+import { login } from '@/lib/data'
 
 export function meta({}: Route.MetaArgs) {
   return [

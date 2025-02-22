@@ -3,14 +3,12 @@ import { redirect, data } from 'react-router'
 import { handleError } from '@/lib/utils'
 import { CreateUpdateAgency } from '@/agencies/create-update-agency'
 import { createAgency } from '@/lib/data'
-import { getTokenFromSession } from '@/sessions.server'
 
-export async function action({ request }: Route.ActionArgs) {
-  const token = await getTokenFromSession(request)
+export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData()
   const entries = Object.fromEntries(formData)
   try {
-    await createAgency(entries, token)
+    await createAgency(entries, context.cloudflare.env.TELL_API_KEY)
     return redirect('/agencies')
   } catch (error) {
     handleError(error)
