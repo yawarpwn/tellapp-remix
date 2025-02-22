@@ -1,10 +1,10 @@
 export const PRODUCTION_URL = 'https://app.tellsenales.workers.dev'
 
 const isDev = import.meta.env.MODE === 'development'
-export const BASE_URL = 'https://api.tellsignals.workers.dev'
-// export const BASE_URL = isDev
-//   ? 'http://localhost:8787'
-//   : 'https://api.tellsignals.workers.dev'
+// export const BASE_URL = 'https://api.tellsignals.workers.dev'
+export const BASE_URL = isDev
+  ? 'http://localhost:8787'
+  : 'https://api.tellsignals.workers.dev'
 
 export const PRODUCT_CATEGORIES = {
   CINTAS_SEGURIDAD: 'cintas seguridad',

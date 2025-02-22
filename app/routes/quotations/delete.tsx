@@ -6,7 +6,7 @@ import { HTTPRequestError } from '@/lib/errors'
 export async function action({ params, context }: Route.ActionArgs) {
   try {
     await deleteQuotation(+params.number, context.cloudflare.env.TELL_API_KEY)
-    return redirect('/quotations/')
+    return redirect('/quotations')
   } catch (error) {
     if (error instanceof HTTPRequestError) {
       return { error: error.message }
@@ -16,4 +16,10 @@ export async function action({ params, context }: Route.ActionArgs) {
       error: 'Error deleting quotation',
     }
   }
+}
+
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
+  localStorage.removeItem('__QUOS__')
+  const serverData = await serverAction()
+  return serverData
 }

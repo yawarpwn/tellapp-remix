@@ -39,6 +39,13 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 }
 
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
+  console.log('client action')
+  localStorage.removeItem('__QUOS__')
+  const serverData = await serverAction()
+  return serverData
+}
+
 export async function loader({ context }: Route.LoaderArgs) {
   return {
     productsPromise: fetchProducts(context.cloudflare.env.TELL_API_KEY),

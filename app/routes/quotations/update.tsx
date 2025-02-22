@@ -24,6 +24,11 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 }
 
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
+  localStorage.removeItem('__QUOS__')
+  return await serverAction()
+}
+
 export async function loader({ params, context }: Route.LoaderArgs) {
   return {
     productsPromise: fetchProducts(context.cloudflare.env.TELL_API_KEY),

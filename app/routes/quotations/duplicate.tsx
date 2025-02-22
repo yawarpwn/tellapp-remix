@@ -16,3 +16,8 @@ export async function action({ params, context }: Route.ActionArgs) {
     }
   }
 }
+
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
+  localStorage.removeItem('__QUOS__')
+  return await serverAction()
+}
