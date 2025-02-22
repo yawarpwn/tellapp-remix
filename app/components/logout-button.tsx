@@ -2,7 +2,7 @@ import { useFetcher } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { Loader2Icon, LogOutIcon } from 'lucide-react'
 
-export function LogoutButton({ isMobile }: { isMobile: boolean }) {
+export function LogoutButton({ isMobile }: { isMobile?: boolean }) {
   const fetcher = useFetcher()
   return (
     <fetcher.Form method="post" action="/action/logout">

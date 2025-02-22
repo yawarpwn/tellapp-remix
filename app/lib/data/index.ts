@@ -24,6 +24,7 @@ import { fetchData } from '@/lib/utils'
 export async function fetchQuotations(
   apiKey: string
 ): Promise<QuotationClient[]> {
+  console.log('fetch quotations')
   const url = `${BASE_URL}/api/quotations`
   const data = await fetchData<DataResponse<QuotationClient>>(url, {
     headers: {

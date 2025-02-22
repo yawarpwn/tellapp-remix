@@ -143,7 +143,7 @@ export default function SidebarLayout() {
             </nav>
             <div className="h-px bg-primary my-8"></div>
             <div className="mt-4 flex flex-col gap-4">
-              <ToggleThemeButton />
+              {/* <ToggleThemeButton /> */}
               <LogoutButton />
             </div>
           </div>
@@ -194,7 +194,7 @@ export default function SidebarLayout() {
                   <Link to={'/signals'}>Señales</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <ToggleThemeButton />
+                {/* <ToggleThemeButton /> */}
                 <DropdownMenuItem asChild>
                   <LogoutButton isMobile />
                   {/* <button className="w-full" onClick={logout} type="submit"> */}
