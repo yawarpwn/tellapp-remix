@@ -39,7 +39,7 @@ export const columns: ColumnDef<QuotationClient>[] = [
   {
     accessorKey: 'customer.name',
     header: 'Cliente',
-    enableGlobalFilter: false,
+    enableGlobalFilter: true,
     cell: ({ row }) => (
       <div>
         <p className="min-w-[230px]">

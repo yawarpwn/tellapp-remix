@@ -30,6 +30,8 @@ export async function fetchQuotations(
       'TELL-API-KEY': apiKey,
     },
   })
+
+  console.log('total quotations', data.meta.totalItems)
   return data.items
 }
 

@@ -63,7 +63,7 @@ export default function CreateUpdateProduct({
               <Label className="text-muted-foreground">Unidad/Medida</Label>
               <Input
                 required
-                value={product?.unitSize ?? ''}
+                defaultValue={product?.unitSize ?? ''}
                 name="unitSize"
                 id="unitSize"
                 placeholder="20x30cm"
@@ -76,7 +76,7 @@ export default function CreateUpdateProduct({
               </Label>
               <Input
                 required
-                value={product?.code ?? ''}
+                defaultValue={product?.code ?? ''}
                 id="code"
                 placeholder="FHP-50"
                 name="code"
@@ -107,7 +107,7 @@ export default function CreateUpdateProduct({
               </Label>
               <Input
                 required
-                value={product?.price || ''}
+                defaultValue={product?.price || ''}
                 id="price"
                 name="price"
                 placeholder="100"
