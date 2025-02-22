@@ -37,6 +37,7 @@ import {
 import { useTheme } from 'remix-themes'
 import { set } from 'zod'
 import { Switch } from '@/components/ui/switch'
+import { LogoutButton } from '@/components/logout-button'
 
 const routes = [
   {
@@ -111,10 +112,10 @@ const ToggleThemeButton = () => {
 export default function SidebarLayout() {
   const navigation = useNavigation()
 
-  const fetcher = useFetcher()
-  const logout = () => {
-    fetcher.submit(null, { method: 'post', action: '/action/logout' })
-  }
+  // const fetcher = useFetcher()
+  // const logout = () => {
+  //   fetcher.submit(null, { method: 'post', action: '/action/logout' })
+  // }
 
   return (
     <div
@@ -143,16 +144,7 @@ export default function SidebarLayout() {
             <div className="h-px bg-primary my-8"></div>
             <div className="mt-4 flex flex-col gap-4">
               <ToggleThemeButton />
-              <fetcher.Form method="post" action="/action/logout">
-                <Button className="w-full" size="icon" type="submit">
-                  {fetcher.state !== 'idle' ? (
-                    <Loader2Icon className="animate-spin" />
-                  ) : (
-                    <LogOutIcon />
-                  )}
-                  <span className="hidden lg:block">Salir</span>
-                </Button>
-              </fetcher.Form>
+              <LogoutButton />
             </div>
           </div>
         </div>
@@ -204,9 +196,10 @@ export default function SidebarLayout() {
                 <DropdownMenuSeparator />
                 <ToggleThemeButton />
                 <DropdownMenuItem asChild>
-                  <button className="w-full" onClick={logout} type="submit">
-                    Salir
-                  </button>
+                  <LogoutButton isMobile />
+                  {/* <button className="w-full" onClick={logout} type="submit"> */}
+                  {/*   Salir */}
+                  {/* </button> */}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

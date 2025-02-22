@@ -17,6 +17,7 @@ export function meta({}: Route.MetaArgs) {
 export async function loader({ request }: Route.LoaderArgs) {
   const session = await getSession(request.headers.get('Cookie'))
 
+  // Redirect to the quotations page if they are already signed in.
   if (session.has('authToken')) return redirect('/quotations')
 
   return data(
@@ -37,6 +38,8 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
   const email = formData.get('email') as string
   const password = formData.get('password') as string
+
+  //Validate Credencials
   const authToken = await login({ email, password })
 
   if (!authToken) {
@@ -52,7 +55,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   session.set('authToken', authToken)
 
-  // Login succeeded, send them to the home page.
+  // Login succeeded, send them to the quotations page.
   return redirect('/quotations', {
     headers: {
       'Set-Cookie': await commitSession(session),
