@@ -69,5 +69,5 @@ export default [
     route('/action/set-theme', 'routes/action/set-theme.ts'),
     route('/test-page', 'routes/test-page.tsx'),
   ]),
-  route('/logout', 'routes/logout.tsx'),
+  route('/action/logout', 'routes/action/logout.ts'),
 ] satisfies RouteConfig

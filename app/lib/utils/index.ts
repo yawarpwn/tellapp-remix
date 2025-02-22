@@ -7,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 import { type QuotationItem } from '@/types'
+import { redirect } from 'react-router'
 
 export const formatDateToLocal = (
   date: Date,
@@ -84,7 +85,8 @@ export async function fetchData<T>(
   console.log(`OK:${response.ok} - ${response.url} - ${response.statusText}`)
   if (!response.ok) {
     throw new HTTPRequestError(
-      `Error en la peticion: ${url} - ${response.statusText}`
+      `Error en la peticion: ${url} - ${response.statusText}`,
+      response.status
     )
   }
   return response.json() as T
@@ -97,7 +99,6 @@ export async function fakePromise(time = 1000) {
 }
 
 export function handleError(error: unknown) {
-  console.log(error)
   if (error instanceof HTTPRequestError) {
     return {
       success: false,

@@ -1,11 +1,13 @@
 type HTTPRequestErrorOptions = {
-  message: string;
-  cause?: string;
-};
+  message: string
+  cause?: string
+}
 
 export class HTTPRequestError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "HttpRequestError";
+  statusCode: number
+  constructor(message: string, statusCode: number) {
+    super(message)
+    this.statusCode = statusCode
+    this.name = 'HttpRequestError'
   }
 }

@@ -42,7 +42,7 @@ export function SearchRucButton({
     }
   }, [fetcher.data])
   return (
-    <div className="col-span-4 grid flex-grow gap-2 md:col-span-3">
+    <div className="col-span-4 grid flex-grow  md:col-span-3">
       <Label className="text-muted-foreground" htmlFor="ruc">
         Ruc
       </Label>
@@ -67,7 +67,7 @@ export function SearchRucButton({
             size="icon"
             type="submit"
             disabled={pending}
-            className="absolute right-1.5 top-1 size-7"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 size-7"
             variant="outline"
           >
             {pending ? (

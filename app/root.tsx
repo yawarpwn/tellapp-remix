@@ -15,7 +15,7 @@ import { Toaster } from '@/components/ui/sonner'
 
 import type { Route } from './+types/root'
 import stylesheet from './app.css?url'
-import { getSession } from './sessions.server'
+import { HTTPRequestError } from './lib/errors'
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   // const url = new URL(request.url)
@@ -46,29 +46,6 @@ export const links: Route.LinksFunction = () => [
   { rel: 'stylesheet', href: stylesheet },
 ]
 
-// export function Layout({ children }: { children: React.ReactNode }) {
-//   const data = useLoaderData()
-//   const [theme] = useTheme()
-//   console.log({ data, theme })
-//   return (
-//     <html lang="es" className={theme ?? ''}>
-//       <head>
-//         <meta charSet="utf-8" />
-//         <meta name="viewport" content="width=device-width, initial-scale=1" />
-//         <Meta />
-//         <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
-//         <Links />
-//       </head>
-//       <body className="relative min-h-dvh overflow-x-hidden  antialiased font-['inter',san-serif] flex flex-col justify-start">
-//         {/* {navigation.location ? "...loading" : undefined} */}
-//         {children}
-//         <ScrollRestoration />
-//         <Scripts />
-//         <Toaster />
-//       </body>
-//     </html>
-//   )
-// }
 // Wrap your app with ThemeProvider.
 // `specifiedTheme` is the stored theme in the session storage.
 // `themeAction` is the action name that's used to change the theme in the session storage.
@@ -115,6 +92,10 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       error.status === 404
         ? 'The requested page could not be found.'
         : error.statusText || details
+  } else if (error instanceof HTTPRequestError) {
+    if (error.statusCode === 401) {
+      return redirect('/')
+    }
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message
     stack = error.stack

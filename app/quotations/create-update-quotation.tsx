@@ -91,9 +91,6 @@ export function CreateUpdateQuotation({
               Entrega
             </Label>
             <Input
-              className={
-                quotation?.deadline === 0 ? 'border border-destructive' : ''
-              }
               required
               type="number"
               id="deadline"
@@ -221,7 +218,7 @@ export function CreateUpdateQuotation({
           <Button
             onClick={handleSubmit}
             className="px-12"
-            disabled={pending ?? !hasItems ?? quotation.deadline === 0}
+            disabled={pending || !hasItems || quotation.deadline === 0}
             type="submit"
           >
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

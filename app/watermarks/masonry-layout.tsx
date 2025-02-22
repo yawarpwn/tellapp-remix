@@ -44,7 +44,11 @@ export function MasonryLayout({ items }: Props) {
     if (navigator.share) {
       setShareLoading(true)
       const blobs = await Promise.all(
-        photosToShare.map((url) => fetch(url).then((res) => res.blob()))
+        photosToShare.map((url) =>
+          fetch(
+            url.replace(/v1737858778/, 'fl_layer_apply,l_watermark-tellsenales')
+          ).then((res) => res.blob())
+        )
       )
       try {
         await navigator.share({

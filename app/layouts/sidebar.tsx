@@ -113,7 +113,7 @@ export default function SidebarLayout() {
 
   const fetcher = useFetcher()
   const logout = () => {
-    fetcher.submit(null, { method: 'post', action: '/logout' })
+    fetcher.submit(null, { method: 'post', action: '/action/logout' })
   }
 
   return (
@@ -202,7 +202,7 @@ export default function SidebarLayout() {
                   <Link to={'/signals'}>Señales</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <ToggleThemeButton isMobile />
+                <ToggleThemeButton />
                 <DropdownMenuItem asChild>
                   <button className="w-full" onClick={logout} type="submit">
                     Salir

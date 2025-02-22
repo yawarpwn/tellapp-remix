@@ -39,6 +39,10 @@ export function DataTable<TData, TValue>({
   createPath,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 15,
+  })
   const [globalFilter, setGlobalFilter] = React.useState('')
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
@@ -53,11 +57,13 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
 
     getFilteredRowModel: getFilteredRowModel(),
+    onPaginationChange: setPagination,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnVisibility,
+      pagination: pagination,
       rowSelection,
       globalFilter: globalFilter,
     },

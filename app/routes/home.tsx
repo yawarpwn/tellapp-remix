@@ -64,7 +64,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const fetcher = useFetcher()
   const { error } = loaderData
   return (
-    <div className="relative bg-black">
+    <div className="relative bg-black ">
       <div className="absolute h-full min-h-screen w-full"></div>
       <img
         width={1500}
