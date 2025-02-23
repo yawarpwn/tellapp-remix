@@ -6,7 +6,7 @@ export async function action({ params, context }: Route.ActionArgs) {
   try {
     const createdQuotationNumber = await duplicateQuotation(
       +params.number,
-      context.cloudflare.env.TELL_API_KEY
+      context.cloudflare.env.TELL_API_KEY,
     )
     return redirect('/quotations/' + createdQuotationNumber)
   } catch (error) {

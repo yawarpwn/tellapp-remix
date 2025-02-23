@@ -10,17 +10,13 @@ export default async function handleRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   routerContext: EntryContext,
-  _loadContext: AppLoadContext
+  _loadContext: AppLoadContext,
 ) {
   let shellRendered = false
   const userAgent = request.headers.get('user-agent')
 
   const body = await renderToReadableStream(
-    <ServerRouter
-      context={routerContext}
-      url={request.url}
-      abortDelay={ABORT_DELAY}
-    />,
+    <ServerRouter context={routerContext} url={request.url} abortDelay={ABORT_DELAY} />,
     {
       onError(error: unknown) {
         responseStatusCode = 500
@@ -31,7 +27,7 @@ export default async function handleRequest(
           console.error(error)
         }
       },
-    }
+    },
   )
   shellRendered = true
 

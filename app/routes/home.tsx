@@ -28,7 +28,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       headers: {
         'Set-Cookie': await commitSession(session),
       },
-    }
+    },
   )
 }
 
@@ -159,12 +159,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <div className="absolute bottom-1 right-1 z-10 flex max-w-md items-center gap-2 rounded-md bg-background/60 px-4">
               <div className=" text-sm italic">
                 <p>
-                  Desde que supimos que venías, nuestras vidas tomaron, rumbo,
-                  un horizonte, una meta, un camino.
+                  Desde que supimos que venías, nuestras vidas tomaron, rumbo, un horizonte, una
+                  meta, un camino.
                 </p>
-                <p className="mt-2">
-                  Todo nuestros logros son para ti y gracias a ti🙏
-                </p>
+                <p className="mt-2">Todo nuestros logros son para ti y gracias a ti🙏</p>
               </div>
               <div className="flex h-[100px] w-[150px] justify-center object-cover">
                 <img

@@ -36,11 +36,5 @@ export function meta({}: Route.MetaArgs) {
 
 export default function QuotationsPage({ loaderData }: Route.ComponentProps) {
   const { products } = loaderData
-  return (
-    <DataTable
-      columns={columns}
-      data={products}
-      createPath="/products/create"
-    />
-  )
+  return <DataTable columns={columns} data={products} createPath="/products/create" />
 }

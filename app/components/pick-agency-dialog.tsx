@@ -22,16 +22,9 @@ export function PickAgencyDialog({ agencies, agencyId, onPickAgency }: Props) {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <Button
-        type="button"
-        variant="secondary"
-        className="w-full"
-        onClick={() => setOpen(true)}
-      >
+      <Button type="button" variant="secondary" className="w-full" onClick={() => setOpen(true)}>
         <span className="truncate">
-          {agencyId
-            ? agencies.find((a) => a.id === agencyId)?.name
-            : 'Selecionar Agencia'}
+          {agencyId ? agencies.find((a) => a.id === agencyId)?.name : 'Selecionar Agencia'}
         </span>
         <ChevronDown className="ml-2 size-3" />
       </Button>
@@ -52,7 +45,7 @@ export function PickAgencyDialog({ agencies, agencyId, onPickAgency }: Props) {
                 <Check
                   className={cn(
                     'mr-2 size-2',
-                    agency.id === agencyId ? 'opacity-100' : 'opacity-30'
+                    agency.id === agencyId ? 'opacity-100' : 'opacity-30',
                   )}
                 />
                 {agency.name}

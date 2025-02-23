@@ -112,10 +112,7 @@ export interface LabelType {
   agency: Agency
 }
 
-export type CreateLabel = Omit<
-  LabelType,
-  'id' | 'createdAt' | 'updatedAt' | 'agency'
->
+export type CreateLabel = Omit<LabelType, 'id' | 'createdAt' | 'updatedAt' | 'agency'>
 export type UpdateLabel = Partial<CreateLabel>
 
 // -------------------------- Watermark  --------------------------------------//
@@ -130,10 +127,7 @@ export type Watermark = {
   updatedAt: string
   thumbUrl: string
 }
-export type CreateWatermark = Omit<
-  Watermark,
-  'id' | 'createdAt' | 'updatedAt' | 'thumbUrl'
->
+export type CreateWatermark = Omit<Watermark, 'id' | 'createdAt' | 'updatedAt' | 'thumbUrl'>
 export type UpdateWatermark = Partial<CreateWatermark>
 
 export type CloudinarySignature = {

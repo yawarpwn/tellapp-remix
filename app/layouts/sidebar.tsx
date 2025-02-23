@@ -1,14 +1,7 @@
 // import { type Route } from './+types/sidebar'
 import { cn } from '@/lib/utils'
 import { Theme } from 'remix-themes'
-import {
-  Form,
-  Link,
-  NavLink,
-  Outlet,
-  useFetcher,
-  useNavigation,
-} from 'react-router'
+import { Form, Link, NavLink, Outlet, useFetcher, useNavigation } from 'react-router'
 import { Button } from '@/components/ui/button'
 import {
   HomeIcon,
@@ -99,9 +92,7 @@ const ToggleThemeButton = () => {
   return (
     <Button
       variant="secondary"
-      onClick={() =>
-        setTheme((prev) => (prev === Theme.DARK ? 'ligth' : 'dark'))
-      }
+      onClick={() => setTheme((prev) => (prev === Theme.DARK ? 'ligth' : 'dark'))}
     >
       <span>{theme == 'light' ? 'Oscuro' : 'Claro'}</span>
       {theme == 'light' ? <MoonIcon /> : <SunIcon />}
@@ -153,7 +144,7 @@ export default function SidebarLayout() {
       <main
         className={cn(
           'min-w-[320px] max-w-7xl mx-auto flex shrink w-full justify-center items-stretch',
-          navigation.state === 'loading' && 'opacity-25'
+          navigation.state === 'loading' && 'opacity-25',
         )}
       >
         <div className="w-full relative max-h-[calc(0px+100vh)] pb-[3rem]">

@@ -5,10 +5,7 @@ import { fetchAgencyById, updateAgency } from '@/lib/data'
 import { CreateUpdateAgency } from '@/agencies/create-update-agency'
 
 export async function loader({ params, context }: Route.LoaderArgs) {
-  const agency = await fetchAgencyById(
-    params.id,
-    context.cloudflare.env.TELL_API_KEY
-  )
+  const agency = await fetchAgencyById(params.id, context.cloudflare.env.TELL_API_KEY)
 
   return { agency }
 }

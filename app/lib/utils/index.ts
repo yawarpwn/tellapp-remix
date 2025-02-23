@@ -8,10 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 
 import { type QuotationItem } from '@/types'
 
-export const formatDateToLocal = (
-  date: Date | string,
-  options?: Intl.DateTimeFormatOptions
-) => {
+export const formatDateToLocal = (date: Date | string, options?: Intl.DateTimeFormatOptions) => {
   const formatter = new Intl.DateTimeFormat('es-PE', {
     day: '2-digit',
     month: '2-digit',
@@ -34,9 +31,7 @@ export const getFormatedDate = (date: string | Date) => {
   let month = currentDate.getMonth() + 1
   let day = currentDate.getDate()
 
-  const formatedDate = `${year}-${String(month).padStart(2, '0')}-${String(
-    day
-  ).padStart(2, '0')}`
+  const formatedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
   return formatedDate
 }
 
@@ -70,10 +65,7 @@ export function getIgv(items: QuotationItem[]) {
   }
 }
 
-export async function fetchData<T>(
-  url: string,
-  options?: RequestInit
-): Promise<T> {
+export async function fetchData<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, {
     ...options,
     headers: {
@@ -85,7 +77,7 @@ export async function fetchData<T>(
   if (!response.ok) {
     throw new HTTPRequestError(
       `Error en la peticion: ${url} - ${response.statusText}`,
-      response.status
+      response.status,
     )
   }
   return response.json() as T
@@ -114,7 +106,7 @@ export function resizeImageFile(
   file: File,
   maxWidth: number,
   maxHeight: number,
-  quality = 0.7
+  quality = 0.7,
 ): Promise<File> {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -149,13 +141,11 @@ export function resizeImageFile(
             })
             resolve(resizedFile)
           } else {
-            reject(
-              new Error('No se pudo crear el Blob de la imagen redimensionada')
-            )
+            reject(new Error('No se pudo crear el Blob de la imagen redimensionada'))
           }
         },
         file.type,
-        quality
+        quality,
       )
 
       URL.revokeObjectURL(url)

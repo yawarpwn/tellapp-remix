@@ -33,13 +33,7 @@ export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
 clientLoader.hydrate = true as const
 
 export function HydrateFallback() {
-  return (
-    <DataTableSkeleton
-      columnCount={5}
-      rowCount={20}
-      searchableColumnCount={1}
-    />
-  )
+  return <DataTableSkeleton columnCount={5} rowCount={20} searchableColumnCount={1} />
 }
 
 export function meta({}: Route.MetaArgs) {
@@ -50,11 +44,5 @@ export default function QuotationsPage({ loaderData }: Route.ComponentProps) {
   const { quotations } = loaderData
   // console.log('data', data)
 
-  return (
-    <DataTable
-      columns={columns}
-      data={quotations}
-      createPath="/quotations/create"
-    />
-  )
+  return <DataTable columns={columns} data={quotations} createPath="/quotations/create" />
 }

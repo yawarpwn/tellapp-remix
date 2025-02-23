@@ -26,10 +26,7 @@ export const productCategoriesSchema = z.object({
 export const productSchema = z.object({
   id: z.string(),
   description: z.string().min(10, 'Campo requerido, mínimo 10 caracteres'),
-  price: z.coerce
-    .number({ message: 'Campo requerido' })
-    .int()
-    .positive('Debe ser número positivo'),
+  price: z.coerce.number({ message: 'Campo requerido' }).int().positive('Debe ser número positivo'),
   cost: z.coerce
     .number({
       message: 'Campo requerido',

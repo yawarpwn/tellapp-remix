@@ -21,7 +21,7 @@ export function SingleInputEdit({
       <input
         className={cn(
           'absolute inset-0 text-center bg-muted border-none outline-none',
-          !isEditing && 'hidden'
+          !isEditing && 'hidden',
         )}
         type={type}
         onChange={(ev) => onInputChange(ev.target.value)}
@@ -36,10 +36,7 @@ export function SingleInputEdit({
       />
       <div
         onClick={() => setIsEditing(true)}
-        className={cn(
-          'absolute flex justify-center inset-0',
-          isEditing && 'hidden'
-        )}
+        className={cn('absolute flex justify-center inset-0', isEditing && 'hidden')}
       >
         <p>{value}</p>
       </div>

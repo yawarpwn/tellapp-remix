@@ -1,17 +1,10 @@
-import type {
-  CreateQuotationClient,
-  Customer,
-  QuotationClient,
-  QuotationItem,
-} from '@/types'
+import type { CreateQuotationClient, Customer, QuotationClient, QuotationItem } from '@/types'
 import React from 'react'
 
-export function useQuotation(
-  initialState: QuotationClient | CreateQuotationClient
-) {
-  const [quotation, setQuotation] = React.useState<
-    QuotationClient | CreateQuotationClient
-  >(initialState)
+export function useQuotation(initialState: QuotationClient | CreateQuotationClient) {
+  const [quotation, setQuotation] = React.useState<QuotationClient | CreateQuotationClient>(
+    initialState,
+  )
 
   const [showCreditOption, setShowCreditOption] = React.useState(false)
 
@@ -78,9 +71,7 @@ export function useQuotation(
     }
   }
 
-  const updateQuotation = (
-    quotation: QuotationClient | CreateQuotationClient
-  ) => {
+  const updateQuotation = (quotation: QuotationClient | CreateQuotationClient) => {
     setQuotation(quotation)
   }
 

@@ -69,9 +69,7 @@ export function WatermarkCard({
         console.error('Error al compartir la imagen:', error)
       }
     } else {
-      alert(
-        'La funcionalidad de compartir no está disponible en este dispositivo.'
-      )
+      alert('La funcionalidad de compartir no está disponible en este dispositivo.')
     }
   }
 
@@ -85,7 +83,7 @@ export function WatermarkCard({
       {
         method: 'post',
         action: `/watermarks/${id}/delete`,
-      }
+      },
     )
   }
 
@@ -110,12 +108,7 @@ export function WatermarkCard({
                 >
                   <DownloadIcon size={20} />
                 </Button>
-                <Button
-                  onClick={handleShare}
-                  variant="outline"
-                  className="h-8 w-8 "
-                  size={'icon'}
-                >
+                <Button onClick={handleShare} variant="outline" className="h-8 w-8 " size={'icon'}>
                   <Share2Icon size={20} />
                 </Button>
                 <Button
@@ -147,10 +140,7 @@ export function WatermarkCard({
             className="absolute left-1 top-1 z-50 size-6"
             onCheckedChange={() => toggleSelectedPhoto(id)}
           />
-          <button
-            className="absolute right-1 top-1 z-50 w-8"
-            onClick={() => setOpenModal(true)}
-          >
+          <button className="absolute right-1 top-1 z-50 w-8" onClick={() => setOpenModal(true)}>
             <EyeIcon />
           </button>
           <img className="h-full w-full object-contain" src={thumbUrl} />
@@ -159,7 +149,7 @@ export function WatermarkCard({
           onClick={() => toggleSelectedPhoto(id)}
           className={cn(
             'absolute inset-0  bg-black/80 opacity-0 transition-colors duration-100',
-            isSelected && 'opacity-100'
+            isSelected && 'opacity-100',
           )}
         ></div>
       </div>

@@ -24,7 +24,7 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
       phone: '',
       observations: '',
       agencyId: undefined,
-    }
+    },
   )
 
   const fetcher = useFetcher()
@@ -43,9 +43,7 @@ export function CreateUpdateLabel({ label: labelToUpdate, agencies }: Props) {
   }
 
   const handleChange = (
-    ev:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
+    ev: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const { name, value } = ev.target
     setLabel((prev) => ({ ...prev, [name]: value }))

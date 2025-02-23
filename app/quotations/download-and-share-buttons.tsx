@@ -22,11 +22,7 @@ const getQuotationPdfName = (quotation: QuotationClient) => {
   return `${quotation.number}-COT${ruc}${updatePrefix}.pdf`
 }
 
-export function DownloadAndShareButtons({
-  quotation,
-}: {
-  quotation: QuotationClient
-}) {
+export function DownloadAndShareButtons({ quotation }: { quotation: QuotationClient }) {
   const pdfFileName = getQuotationPdfName(quotation)
 
   const handleSharePdf = async () => {

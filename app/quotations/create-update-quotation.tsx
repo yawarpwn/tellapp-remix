@@ -79,10 +79,7 @@ export function CreateUpdateQuotation({
       <article className="mt-4 flex flex-col gap-4 ">
         <div className="grid grid-cols-6 gap-3 md:gap-4">
           {/* Ruc  */}
-          <SearchRucButton
-            quotation={quotation}
-            updateQuotation={updateQuotation}
-          />
+          <SearchRucButton quotation={quotation} updateQuotation={updateQuotation} />
           {/* Deadline  */}
           <div className="col-span-2 grid gap-2 md:col-span-3">
             <Label className="text-muted-foreground" htmlFor="deadline">
@@ -142,9 +139,7 @@ export function CreateUpdateQuotation({
           <div className="col-span-3 flex items-center gap-2 ">
             <Checkbox
               id="includeIgv"
-              onCheckedChange={(e) =>
-                updateQuotation({ ...quotation, includeIgv: Boolean(e) })
-              }
+              onCheckedChange={(e) => updateQuotation({ ...quotation, includeIgv: Boolean(e) })}
               checked={quotation.includeIgv}
             />
             <Label htmlFor="includeIgv">Incluir IGV</Label>
@@ -204,13 +199,7 @@ export function CreateUpdateQuotation({
           />
         </React.Suspense>
         <footer className="flex items-center justify-between">
-          <Button
-            variant="outline"
-            disabled={false}
-            type="button"
-            className="px-12"
-            asChild
-          >
+          <Button variant="outline" disabled={false} type="button" className="px-12" asChild>
             <Link to="/quotations">Cancelar</Link>
           </Button>
           <Button

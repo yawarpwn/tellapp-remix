@@ -13,11 +13,5 @@ export function meta({}: Route.MetaArgs) {
 }
 export default function QuotationsPage({ loaderData }: Route.ComponentProps) {
   const { agencies } = loaderData
-  return (
-    <DataTable
-      columns={columns}
-      data={agencies}
-      createPath="/agencies/create"
-    />
-  )
+  return <DataTable columns={columns} data={agencies} createPath="/agencies/create" />
 }

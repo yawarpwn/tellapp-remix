@@ -21,9 +21,7 @@ import type {
 import { fetchData } from '@/lib/utils'
 
 //----------------------------- Quotations ----------------------------->
-export async function fetchQuotations(
-  apiKey: string
-): Promise<QuotationClient[]> {
+export async function fetchQuotations(apiKey: string): Promise<QuotationClient[]> {
   console.log('fetch quotations')
   const url = `${BASE_URL}/api/quotations`
   const data = await fetchData<DataResponse<QuotationClient>>(url, {
@@ -36,10 +34,7 @@ export async function fetchQuotations(
   return data.items
 }
 
-export async function fetchQuotaitonByNumber(
-  quotationNumber: number,
-  apiKey: string
-) {
+export async function fetchQuotaitonByNumber(quotationNumber: number, apiKey: string) {
   const url = `${BASE_URL}/api/quotations/${quotationNumber}`
   const data = await fetchData<QuotationClient>(url, {
     headers: {
@@ -60,10 +55,7 @@ export async function deleteQuotation(quotationNumber: number, apiKey: string) {
   return data
 }
 
-export async function createQuotation(
-  newQuotation: CreateQuotationClient,
-  apiKey: string
-) {
+export async function createQuotation(newQuotation: CreateQuotationClient, apiKey: string) {
   const url = `${BASE_URL}/api/quotations`
   const data = await fetchData<{ insertedNumber: number }>(url, {
     method: 'POST',
@@ -77,10 +69,7 @@ export async function createQuotation(
   return data.insertedNumber
 }
 
-export async function updateQuotation(
-  quotationToUpdate: UpdateQuotationClient,
-  apiKey: string
-) {
+export async function updateQuotation(quotationToUpdate: UpdateQuotationClient, apiKey: string) {
   const url = `${BASE_URL}/api/quotations/${quotationToUpdate.id}`
   console.log({ url, quotationToUpdate })
   const updateQuotation = await fetchData<QuotationClient>(url, {
@@ -95,16 +84,13 @@ export async function updateQuotation(
   return updateQuotation
 }
 
-export async function duplicateQuotation(
-  quotationNumber: number,
-  apiKey: string
-) {
+export async function duplicateQuotation(quotationNumber: number, apiKey: string) {
   const quotation = await fetchQuotaitonByNumber(quotationNumber, apiKey)
   const insertedQuotationNumber = await createQuotation(
     {
       ...quotation,
     },
-    apiKey
+    apiKey,
   )
   return insertedQuotationNumber
 }
@@ -116,7 +102,7 @@ type FetchCustomerOptions = {
 //----------------------------- Customers ----------------------------->
 export async function fetchCustomers(
   apiKey: string,
-  options?: FetchCustomerOptions
+  options?: FetchCustomerOptions,
 ): Promise<Customer[]> {
   const { onlyRegular = false } = options ?? {}
   const url = `${BASE_URL}/api/customers`
@@ -125,9 +111,7 @@ export async function fetchCustomers(
       'TELL-API-KEY': apiKey,
     },
   })
-  return onlyRegular
-    ? data.items.filter((customer) => customer.isRegular)
-    : data.items
+  return onlyRegular ? data.items.filter((customer) => customer.isRegular) : data.items
 }
 
 export async function searchCustomerByDniOrRuc(dniRuc: string, apiKey: string) {
@@ -156,11 +140,7 @@ export async function fetchCustomerById(id: string, apiKey: string) {
   return data
 }
 
-export async function updateCustomer(
-  id: string,
-  customerToUpdate: UpdateCustomer,
-  apiKey: string
-) {
+export async function updateCustomer(id: string, customerToUpdate: UpdateCustomer, apiKey: string) {
   const url = `${BASE_URL}/api/customers/${id}`
   const data = await fetchData<Customer>(url, {
     method: 'PUT',
@@ -184,10 +164,7 @@ export async function fetchProducts(apiKey: string): Promise<Product[]> {
   return data.items
 }
 
-export async function fetchProductById(
-  id: string,
-  apiKey: string
-): Promise<Product> {
+export async function fetchProductById(id: string, apiKey: string): Promise<Product> {
   const url = `${BASE_URL}/api/products/${id}`
   const data = await fetchData<Product>(url, {
     headers: {
@@ -207,10 +184,7 @@ export async function fetchProductCategories(apiKey: string) {
   return data.items
 }
 
-export async function createProduct(
-  productToInsert: InsertProduct,
-  apiKey: string
-) {
+export async function createProduct(productToInsert: InsertProduct, apiKey: string) {
   const url = `${BASE_URL}/api/products`
   const data = await fetchData<Product>(url, {
     method: 'POST',
@@ -223,11 +197,7 @@ export async function createProduct(
   return data
 }
 
-export async function updateProduct(
-  id: string,
-  productToUpdate: UpdateProduct,
-  apiKey: string
-) {
+export async function updateProduct(id: string, productToUpdate: UpdateProduct, apiKey: string) {
   console.log('update product ')
   const url = `${BASE_URL}/api/products/${id}`
   const updatedProduct = await fetchData<Product>(url, {
@@ -274,10 +244,7 @@ export async function fetchAgencyById(id: string, apiKey: string) {
   return data
 }
 
-export async function createAgency(
-  agencyToCreate: CreateAgency,
-  apiKey: string
-) {
+export async function createAgency(agencyToCreate: CreateAgency, apiKey: string) {
   const url = `${BASE_URL}/api/agencies`
   const data = await fetchData<Agency>(url, {
     method: 'POST',
@@ -290,11 +257,7 @@ export async function createAgency(
   return data
 }
 
-export async function updateAgency(
-  id: string,
-  agencyToUpdate: Agency,
-  apiKey: string
-) {
+export async function updateAgency(id: string, agencyToUpdate: Agency, apiKey: string) {
   const url = `${BASE_URL}/api/agencies/${id}`
   const data = await fetchData<Agency>(url, {
     method: 'PUT',
@@ -352,11 +315,7 @@ export async function createLabel(labelToCreate: CreateLabel, apiKey: string) {
   return data
 }
 
-export async function updateLabel(
-  id: string,
-  labelToUpdate: LabelType,
-  apiKey: string
-) {
+export async function updateLabel(id: string, labelToUpdate: LabelType, apiKey: string) {
   const url = `${BASE_URL}/api/labels/${id}`
   const data = await fetchData<LabelType>(url, {
     method: 'PUT',
@@ -413,11 +372,7 @@ export async function createWatermark(formData: FormData, apiKey: string) {
   return data
 }
 
-export async function updateWatermarkl(
-  id: string,
-  labelToUpdate: UpdateWatermark,
-  apiKey: string
-) {
+export async function updateWatermarkl(id: string, labelToUpdate: UpdateWatermark, apiKey: string) {
   const url = `${BASE_URL}/api/watermarks/${id}`
   const data = await fetchData<Watermark>(url, {
     method: 'PUT',
@@ -443,13 +398,7 @@ export async function deleteWatermark(id: string, apiKey: string) {
 
 //----------------------------- Auth -----------------------------\
 
-export async function login({
-  email,
-  password,
-}: {
-  email: string
-  password: string
-}) {
+export async function login({ email, password }: { email: string; password: string }) {
   const url = `${BASE_URL}/auth/login`
   const data = await fetchData<{ token: string }>(url, {
     method: 'POST',

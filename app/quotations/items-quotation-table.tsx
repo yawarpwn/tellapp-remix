@@ -42,11 +42,11 @@ export function ItemsQuotationTable(props: Props) {
   } = props
 
   const [slotItemMap, setSlotItemMap] = useState<SlotItemMapArray>(
-    utils.initSlotItemMap(items, 'id')
+    utils.initSlotItemMap(items, 'id'),
   )
   const slottedItems = React.useMemo(
     () => utils.toSlottedItems(items, 'id', slotItemMap),
-    [items, slotItemMap]
+    [items, slotItemMap],
   )
   const swapyRef = React.useRef<Swapy | null>(null)
   const containerRef = React.useRef<HTMLDivElement>(null)
@@ -64,19 +64,11 @@ export function ItemsQuotationTable(props: Props) {
     setSelectedProductId(id)
   }
 
-  const { formatedIgv, formatedTotal, formatedSubTotal, totalItems } =
-    getIgv(items)
+  const { formatedIgv, formatedTotal, formatedSubTotal, totalItems } = getIgv(items)
 
   React.useEffect(
-    () =>
-      utils.dynamicSwapy(
-        swapyRef.current,
-        items,
-        'id',
-        slotItemMap,
-        setSlotItemMap
-      ),
-    [items]
+    () => utils.dynamicSwapy(swapyRef.current, items, 'id', slotItemMap, setSlotItemMap),
+    [items],
   )
 
   React.useEffect(() => {

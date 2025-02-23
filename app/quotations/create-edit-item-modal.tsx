@@ -1,12 +1,7 @@
 //ui
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog, DialogClose, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useFuse } from '@/hooks/use-fuse'
@@ -59,9 +54,9 @@ export function CreateEditItemModal(props: Props) {
   const { products } = props
   const qtyInputRef = React.useRef<HTMLInputElement>(null)
 
-  const [quoItem, setQuoItem] = useState<
-    Omit<QuotationItem, 'id'> | QuotationItem
-  >(item ?? initialQuoItem)
+  const [quoItem, setQuoItem] = useState<Omit<QuotationItem, 'id'> | QuotationItem>(
+    item ?? initialQuoItem,
+  )
 
   const { hits, onSearch } = useFuse<Product>(products, {
     keys: [
@@ -77,16 +72,12 @@ export function CreateEditItemModal(props: Props) {
   })
 
   const handleChangeItem = (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.currentTarget
 
     const updateValue =
-      name === 'price' || name === 'qty' || name === 'cost'
-        ? Number(value)
-        : value
+      name === 'price' || name === 'qty' || name === 'cost' ? Number(value) : value
 
     setQuoItem({
       ...quoItem,
@@ -128,7 +119,7 @@ export function CreateEditItemModal(props: Props) {
       <DialogContent
         className={cn(
           'flex  max-w-md md:max-w-3xl flex-col border p-2 py-4 md:p-6',
-          hits.length === 0 ? 'h-auto' : 'h-[95svh] md:h-[90svh]'
+          hits.length === 0 ? 'h-auto' : 'h-[95svh] md:h-[90svh]',
         )}
       >
         {/* Search Product */}
@@ -167,16 +158,10 @@ export function CreateEditItemModal(props: Props) {
                   {hit.item.description}
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge
-                    variant="outline"
-                    className="lowercase text-muted-foreground"
-                  >
+                  <Badge variant="outline" className="lowercase text-muted-foreground">
                     {hit.item.unitSize}
                   </Badge>
-                  <Badge
-                    variant="outline"
-                    className="border border-primary uppercase text-primary"
-                  >
+                  <Badge variant="outline" className="border border-primary uppercase text-primary">
                     {hit.item.code}
                   </Badge>
                   <Badge variant="outline" className="text-muted-foreground">
@@ -228,10 +213,7 @@ export function CreateEditItemModal(props: Props) {
                 />
               </div>
               <div className="grid w-full gap-2">
-                <label
-                  className="text-xs text-muted-foreground"
-                  htmlFor="unitSize"
-                >
+                <label className="text-xs text-muted-foreground" htmlFor="unitSize">
                   Unidad/Medida
                 </label>
                 <Input
@@ -245,10 +227,7 @@ export function CreateEditItemModal(props: Props) {
             </div>
             <div className="flex gap-4">
               <div className="grid w-full gap-2">
-                <label
-                  className="text-xs text-muted-foreground"
-                  htmlFor="price"
-                >
+                <label className="text-xs text-muted-foreground" htmlFor="price">
                   Precio
                 </label>
                 <Input

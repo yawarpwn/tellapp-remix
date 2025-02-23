@@ -22,10 +22,7 @@ type Props = {
   productCategories: ProductCategory[]
 }
 
-export default function CreateUpdateProduct({
-  product,
-  productCategories,
-}: Props) {
+export default function CreateUpdateProduct({ product, productCategories }: Props) {
   const fetcher = useFetcher()
 
   const [errors, setErrors] = React.useState([])
@@ -137,10 +134,7 @@ export default function CreateUpdateProduct({
             <Label className="text-muted-foreground" htmlFor="categoryId">
               Categoria
             </Label>
-            <Select
-              defaultValue={String(product?.categoryId || '')}
-              name="categoryId"
-            >
+            <Select defaultValue={String(product?.categoryId || '')} name="categoryId">
               <SelectTrigger className="capitalize">
                 <SelectValue placeholder="Seleciona una categoria" />
               </SelectTrigger>

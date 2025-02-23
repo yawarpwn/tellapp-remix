@@ -22,10 +22,7 @@ type Props = {
   productCategories: ProductCategory[]
 }
 
-export default function CreateUpdateProduct({
-  product,
-  productCategories,
-}: Props) {
+export default function CreateUpdateProduct({ product, productCategories }: Props) {
   const fetcher = useFetcher()
 
   const [errors, setErrors] = React.useState([])

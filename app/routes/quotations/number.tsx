@@ -6,10 +6,7 @@ import { BackTo } from '@/components/back-to'
 
 export async function loader({ params, context }: Route.LoaderArgs) {
   return {
-    quotation: await fetchQuotaitonByNumber(
-      +params.number,
-      context.cloudflare.env.TELL_API_KEY
-    ),
+    quotation: await fetchQuotaitonByNumber(+params.number, context.cloudflare.env.TELL_API_KEY),
   }
 }
 
@@ -30,9 +27,7 @@ export function HydrateFallback() {
   )
 }
 
-export default function QuotationByNumber({
-  loaderData,
-}: Route.ComponentProps) {
+export default function QuotationByNumber({ loaderData }: Route.ComponentProps) {
   const { quotation } = loaderData
   return (
     <div>

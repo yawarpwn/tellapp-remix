@@ -17,17 +17,8 @@ export function ToggleRegularCustomerButton({
   }
 
   return (
-    <fetcher.Form
-      method="post"
-      action={`/action/${customerId}/toggle-regular-customer`}
-    >
-      <Button
-        name="status"
-        value={status}
-        type="submit"
-        variant={'outline'}
-        size={'sm'}
-      >
+    <fetcher.Form method="post" action={`/action/${customerId}/toggle-regular-customer`}>
+      <Button name="status" value={status} type="submit" variant={'outline'} size={'sm'}>
         {status === 'is-regular' ? (
           <StarIcon className="text-primary" />
         ) : (

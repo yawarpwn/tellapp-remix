@@ -5,10 +5,7 @@ import { fetchAgencies, fetchLabelById, updateLabel } from '@/lib/data'
 import { CreateUpdateLabel } from '@/labels/create-update-label'
 
 export async function loader({ params, context }: Route.LoaderArgs) {
-  const label = await fetchLabelById(
-    params.id,
-    context.cloudflare.env.TELL_API_KEY
-  )
+  const label = await fetchLabelById(params.id, context.cloudflare.env.TELL_API_KEY)
   const agencies = await fetchAgencies(context.cloudflare.env.TELL_API_KEY)
 
   return { label, agencies }

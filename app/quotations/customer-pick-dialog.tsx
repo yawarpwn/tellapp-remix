@@ -19,28 +19,17 @@ interface Props {
   onCustomerPick: (customer: Customer) => void
 }
 
-export function CustomerPickerDialog({
-  customers,
-  customerId,
-  onCustomerPick,
-}: Props) {
+export function CustomerPickerDialog({ customers, customerId, onCustomerPick }: Props) {
   if (customers.length === 0) return null
   const [open, setOpen] = useState(false)
   return (
     <>
-      <Button
-        variant="secondary"
-        size="sm"
-        type="button"
-        onClick={() => setOpen(true)}
-      >
+      <Button variant="secondary" size="sm" type="button" onClick={() => setOpen(true)}>
         Clientes
         <SearchIcon />
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <DialogTitle className="sr-only">
-          Buscar Clientes frecuentes
-        </DialogTitle>
+        <DialogTitle className="sr-only">Buscar Clientes frecuentes</DialogTitle>
         <CommandInput placeholder="buscar agencia..." />
         <CommandList className="max-h-[700px]">
           <CommandEmpty>Cliente no encontrada</CommandEmpty>
@@ -58,7 +47,7 @@ export function CustomerPickerDialog({
                 <Check
                   className={cn(
                     'mr-2 size-2',
-                    customer.id === customerId ? 'opacity-100' : 'opacity-30'
+                    customer.id === customerId ? 'opacity-100' : 'opacity-30',
                   )}
                 />
                 {customer.name}

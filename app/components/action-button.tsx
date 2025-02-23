@@ -17,11 +17,7 @@ export function ActionButton({
   return (
     <>
       {open && (
-        <ConfirmActionDialog
-          open={open}
-          closeModal={() => setOpen(false)}
-          action={action}
-        />
+        <ConfirmActionDialog open={open} closeModal={() => setOpen(false)} action={action} />
       )}
       <Button onClick={() => setOpen(true)} variant={'outline'} size={'sm'}>
         {icon} <span className="hidden lg:block">{text}</span>

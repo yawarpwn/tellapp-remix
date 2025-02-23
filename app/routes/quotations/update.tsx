@@ -3,11 +3,7 @@ import { UpdateCreateQuotationSkeleton } from '@/components/skeletons/quotations
 
 import React from 'react'
 import type { Route } from './+types/update'
-import {
-  fetchCustomers,
-  fetchProducts,
-  fetchQuotaitonByNumber,
-} from '@/lib/data'
+import { fetchCustomers, fetchProducts, fetchQuotaitonByNumber } from '@/lib/data'
 import { CUSTOMERS_KEY, PRODUCTS_KEY } from '@/lib/constants'
 import { useQuotation } from '@/hooks/use-quotation'
 import { CreateUpdateQuotation } from '@/quotations/create-update-quotation'
@@ -20,18 +16,14 @@ export async function loader({ params, context }: Route.LoaderArgs) {
     customersPromise: fetchCustomers(context.cloudflare.env.TELL_API_KEY, {
       onlyRegular: true,
     }),
-    quotationPromise: fetchQuotaitonByNumber(
-      +params.number,
-      context.cloudflare.env.TELL_API_KEY
-    ),
+    quotationPromise: fetchQuotaitonByNumber(+params.number, context.cloudflare.env.TELL_API_KEY),
   }
 }
 
 export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
   if (isFirstRequest) {
     isFirstRequest = false
-    const { productsPromise, customersPromise, quotationPromise } =
-      await serverLoader()
+    const { productsPromise, customersPromise, quotationPromise } = await serverLoader()
     const [customers, products, quotation] = await Promise.all([
       customersPromise,
       productsPromise,
@@ -58,8 +50,7 @@ export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
     }
   }
 
-  const { productsPromise, customersPromise, quotationPromise } =
-    await serverLoader()
+  const { productsPromise, customersPromise, quotationPromise } = await serverLoader()
   const [customers, products, quotation] = await Promise.all([
     customersPromise,
     productsPromise,

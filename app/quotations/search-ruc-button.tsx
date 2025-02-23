@@ -21,9 +21,7 @@ export function SearchRucButton({
     if (fetcher.data) {
       if (fetcher.data.success) {
         toast('Cliente encontrado', {
-          description: (
-            <pre>{JSON.stringify(fetcher.data.customer, null, 2)}</pre>
-          ),
+          description: <pre>{JSON.stringify(fetcher.data.customer, null, 2)}</pre>,
         })
 
         updateQuotation({

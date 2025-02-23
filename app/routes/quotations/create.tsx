@@ -7,12 +7,7 @@ import { toast } from 'sonner'
 import { useQuotation } from '@/hooks/use-quotation'
 import { CreateUpdateQuotation } from '@/quotations/create-update-quotation'
 import type { CreateQuotationClient } from '@/types'
-import {
-  Dialog,
-  DialogDescription,
-  DialogContent,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog, DialogDescription, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { useAutoSave } from '@/hooks/use-auto-save'
 import { UpdateCreateQuotationSkeleton } from '@/components/skeletons/quotations'
@@ -102,12 +97,16 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
     toggleCreditOption,
   } = useQuotation(INITIAL_QUOTATION)
 
-  const { showRecuperationModal, closeRecuperationModal, clearSavedQuotation } =
-    useAutoSave({
-      quotation,
-      updateQuotation,
-      initialQuotation: INITIAL_QUOTATION,
-    })
+  const {
+    showRecuperationModal,
+    closeRecuperationModal,
+    clearSavedQuotation,
+    removeStoredQuotation,
+  } = useAutoSave({
+    quotation,
+    updateQuotation,
+    initialQuotation: INITIAL_QUOTATION,
+  })
 
   const fetcher = useFetcher()
   const pending = fetcher.state !== 'idle'
@@ -119,7 +118,7 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
       method: 'post',
       action: '/action/create-quotation',
     })
-    clearSavedQuotation()
+    removeStoredQuotation()
   }
 
   React.useEffect(() => {
@@ -130,10 +129,7 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <Dialog
-        open={showRecuperationModal}
-        onOpenChange={closeRecuperationModal}
-      >
+      <Dialog open={showRecuperationModal} onOpenChange={closeRecuperationModal}>
         <DialogContent className="max-w-xs">
           <DialogTitle className="text-center">Recupea Cotización!</DialogTitle>
           <DialogDescription className="text-center">

@@ -1,20 +1,17 @@
+import { SAVED_QUOTATION_KEY } from '@/lib/constants'
 import type { CreateQuotationClient, QuotationClient } from '@/types'
 import compare from 'just-compare'
 import React from 'react'
 
-const SAVED_QUOTATION_KEY = 'SAVED_QUOTATION'
 type Props = {
   updateQuotation: (quotation: QuotationClient | CreateQuotationClient) => void
   quotation: QuotationClient | CreateQuotationClient
   initialQuotation: CreateQuotationClient
 }
-export function useAutoSave({
-  quotation,
-  updateQuotation,
-  initialQuotation,
-}: Props) {
-  const [showRecuperationModal, setShowRecuperationModal] =
-    React.useState(false)
+
+export function useAutoSave({ quotation, updateQuotation, initialQuotation }: Props) {
+  const [showRecuperationModal, setShowRecuperationModal] = React.useState(false)
+
   React.useEffect(() => {
     if (compare(initialQuotation, quotation)) return
     localStorage.setItem(SAVED_QUOTATION_KEY, JSON.stringify(quotation))
@@ -33,8 +30,12 @@ export function useAutoSave({
     return JSON.parse(savedQuotation)
   }
 
-  const clearSavedQuotation = () => {
+  const removeStoredQuotation = () => {
     localStorage.removeItem(SAVED_QUOTATION_KEY)
+  }
+
+  const clearSavedQuotation = () => {
+    removeStoredQuotation()
     updateQuotation(initialQuotation)
     closeRecuperationModal()
   }
@@ -44,6 +45,7 @@ export function useAutoSave({
   }
 
   return {
+    removeStoredQuotation,
     clearSavedQuotation,
     showRecuperationModal,
     closeRecuperationModal,

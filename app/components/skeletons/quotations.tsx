@@ -40,51 +40,13 @@ export function UpdateCreateQuotationSkeleton() {
         </div>
         <Skeleton className="h-6 w-20" />
         <div className="flex justify-between">
-          <Skeleton className="h-6 w-28" />
+          <Skeleton className="h-6 w-26" />
           <Skeleton className="h-6 w-16" />
         </div>
         <Skeleton className="h-40 w-full"></Skeleton>
         <Skeleton className="h-40 w-full"></Skeleton>
         <Skeleton className="h-40 w-full"></Skeleton>
         <Skeleton className="h-40 w-full"></Skeleton>
-      </div>
-    </div>
-  )
-}
-export function InvoiceSkeleton() {
-  return (
-    <div className="flex flex-row items-center justify-between border-b border-gray-800 py-4">
-      <div className="flex items-center">
-        <div className="bg-base-200 mr-2 h-8 w-8 rounded-full" />
-        <div className="min-w-0">
-          <div className="bg-base-200 h-5 w-40 rounded-md" />
-          <div className="bg-base-200 mt-2 h-4 w-12 rounded-md" />
-        </div>
-      </div>
-      <div className="bg-base-200 mt-2 h-4 w-12 rounded-md" />
-    </div>
-  )
-}
-
-export function InvoicesMobileSkeleton() {
-  return (
-    <div className="card card-compact bg-base-200">
-      <div className="card-body">
-        <div className=" border-base-content/30 flex flex-col gap-2 border-b pb-4 pt-2">
-          <div className="flex items-center justify-between">
-            <Skeleton className="skeleton h-4 w-16"></Skeleton>
-            <Skeleton className="skeleton h-4 w-16"></Skeleton>
-          </div>
-          <div className="skeleton mx-auto h-4 w-60"></div>
-        </div>
-        <div className="flex w-full items-center justify-between">
-          <Skeleton className="skeleton h-4 w-16"></Skeleton>
-          <Skeleton className="skeleton h-4 w-16"></Skeleton>
-          <div className="flex gap-2">
-            <Skeleton className="skeleton h-4 w-6"></Skeleton>
-            <Skeleton className="skeleton h-4 w-6"></Skeleton>
-          </div>
-        </div>
       </div>
     </div>
   )
@@ -162,12 +124,12 @@ export function QuotationSkeleton() {
     <div>
       <header className="flex justify-end gap-x-2">
         <div className="flex gap-2">
-          <Skeleton className="h-11 w-12 rounded-md" />
-          <Skeleton className="h-11 w-12 rounded-md" />
-          <Skeleton className="h-11 w-12 rounded-md" />
-          <Skeleton className="h-11 w-12 rounded-md" />
-          <Skeleton className="h-11 w-12 rounded-md" />
-          <Skeleton className="h-11 w-12 rounded-md" />
+          <Skeleton className="h-8 w-9 lg:w-24 rounded-md" />
+          <Skeleton className="h-8 w-9 lg:w-24 rounded-md" />
+          <Skeleton className="h-8 w-9 lg:w-24 rounded-md" />
+          <Skeleton className="h-8 w-9 lg:w-24 rounded-md" />
+          <Skeleton className="h-8 w-9 lg:w-24 rounded-md" />
+          <Skeleton className="h-8 w-9 lg:w-24 rounded-md" />
         </div>
       </header>
       <div className="container mx-auto px-4 py-8">
@@ -205,17 +167,13 @@ export function QuotationSkeleton() {
                 </dl>
 
                 <dl className="grid items-center gap-x-3 sm:grid-cols-6">
-                  <dt className="col-span-3 font-semibold ">
-                    Tiempo de entrega:
-                  </dt>
+                  <dt className="col-span-3 font-semibold ">Tiempo de entrega:</dt>
                   <dd className="col-span-3 ">
                     <Skeleton className="h-10 w-full" />
                   </dd>
                 </dl>
                 <dl className="grid items-center gap-x-3 sm:grid-cols-6">
-                  <dt className="col-span-3 font-semibold ">
-                    Codición de Pago
-                  </dt>
+                  <dt className="col-span-3 font-semibold ">Codición de Pago</dt>
                   <dd className="col-span-3 ">
                     <Skeleton className="h-10 w-full" />
                   </dd>

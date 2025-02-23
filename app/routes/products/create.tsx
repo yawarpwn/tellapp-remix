@@ -8,9 +8,7 @@ import { fetchProductCategories } from '@/lib/data'
 import { PRODUCTS_KEY } from '@/lib/constants'
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const productCategories = await fetchProductCategories(
-    context.cloudflare.env.TELL_API_KEY
-  )
+  const productCategories = await fetchProductCategories(context.cloudflare.env.TELL_API_KEY)
   return { productCategories }
 }
 
@@ -41,10 +39,5 @@ export async function clientAction({ serverAction }: Route.ClientActionArgs) {
 
 export default function CreateProduct({ loaderData }: Route.ComponentProps) {
   const { productCategories } = loaderData
-  return (
-    <CreateUpdateProduct
-      product={undefined}
-      productCategories={productCategories}
-    />
-  )
+  return <CreateUpdateProduct product={undefined} productCategories={productCategories} />
 }

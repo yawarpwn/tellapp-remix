@@ -3,9 +3,7 @@ import type { QuotationClient } from '@/types'
 import type { Content } from 'pdfmake/interfaces'
 
 export function getItemsTable(quotation: QuotationClient) {
-  const { formatedIgv, formatedSubTotal, formatedTotal } = getIgv(
-    quotation.items
-  )
+  const { formatedIgv, formatedSubTotal, formatedTotal } = getIgv(quotation.items)
 
   const itemsTable: Content = {
     table: {
@@ -35,9 +33,7 @@ export function getItemsTable(quotation: QuotationClient) {
           { text: 'IMPORTE', color: '#fff', alignment: 'center' },
         ],
         ...quotation.items.map((item, index) => {
-          const unitPrice = quotation.includeIgv
-            ? item.price / 1.18
-            : item.price
+          const unitPrice = quotation.includeIgv ? item.price / 1.18 : item.price
           const importe = unitPrice * item.qty
           return [
             // numero

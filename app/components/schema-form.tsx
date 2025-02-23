@@ -18,9 +18,7 @@ function SchemaForm<Schema extends FormSchema>(props: SchemaFormProps<Schema>) {
       // fieldErrorsComponent={/* your custom FieldErrors */}
       // globalErrorsComponent={/* your custom GlobalErrors */}
       // errorComponent={/* your custom Error */}
-      errorComponent={({ children }) => (
-        <div className="text-sm text-destructive">{children}</div>
-      )}
+      errorComponent={({ children }) => <div className="text-sm text-destructive">{children}</div>}
       {...props}
     />
   )

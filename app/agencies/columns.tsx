@@ -13,6 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import React from 'react'
+import { ConfirmActionDialog } from '@/components/confirm-action-dialog'
 
 export const columns: ColumnDef<Agency>[] = [
   {
@@ -22,9 +24,7 @@ export const columns: ColumnDef<Agency>[] = [
     cell: (props) => (
       <div className="min-w-[250px]">
         <p>{props.row.original.name}</p>
-        <p className="text-sm text-muted-foreground">
-          {props.row.original.address}
-        </p>
+        <p className="text-sm text-muted-foreground">{props.row.original.address}</p>
       </div>
     ),
   },
@@ -43,37 +43,38 @@ export const columns: ColumnDef<Agency>[] = [
     id: 'actions',
     enableGlobalFilter: false,
     cell: ({ row }) => {
+      const [showDestroyConfirmDialog, setShowDestroyConfirmDialog] = React.useState(false)
       const agency = row.original
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link to={`/agencies/${agency.id}/update`}>Editar</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Form
-                action={`/agencies/${agency.id}/delete`}
-                method="post"
-                onSubmit={(ev) => {
-                  let response = confirm('¿Deseas Eliminar el agency?')
-                  if (!response) {
-                    ev.preventDefault()
-                  }
-                }}
-              >
-                <button>Eliminar</button>
-              </Form>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          {showDestroyConfirmDialog && (
+            <ConfirmActionDialog
+              open={showDestroyConfirmDialog}
+              closeModal={() => setShowDestroyConfirmDialog(false)}
+              action={`/agencies/${agency.id}/delete`}
+            />
+          )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link to={`/agencies/${agency.id}/update`}>Editar</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <button className="w-full" onClick={() => setShowDestroyConfirmDialog(true)}>
+                  Eliminar
+                </button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
       )
     },
   },

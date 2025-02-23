@@ -44,12 +44,7 @@ export function ProductCard(props: Props) {
         <CardContent className="grid gap-4 p-4">
           <div className="flex items-center justify-between [&_button]:size-7 [&_button]:shrink-0 [&_button_svg]:size-4 ">
             <div className="flex items-center gap-1">
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
-                onClick={() => moveUpItem(index)}
-              >
+              <Button type="button" variant="outline" size="icon" onClick={() => moveUpItem(index)}>
                 <ChevronUp />
               </Button>
               <Button
@@ -60,12 +55,7 @@ export function ProductCard(props: Props) {
               >
                 <ChevronDown />
               </Button>
-              <Button
-                type="button"
-                size="icon"
-                variant="outline"
-                data-swapy-handle
-              >
+              <Button type="button" size="icon" variant="outline" data-swapy-handle>
                 <GripIcon />
               </Button>
             </div>
@@ -101,7 +91,7 @@ export function ProductCard(props: Props) {
               <textarea
                 className={cn(
                   'absolute inset-0 z-20 resize-none border-none outline-none bg-background',
-                  !isEditingDescription && 'hidden'
+                  !isEditingDescription && 'hidden',
                 )}
                 onChange={(event) => {
                   onEditItem({
@@ -124,10 +114,7 @@ export function ProductCard(props: Props) {
                 onClick={() => {
                   setIsEditingDescription(true)
                 }}
-                className={cn(
-                  'absolute inset-0 z-10',
-                  isEditingDescription && 'hidden'
-                )}
+                className={cn('absolute inset-0 z-10', isEditingDescription && 'hidden')}
               >
                 {item.description}
               </p>
@@ -138,9 +125,7 @@ export function ProductCard(props: Props) {
             <SingleInputEdit
               value={item.unitSize}
               className="flex-1"
-              onInputChange={(unitSize) =>
-                onEditItem({ ...item, unitSize: unitSize })
-              }
+              onInputChange={(unitSize) => onEditItem({ ...item, unitSize: unitSize })}
               type="text"
               name="name"
             />
@@ -156,9 +141,7 @@ export function ProductCard(props: Props) {
             <SingleInputEdit
               className="flex-1"
               value={item.price}
-              onInputChange={(price) =>
-                onEditItem({ ...item, price: Number(price) })
-              }
+              onInputChange={(price) => onEditItem({ ...item, price: Number(price) })}
               name="price"
               type="number"
             />

@@ -1,10 +1,4 @@
-import {
-  type RouteConfig,
-  index,
-  route,
-  layout,
-  prefix,
-} from '@react-router/dev/routes'
+import { type RouteConfig, index, route, layout, prefix } from '@react-router/dev/routes'
 
 export default [
   index('routes/home.tsx'),
@@ -66,8 +60,5 @@ export default [
   route('/action/logout', 'routes/actions/logout.ts'),
   route('/action/create-quotation', 'routes/actions/create-quotation.ts'),
   route('/action/update-quotation', 'routes/actions/update-quotation.ts'),
-  route(
-    '/action/:id/toggle-regular-customer',
-    'routes/actions/toggle-regular-customer.ts'
-  ),
+  route('/action/:id/toggle-regular-customer', 'routes/actions/toggle-regular-customer.ts'),
 ] satisfies RouteConfig

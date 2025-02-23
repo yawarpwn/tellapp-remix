@@ -66,10 +66,9 @@ type CloudinarySuccessResponse = {
 export const uploadFilesFromClient = async (
   files: File[],
   signData: CloudinarySignature,
-  cb: (data: CloudinarySuccessResponse) => void
+  cb: (data: CloudinarySuccessResponse) => void,
 ) => {
-  const url =
-    'https://api.cloudinary.com/v1_1/' + signData.cloudname + '/auto/upload'
+  const url = 'https://api.cloudinary.com/v1_1/' + signData.cloudname + '/auto/upload'
   const formData = new FormData()
   for (const file of files) {
     formData.append('file', file)

@@ -16,6 +16,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { DataTableColumnHeader } from '@/components/data-table-column-header'
+import React from 'react'
+import { ConfirmActionDialog } from '@/components/confirm-action-dialog'
 
 export const columns: ColumnDef<QuotationClient>[] = [
   {
@@ -42,9 +44,7 @@ export const columns: ColumnDef<QuotationClient>[] = [
     enableGlobalFilter: true,
     cell: ({ row }) => (
       <div>
-        <p className="min-w-[230px]">
-          {row.original.customer?.name || 'SIN RUC'}
-        </p>
+        <p className="min-w-[230px]">{row.original.customer?.name || 'SIN RUC'}</p>
         <p>{row.original.customer?.ruc}</p>
       </div>
     ),
@@ -71,54 +71,55 @@ export const columns: ColumnDef<QuotationClient>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
+      const [showDuplicateConfirmDialog, setShowDuplicateConfirmDialog] = React.useState(false)
+      const [showDestroyConfirmDialog, setShowDestroyConfirmDialog] = React.useState(false)
+
       const quotation = row.original
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link to={`/quotations/${quotation.number}`}>Ver</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link to={`/quotations/${quotation.number}/update`}>Editar</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Form
-                action={`/quotations/${quotation.number}/delete`}
-                method="post"
-                onSubmit={(ev) => {
-                  let response = confirm('¿Deseas Eliminar la cotización?')
-                  if (!response) {
-                    ev.preventDefault()
-                  }
-                }}
-              >
-                <button>Eliminar</button>
-              </Form>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Form
-                action={`/quotations/${quotation.number}/duplicate`}
-                method="post"
-                onSubmit={(ev) => {
-                  let response = confirm('¿Deseas duplicar la cotización?')
-                  if (!response) {
-                    ev.preventDefault()
-                  }
-                }}
-              >
-                <button>Duplicar</button>
-              </Form>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          {showDuplicateConfirmDialog && (
+            <ConfirmActionDialog
+              open={showDuplicateConfirmDialog}
+              closeModal={() => setShowDuplicateConfirmDialog(false)}
+              action={`/quotations/${quotation.number}/duplicate`}
+            />
+          )}
+          {showDestroyConfirmDialog && (
+            <ConfirmActionDialog
+              open={showDestroyConfirmDialog}
+              closeModal={() => setShowDestroyConfirmDialog(false)}
+              action={`/quotations/${quotation.number}/delete`}
+            />
+          )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to={`/quotations/${quotation.number}`}>Ver</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link to={`/quotations/${quotation.number}/update`}>Editar</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <button className="w-full" onClick={() => setShowDestroyConfirmDialog(true)}>
+                  Eliminar
+                </button>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <button className="w-full" onClick={() => setShowDuplicateConfirmDialog(true)}>
+                  Duplicar
+                </button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
       )
     },
   },

@@ -7,10 +7,7 @@ import { PRODUCTS_KEY } from '@/lib/constants'
 
 export async function action({ params, context }: Route.ActionArgs) {
   try {
-    const product = await fetchProductById(
-      params.id,
-      context.cloudflare.env.TELL_API_KEY
-    )
+    const product = await fetchProductById(params.id, context.cloudflare.env.TELL_API_KEY)
     await createProduct(
       {
         description: product.description,
@@ -21,7 +18,7 @@ export async function action({ params, context }: Route.ActionArgs) {
         categoryId: product.categoryId,
         unitSize: product.unitSize,
       },
-      context.cloudflare.env.TELL_API_KEY
+      context.cloudflare.env.TELL_API_KEY,
     )
     return redirect('/products')
   } catch (error) {

@@ -1,12 +1,12 @@
-import type { Route } from "./+types/test-page";
-import { BASE_URL } from "@/lib/constants";
-import type { LoaderFunction } from "react-router";
+import type { Route } from './+types/test-page'
+import { BASE_URL } from '@/lib/constants'
+import type { LoaderFunction } from 'react-router'
 
 export const loader: LoaderFunction = async ({ context, params }) => {
-  console.log("context", context);
+  console.log('context', context)
 
-  return { data: [] };
-};
+  return { data: [] }
+}
 
 // export async function loader() {
 //   const url = `https://api.tellsenales.workers.dev/api/test`;
@@ -29,10 +29,10 @@ export const loader: LoaderFunction = async ({ context, params }) => {
 // }
 
 export default function testPage({ loaderData }: Route.ComponentProps) {
-  const { data } = loaderData;
+  const { data } = loaderData
   return (
     <div>
       <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
-  );
+  )
 }

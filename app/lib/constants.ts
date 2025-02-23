@@ -2,9 +2,7 @@ export const PRODUCTION_URL = 'https://app.tellsenales.workers.dev'
 
 const isDev = import.meta.env.MODE === 'development'
 // export const BASE_URL = 'https://api.tellsignals.workers.dev'
-export const BASE_URL = isDev
-  ? 'http://localhost:8787'
-  : 'https://api.tellsignals.workers.dev'
+export const BASE_URL = isDev ? 'http://localhost:8787' : 'https://api.tellsignals.workers.dev'
 
 export const PRODUCT_CATEGORIES = {
   CINTAS_SEGURIDAD: 'cintas seguridad',
@@ -43,3 +41,4 @@ export const PRODUCT_CATEGORIES_TABLE = {
 export const PRODUCTS_KEY = '__TELL_PRODUCTS__'
 export const CUSTOMERS_KEY = '__TELL_CUSTOMERS__'
 export const QUOTATIONS_KEY = '__QUOS__'
+export const SAVED_QUOTATION_KEY = '__TELL_SAVED_QUOTATION__'

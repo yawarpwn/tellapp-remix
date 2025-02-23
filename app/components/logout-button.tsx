@@ -6,18 +6,9 @@ export function LogoutButton({ isMobile }: { isMobile?: boolean }) {
   const fetcher = useFetcher()
   return (
     <fetcher.Form method="post" action="/action/logout">
-      <Button
-        variant={isMobile ? 'ghost' : 'default'}
-        className="w-full"
-        size="icon"
-        type="submit"
-      >
+      <Button variant={isMobile ? 'ghost' : 'default'} className="w-full" size="icon" type="submit">
         <div className="hidden lg:block">
-          {fetcher.state !== 'idle' ? (
-            <Loader2Icon className="animate-spin" />
-          ) : (
-            <LogOutIcon />
-          )}
+          {fetcher.state !== 'idle' ? <Loader2Icon className="animate-spin" /> : <LogOutIcon />}
         </div>
         <span className="">Salir</span>
       </Button>

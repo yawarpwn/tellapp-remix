@@ -22,9 +22,9 @@ type Props = {
   quotation: QuotationClient
 }
 export default function ViewQuotation({ quotation }: Props) {
-  const { formatedIgv, formatedTotal, formatedSubTotal } = getIgv(
-    quotation.items
-  )
+  const { formatedIgv, formatedTotal, formatedSubTotal } = getIgv(quotation.items)
+
+  console.log({ quotation })
 
   return (
     <div className="flex flex-col gap-6">
@@ -62,32 +62,24 @@ export default function ViewQuotation({ quotation }: Props) {
           <h2 className="text-2xl font-semibold md:text-3xl">Cotización</h2>
           <div className="mt-1 flex justify-end gap-1 text-xl text-primary">
             <span>#</span>
-            <span className="font-bold">
-              {String(quotation.number).padStart(4, '0')}
-            </span>
+            <span className="font-bold">{String(quotation.number).padStart(4, '0')}</span>
           </div>
         </div>
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <div>
-          <h3 className="text-lg font-semibold ">
-            {quotation?.customer?.name ?? 'SIN NOMBRE'}
-          </h3>
+          <h3 className="text-lg font-semibold ">{quotation?.customer?.name ?? 'SIN NOMBRE'}</h3>
           <address className="mt-2 not-italic text-muted-foreground ">
             {quotation?.customer?.address ?? 'SIN DIRECCION'}
           </address>
-          <p className="mt-2 text-muted-foreground">
-            {quotation?.customer?.ruc ?? 'SIN RUC'}
-          </p>
+          <p className="mt-2 text-muted-foreground">{quotation?.customer?.ruc ?? 'SIN RUC'}</p>
         </div>
         <div className="space-y-2 sm:text-right">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-1 sm:gap-2">
             <dl className="grid gap-x-3 sm:grid-cols-6">
               <dt className="col-span-3 font-semibold ">Fecha:</dt>
-              <dd className="col-span-3 ">
-                {formatDateToLocal(new Date(quotation.createdAt))}
-              </dd>
+              <dd className="col-span-3 ">{formatDateToLocal(new Date(quotation.createdAt))}</dd>
             </dl>
             <dl className="grid gap-x-3 sm:grid-cols-6">
               <dt className="col-span-3 font-semibold ">Actualizado:</dt>
@@ -103,9 +95,7 @@ export default function ViewQuotation({ quotation }: Props) {
             <dl className="grid gap-x-3 sm:grid-cols-6">
               <dt className="col-span-3 font-semibold ">Codición de Pago</dt>
               <dd className="col-span-3 ">
-                {quotation.credit
-                  ? `${quotation.credit} días`
-                  : '50% Adelanto '}
+                {quotation.credit ? `${quotation.credit} días` : '50% Adelanto '}
               </dd>
             </dl>
           </div>
@@ -133,25 +123,15 @@ export default function ViewQuotation({ quotation }: Props) {
               </TableCell>
               <TableCell className="text-center">
                 {item.link && (
-                  <a
-                    target="_blank"
-                    className="flex justify-center"
-                    href={item.link}
-                  >
+                  <a target="_blank" className="flex justify-center" href={item.link}>
                     <ExternalLinkIcon size={18} className="text-primary" />
                   </a>
                 )}
               </TableCell>
               <TableCell className="text-center">{item.unitSize}</TableCell>
-              <TableCell className="text-center">
-                {item.qty.toString().padStart(2, '0')}
-              </TableCell>
-              <TableCell className="text-center">
-                {(item.price / 1.18).toFixed(4)}
-              </TableCell>
-              <TableCell className="text-center">
-                {formatNumberToLocal(item.price)}
-              </TableCell>
+              <TableCell className="text-center">{item.qty.toString().padStart(2, '0')}</TableCell>
+              <TableCell className="text-center">{(item.price / 1.18).toFixed(4)}</TableCell>
+              <TableCell className="text-center">{formatNumberToLocal(item.price)}</TableCell>
               <TableCell className="text-center">
                 {formatNumberToLocal(item.price * item.qty)}
               </TableCell>
