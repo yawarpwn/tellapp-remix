@@ -2,7 +2,6 @@ import { fetchProductById } from '@/lib/data'
 import type { Route } from './+types/duplicate'
 import { createProduct } from '@/lib/data'
 import { cache, handleError } from '@/lib/utils'
-import { redirect } from 'react-router'
 import { PRODUCTS_KEY } from '@/lib/constants'
 
 export async function action({ params, context }: Route.ActionArgs) {
@@ -18,9 +17,8 @@ export async function action({ params, context }: Route.ActionArgs) {
         categoryId: product.categoryId,
         unitSize: product.unitSize,
       },
-      context.cloudflare.env.TELL_API_KEY,
+      context.cloudflare.env.TELL_API_KEY
     )
-    return redirect('/products')
   } catch (error) {
     return handleError(error)
   }

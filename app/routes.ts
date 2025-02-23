@@ -9,9 +9,7 @@ export default [
       route('/create', 'routes/quotations/create.tsx'),
       route('/search-by-ruc', 'routes/quotations/search-by-ruc.tsx'),
       route('/:number', 'routes/quotations/number.tsx'),
-      route('/:number/duplicate', 'routes/quotations/duplicate.tsx'),
       route('/:number/update', 'routes/quotations/update.tsx'),
-      route('/:number/delete', 'routes/quotations/delete.tsx'),
     ]),
     //Products ---->
     ...prefix('products', [
@@ -60,5 +58,7 @@ export default [
   route('/action/logout', 'routes/actions/logout.ts'),
   route('/action/create-quotation', 'routes/actions/create-quotation.ts'),
   route('/action/update-quotation', 'routes/actions/update-quotation.ts'),
+  route('/action/:number/delete-quotation', 'routes/actions/delete-quotation.ts'),
+  route('/action/:number/duplicate-quotation', 'routes/actions/duplicate-quotation.ts'),
   route('/action/:id/toggle-regular-customer', 'routes/actions/toggle-regular-customer.ts'),
 ] satisfies RouteConfig

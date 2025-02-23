@@ -82,7 +82,7 @@ export const columns: ColumnDef<QuotationClient>[] = [
               open={showDuplicateConfirmDialog}
               description={`Desea duplicar la cotización ${quotation.number}?`}
               closeModal={() => setShowDuplicateConfirmDialog(false)}
-              action={`/quotations/${quotation.number}/duplicate`}
+              action={`/action/${quotation.number}/duplicate-quotation`}
             />
           )}
           {showDestroyConfirmDialog && (
@@ -90,7 +90,7 @@ export const columns: ColumnDef<QuotationClient>[] = [
               description={`Desea eliminar la cotización ${quotation.number}?`}
               open={showDestroyConfirmDialog}
               closeModal={() => setShowDestroyConfirmDialog(false)}
-              action={`/quotations/${quotation.number}/delete`}
+              action={`/action/${quotation.number}/delete-quotation`}
             />
           )}
           <DropdownMenu>

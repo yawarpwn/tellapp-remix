@@ -37,16 +37,16 @@ export default function ViewQuotation({ quotation }: Props) {
           <DownloadAndShareButtons quotation={quotation} />
           <ActionButton
             message={`¿Deseas duplicar la cotización ${quotation.number}?`}
-            action={`/quotations/${quotation.number}/duplicate`}
+            action={`/action/${quotation.number}/duplicate-quotation`}
             text="Duplicar"
             icon={<FilesIcon size={18} />}
           />
-          <ActionButton
-            message={`¿Deseas eliminar la cotización ${quotation.number}?`}
-            action={`/quotations/${quotation.number}/delete`}
-            text="Eliminar"
-            icon={<TrashIcon size={18} />}
-          />
+          {/* <ActionButton */}
+          {/*   message={`¿Deseas eliminar la cotización ${quotation.number}?`} */}
+          {/*   action={`/action/${quotation.number}/delete-quotation`} */}
+          {/*   text="Eliminar" */}
+          {/*   icon={<TrashIcon size={18} />} */}
+          {/* /> */}
           {quotation?.customerId && (
             <ToggleRegularCustomerButton
               isRegular={quotation.customer.isRegular}
