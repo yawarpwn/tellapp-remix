@@ -10,14 +10,10 @@ export async function loader({ context }: Route.LoaderArgs) {
 }
 
 let isInitialRequest = true
-export async function clientLoader({
-  request,
-  serverLoader,
-}: Route.ClientLoaderArgs) {
+export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
   const QUOTATIONS_KEY = '__QUOS__'
 
   if (isInitialRequest) {
-    console.log('is Initial request')
     isInitialRequest = false
     const serverData = await serverLoader()
     localStorage.setItem(QUOTATIONS_KEY, JSON.stringify(serverData))
@@ -25,8 +21,8 @@ export async function clientLoader({
   }
 
   const cacheData = localStorage.getItem(QUOTATIONS_KEY)
-  console.log({ cacheData })
   if (cacheData) {
+    console.log('used cached quotations ')
     return JSON.parse(cacheData)
   }
   const serverData = await serverLoader()
@@ -34,7 +30,7 @@ export async function clientLoader({
   return serverData
 }
 
-clientLoader.hydrate = true as const // (2)
+clientLoader.hydrate = true as const
 
 export function HydrateFallback() {
   return (
@@ -43,7 +39,7 @@ export function HydrateFallback() {
       rowCount={20}
       searchableColumnCount={1}
     />
-  ) // (2)
+  )
 }
 
 export default function QuotationsPage({ loaderData }: Route.ComponentProps) {

@@ -1,8 +1,9 @@
 import { fetchProductById } from '@/lib/data'
 import type { Route } from './+types/duplicate'
 import { createProduct } from '@/lib/data'
-import { handleError } from '@/lib/utils'
+import { cache, handleError } from '@/lib/utils'
 import { redirect } from 'react-router'
+import { PRODUCTS_KEY } from '@/lib/constants'
 
 export async function action({ params, context }: Route.ActionArgs) {
   try {
@@ -26,4 +27,9 @@ export async function action({ params, context }: Route.ActionArgs) {
   } catch (error) {
     return handleError(error)
   }
+}
+
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
+  cache.delete(PRODUCTS_KEY)
+  return await serverAction()
 }

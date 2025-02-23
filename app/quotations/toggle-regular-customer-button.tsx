@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { StarIcon, StarOffIcon } from 'lucide-react'
-import React from 'react'
-import { Form, useActionData, useFetcher, useFetchers } from 'react-router'
+import { Form, useActionData, useFetcher } from 'react-router'
 
 export function ToggleRegularCustomerButton({
   customerId,
@@ -10,8 +9,6 @@ export function ToggleRegularCustomerButton({
   customerId: string
   isRegular: boolean
 }) {
-  console.log({ isRegular })
-
   const fetcher = useFetcher()
 
   let status = isRegular ? 'is-regular' : 'no-regular'
@@ -22,7 +19,7 @@ export function ToggleRegularCustomerButton({
   return (
     <fetcher.Form
       method="post"
-      action={`/customers/${customerId}/toggle-regular-customer`}
+      action={`/action/${customerId}/toggle-regular-customer`}
     >
       <Button
         name="status"

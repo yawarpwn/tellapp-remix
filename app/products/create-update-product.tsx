@@ -127,6 +127,7 @@ export default function CreateUpdateProduct({
             </Label>
             <Input
               name="link"
+              defaultValue={product?.link || ''}
               id="link"
               placeholder="http://tellsenales.com/products/product-link"
             />
@@ -136,7 +137,10 @@ export default function CreateUpdateProduct({
             <Label className="text-muted-foreground" htmlFor="categoryId">
               Categoria
             </Label>
-            <Select value={String(product?.categoryId || '')} name="categoryId">
+            <Select
+              defaultValue={String(product?.categoryId || '')}
+              name="categoryId"
+            >
               <SelectTrigger className="capitalize">
                 <SelectValue placeholder="Seleciona una categoria" />
               </SelectTrigger>

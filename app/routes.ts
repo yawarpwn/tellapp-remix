@@ -28,13 +28,7 @@ export default [
       route('/:id/duplicate', 'routes/products/duplicate.tsx'),
     ]),
     //Customers ---->
-    ...prefix('customers', [
-      index('routes/customers/home.tsx'),
-      route(
-        '/:id/toggle-regular-customer',
-        'routes/customers/toggle-regular-customer.tsx'
-      ),
-    ]),
+    ...prefix('customers', [index('routes/customers/home.tsx')]),
 
     //Agencies ---->
     ...prefix('agencies', [
@@ -66,8 +60,14 @@ export default [
       route('/:id/delete', 'routes/watermarks/delete.tsx'),
     ]),
 
-    route('/action/set-theme', 'routes/action/set-theme.ts'),
+    route('/action/set-theme', 'routes/actions/set-theme.ts'),
     route('/test-page', 'routes/test-page.tsx'),
   ]),
-  route('/action/logout', 'routes/action/logout.ts'),
+  route('/action/logout', 'routes/actions/logout.ts'),
+  route('/action/create-quotation', 'routes/actions/create-quotation.ts'),
+  route('/action/update-quotation', 'routes/actions/update-quotation.ts'),
+  route(
+    '/action/:id/toggle-regular-customer',
+    'routes/actions/toggle-regular-customer.ts'
+  ),
 ] satisfies RouteConfig

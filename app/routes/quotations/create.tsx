@@ -1,10 +1,9 @@
-import { redirect, useFetcher } from 'react-router'
+import { useFetcher } from 'react-router'
 
 import React from 'react'
 import type { Route } from './+types/create'
-import { fetchCustomers, fetchProducts, createQuotation } from '@/lib/data'
+import { fetchCustomers, fetchProducts } from '@/lib/data'
 import { toast } from 'sonner'
-import { HTTPRequestError } from '@/lib/errors'
 import { useQuotation } from '@/hooks/use-quotation'
 import { CreateUpdateQuotation } from '@/quotations/create-update-quotation'
 import type { CreateQuotationClient } from '@/types'
@@ -15,44 +14,58 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { useAutoSave } from '@/hooks/use-autos-save'
+import { useAutoSave } from '@/hooks/use-auto-save'
+import { UpdateCreateQuotationSkeleton } from '@/components/skeletons/quotations'
+import { CUSTOMERS_KEY, PRODUCTS_KEY } from '@/lib/constants'
 
-export async function action({ request, context }: Route.ActionArgs) {
-  const formData = await request.formData()
-  const quotation = JSON.parse(formData.get('quotation') as string)
-  // const quotation = JSON.parse(formData.get('quotation') as string)
-  try {
-    await createQuotation(quotation, context.cloudflare.env.TELL_API_KEY)
-    return redirect('/quotations')
-  } catch (error) {
-    if (error instanceof HTTPRequestError) {
-      return {
-        error: error.message,
-        success: false,
-      }
-    }
-
-    return {
-      error: 'Error creating quotation',
-      success: false,
-    }
-  }
-}
-
-export async function clientAction({ serverAction }: Route.ClientActionArgs) {
-  console.log('client action')
-  localStorage.removeItem('__QUOS__')
-  const serverData = await serverAction()
-  return serverData
-}
-
+let isFirstRequest = true
 export async function loader({ context }: Route.LoaderArgs) {
+  const [products, customers] = await Promise.all([
+    fetchProducts(context.cloudflare.env.TELL_API_KEY),
+    fetchCustomers(context.cloudflare.env.TELL_API_KEY, { onlyRegular: true }),
+  ])
+
   return {
-    productsPromise: fetchProducts(context.cloudflare.env.TELL_API_KEY),
-    customersPromise: fetchCustomers(context.cloudflare.env.TELL_API_KEY, {
-      onlyRegular: true,
-    }),
+    products,
+    customers,
   }
+}
+
+export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
+  if (isFirstRequest) {
+    isFirstRequest = false
+    const { products, customers } = await serverLoader()
+    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products))
+    localStorage.setItem(CUSTOMERS_KEY, JSON.stringify(customers))
+    return {
+      products,
+      customers,
+    }
+  }
+  const cachedProducts = localStorage.getItem(PRODUCTS_KEY)
+  const cachedCustomers = localStorage.getItem(CUSTOMERS_KEY)
+
+  if (cachedCustomers && cachedProducts) {
+    console.log('used cached customers && products')
+    return {
+      customers: JSON.parse(cachedCustomers),
+      products: JSON.parse(cachedProducts),
+    }
+  }
+
+  const { products, customers } = await serverLoader()
+  localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products))
+  localStorage.setItem(CUSTOMERS_KEY, JSON.stringify(customers))
+  return {
+    products,
+    customers,
+  }
+}
+
+clientLoader.hydrate = true as const
+
+export function HydrateFallback() {
+  return <UpdateCreateQuotationSkeleton />
 }
 
 const INITIAL_QUOTATION: CreateQuotationClient = {
@@ -73,25 +86,7 @@ const INITIAL_QUOTATION: CreateQuotationClient = {
   },
 }
 export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
-  const { productsPromise, customersPromise } = loaderData
-
-  const fetcher = useFetcher()
-  const pending = fetcher.state !== 'idle'
-
-  const handleCreateQuotationSubmit = () => {
-    const formData = new FormData()
-    formData.append('quotation', JSON.stringify(quotation))
-    fetcher.submit(formData, {
-      method: 'post',
-    })
-  }
-
-  React.useEffect(() => {
-    if (fetcher.data) {
-      toast.error(fetcher.data.error)
-    }
-  }, [fetcher.data])
-
+  const { products, customers } = loaderData
   const {
     quotation,
     updateQuotation,
@@ -113,6 +108,25 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
       updateQuotation,
       initialQuotation: INITIAL_QUOTATION,
     })
+
+  const fetcher = useFetcher()
+  const pending = fetcher.state !== 'idle'
+
+  const handleCreateQuotationSubmit = () => {
+    const formData = new FormData()
+    formData.append('quotation', JSON.stringify(quotation))
+    fetcher.submit(formData, {
+      method: 'post',
+      action: '/action/create-quotation',
+    })
+    clearSavedQuotation()
+  }
+
+  React.useEffect(() => {
+    if (fetcher.data) {
+      toast.error(fetcher.data.error)
+    }
+  }, [fetcher.data])
 
   return (
     <>
@@ -146,8 +160,8 @@ export default function CreateQuotation({ loaderData }: Route.ComponentProps) {
         hasItems={hasItems}
         showCreditOption={showCreditOption}
         toggleCreditOption={toggleCreditOption}
-        productsPromise={productsPromise}
-        customersPromise={customersPromise}
+        products={products}
+        customers={customers}
         handleSubmit={handleCreateQuotationSubmit}
         pending={pending}
       />

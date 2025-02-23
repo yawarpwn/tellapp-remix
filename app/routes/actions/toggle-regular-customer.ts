@@ -1,5 +1,6 @@
 import { fetchCustomerById, updateCustomer } from '@/lib/data'
 import type { Route } from './+types/toggle-regular-customer'
+import { QUOTATIONS_KEY } from '@/lib/constants'
 
 export async function action({ params, request, context }: Route.ActionArgs) {
   const customer = await fetchCustomerById(
@@ -21,6 +22,7 @@ export async function action({ params, request, context }: Route.ActionArgs) {
   return { updatedCustomer }
 }
 
-export default function () {
-  return <div>Toggle</div>
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
+  localStorage.removeItem(QUOTATIONS_KEY)
+  return await serverAction()
 }

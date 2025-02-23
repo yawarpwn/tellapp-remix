@@ -3,9 +3,10 @@ import { updateProductSchema } from '@/lib/schemas'
 import { redirect } from 'react-router'
 import { data } from 'react-router'
 import { updateProduct } from '@/lib/data'
-import { handleError } from '@/lib/utils'
+import { cache, handleError } from '@/lib/utils'
 import CreateUpdateProduct from '@/products/create-update-product'
 import { fetchProductById, fetchProductCategories } from '@/lib/data'
+import { PRODUCTS_KEY } from '@/lib/constants'
 
 export async function loader({ params, context }: Route.LoaderArgs) {
   const product = await fetchProductById(
@@ -37,6 +38,11 @@ export async function action({ request, params, context }: Route.ActionArgs) {
   } catch (error) {
     return handleError(error)
   }
+}
+
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
+  cache.delete(PRODUCTS_KEY)
+  return await serverAction()
 }
 
 export default function CreateProduct({ loaderData }: Route.ComponentProps) {

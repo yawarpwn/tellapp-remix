@@ -21,11 +21,11 @@ import type {
 type Props = {
   quotation: QuotationClient | CreateQuotationClient
   pending: boolean
-  customersPromise: Promise<Customer[]>
+  customers: Customer[]
   pickCustomer: (customer: Customer) => void
   updateQuotation: (quotation: QuotationClient | CreateQuotationClient) => void
   showCreditOption: boolean
-  productsPromise: Promise<Product[]>
+  products: Product[]
   hasItems: boolean
   addItem: (item: QuotationItem) => void
   editItem: (itemToEdit: QuotationItem) => void
@@ -51,9 +51,9 @@ export function CreateUpdateQuotation({
   pending,
   pickCustomer,
   updateQuotation,
-  customersPromise,
+  customers,
   showCreditOption,
-  productsPromise,
+  products,
   hasItems,
   addItem,
   moveDownItem,
@@ -69,13 +69,11 @@ export function CreateUpdateQuotation({
       <header className="flex justify-between">
         <BackTo to="/quotations" />
         <div className="">
-          <React.Suspense fallback="cargando...">
-            <CustomerPickerDialog
-              customersPromise={customersPromise}
-              onCustomerPick={pickCustomer}
-              customerId={quotation.customerId}
-            />
-          </React.Suspense>
+          <CustomerPickerDialog
+            customers={customers}
+            onCustomerPick={pickCustomer}
+            customerId={quotation.customerId}
+          />
         </div>
       </header>
       <article className="mt-4 flex flex-col gap-4 ">
@@ -195,7 +193,7 @@ export function CreateUpdateQuotation({
 
         <React.Suspense fallback="...cargando">
           <ItemsQuotationTable
-            productsPromise={productsPromise}
+            products={products}
             onAddItem={addItem}
             items={quotation.items}
             onEditItem={editItem}

@@ -2,9 +2,10 @@ import type { Route } from './+types/create'
 import { insertProductSchema } from '@/lib/schemas'
 import { redirect, data } from 'react-router'
 import { createProduct } from '@/lib/data'
-import { handleError } from '@/lib/utils'
+import { cache, handleError } from '@/lib/utils'
 import CreateUpdateProduct from '@/products/create-update-product'
 import { fetchProductCategories } from '@/lib/data'
+import { PRODUCTS_KEY } from '@/lib/constants'
 
 export async function loader({ context }: Route.LoaderArgs) {
   const productCategories = await fetchProductCategories(
@@ -31,6 +32,11 @@ export async function action({ request, context }: Route.ActionArgs) {
   } catch (error) {
     handleError(error)
   }
+}
+
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
+  cache.delete(PRODUCTS_KEY)
+  return await serverAction()
 }
 
 export default function CreateProduct({ loaderData }: Route.ComponentProps) {

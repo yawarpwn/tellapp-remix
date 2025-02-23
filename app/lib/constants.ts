@@ -39,3 +39,7 @@ export const PRODUCT_CATEGORIES_TABLE = {
   CONVENCIONALES: 13,
   ACRILICOS: 14,
 } as const
+
+export const PRODUCTS_KEY = '__TELL_PRODUCTS__'
+export const CUSTOMERS_KEY = '__TELL_CUSTOMERS__'
+export const QUOTATIONS_KEY = '__QUOS__'

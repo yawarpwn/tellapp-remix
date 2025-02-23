@@ -2,6 +2,8 @@ import { handleError } from '@/lib/utils'
 import type { Route } from './+types/delete'
 import { deleteProduct } from '@/lib/data'
 import { redirect } from 'react-router'
+import { cache } from '@/lib/utils'
+import { PRODUCTS_KEY } from '@/lib/constants'
 
 export async function action({ params, context }: Route.ActionArgs) {
   try {
@@ -10,4 +12,9 @@ export async function action({ params, context }: Route.ActionArgs) {
   } catch (error) {
     return handleError(error)
   }
+}
+
+export async function clientAction({ serverAction }: Route.ClientActionArgs) {
+  cache.delete(PRODUCTS_KEY)
+  return await serverAction()
 }

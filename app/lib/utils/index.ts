@@ -7,10 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 import { type QuotationItem } from '@/types'
-import { redirect } from 'react-router'
 
 export const formatDateToLocal = (
-  date: Date,
+  date: Date | string,
   options?: Intl.DateTimeFormatOptions
 ) => {
   const formatter = new Intl.DateTimeFormat('es-PE', {
@@ -165,4 +164,19 @@ export function resizeImageFile(
     img.onerror = (error) => reject(error)
     img.src = url
   })
+}
+
+export const cache = {
+  set: (key: string, value: Object) => {
+    localStorage.setItem(key, JSON.stringify(value))
+  },
+  get: (key: string) => {
+    if (localStorage.getItem(key)) {
+      return JSON.parse(localStorage.getItem(key) as string)
+    }
+    return null
+  },
+  delete: (key: string) => {
+    localStorage.removeItem(key)
+  },
 }

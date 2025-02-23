@@ -20,7 +20,7 @@ import { ProductCard } from './product-card'
 
 interface Props {
   items: QuotationItem[]
-  productsPromise: Promise<Product[]>
+  products: Product[]
   onDuplicateItem: (item: QuotationItem) => void
   onEditItem: (itemToEdit: QuotationItem) => void
   onDeleteItem: (id: string) => void
@@ -31,7 +31,7 @@ interface Props {
 
 export function ItemsQuotationTable(props: Props) {
   const {
-    productsPromise,
+    products,
     items,
     onDuplicateItem,
     onEditItem,
@@ -51,7 +51,6 @@ export function ItemsQuotationTable(props: Props) {
   const swapyRef = React.useRef<Swapy | null>(null)
   const containerRef = React.useRef<HTMLDivElement>(null)
 
-  const products = React.use(productsPromise)
   //States
   const [seletedProductId, setSelectedProductId] = useState<string | null>(null)
   const productItem = items.find((item) => item.id == seletedProductId)
