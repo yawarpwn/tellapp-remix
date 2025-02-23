@@ -11,15 +11,18 @@ export function ToggleRegularCustomerButton({
 }) {
   const fetcher = useFetcher()
 
-  let status = isRegular ? 'is-regular' : 'no-regular'
-  if (fetcher.formData) {
-    status = fetcher.formData.get('status') as string
-  }
+  const favorite = fetcher.formData ? fetcher.formData.get('favorite') === 'true' : isRegular
 
   return (
     <fetcher.Form method="post" action={`/action/${customerId}/toggle-regular-customer`}>
-      <Button name="status" value={status} type="submit" variant={'outline'} size={'sm'}>
-        {status === 'is-regular' ? (
+      <Button
+        name="favorite"
+        value={favorite ? 'false' : 'true'}
+        type="submit"
+        variant={'outline'}
+        size={'sm'}
+      >
+        {favorite ? (
           <StarIcon className="text-primary" />
         ) : (
           <StarOffIcon className="text-muted-foreground" />

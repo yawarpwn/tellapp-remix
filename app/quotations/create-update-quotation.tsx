@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { StarIcon, Loader2 } from 'lucide-react'
 import React from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { CustomerPickerDialog } from './customer-pick-dialog'
 import { ItemsQuotationTable } from './items-quotation-table'
 import { SearchRucButton } from './search-ruc-button'
@@ -46,6 +46,7 @@ const getSavedQuotation = () => {
   }
   return null
 }
+
 export function CreateUpdateQuotation({
   quotation,
   pending,

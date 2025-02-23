@@ -73,11 +73,13 @@ export async function fetchData<T>(url: string, options?: RequestInit): Promise<
       ...options?.headers,
     },
   })
-  console.log(`OK:${response.ok} - ${response.url} - ${response.statusText}`)
+  console.log(
+    `OK:${response.ok} - statusCode:${response.status} - ${response.url} - ${response.statusText}`
+  )
   if (!response.ok) {
     throw new HTTPRequestError(
       `Error en la peticion: ${url} - ${response.statusText}`,
-      response.status,
+      response.status
     )
   }
   return response.json() as T
@@ -106,7 +108,7 @@ export function resizeImageFile(
   file: File,
   maxWidth: number,
   maxHeight: number,
-  quality = 0.7,
+  quality = 0.7
 ): Promise<File> {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -145,7 +147,7 @@ export function resizeImageFile(
           }
         },
         file.type,
-        quality,
+        quality
       )
 
       URL.revokeObjectURL(url)

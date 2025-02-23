@@ -5,8 +5,12 @@ import { columns } from '@/quotations/columns'
 import { DataTableSkeleton } from '@/components/skeletons/data-table'
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const quotations = await fetchQuotations(context.cloudflare.env.TELL_API_KEY)
-  return { quotations }
+  try {
+    const quotations = await fetchQuotations(context.cloudflare.env.TELL_API_KEY)
+    return { quotations }
+  } catch (error) {
+    throw new Response('Not Found', { status: 404 })
+  }
 }
 
 let isInitialRequest = true

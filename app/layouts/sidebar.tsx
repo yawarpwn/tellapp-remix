@@ -122,10 +122,15 @@ export default function SidebarLayout() {
               {routes.map((route) => (
                 <NavLink
                   key={route.path}
-                  className={({ isActive }) => (isActive ? 'text-primary' : '')}
+                  className={({ isActive, isPending }) =>
+                    cn('', {
+                      'text-primary': isActive,
+                      'is-pending': isPending,
+                    })
+                  }
                   to={route.path}
                 >
-                  <div className={cn('flex items-center gap-2')}>
+                  <div className={'flex items-center gap-2 relative'}>
                     <route.Icon size={22} />
                     <span className="hidden lg:block">{route.label}</span>
                   </div>
@@ -144,7 +149,7 @@ export default function SidebarLayout() {
       <main
         className={cn(
           'min-w-[320px] max-w-7xl mx-auto flex shrink w-full justify-center items-stretch',
-          navigation.state === 'loading' && 'opacity-25',
+          navigation.state === 'loading' && 'opacity-25'
         )}
       >
         <div className="w-full relative max-h-[calc(0px+100vh)] pb-[3rem]">

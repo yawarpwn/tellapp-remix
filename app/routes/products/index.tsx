@@ -8,8 +8,12 @@ import { DataTableSkeleton } from '@/components/skeletons/data-table'
 
 let isFirstRequest = true
 export async function loader({ context }: Route.LoaderArgs) {
-  const products = await fetchProducts(context.cloudflare.env.TELL_API_KEY)
-  return { products }
+  try {
+    const products = await fetchProducts(context.cloudflare.env.TELL_API_KEY)
+    return { products }
+  } catch (error) {
+    throw new Response('Not Found', { status: 404 })
+  }
 }
 
 export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {

@@ -3,10 +3,19 @@ import type { Route } from './+types/number'
 import ViewQuotation from '@/quotations/view-quotation'
 import { QuotationSkeleton } from '@/components/skeletons/quotations'
 import { BackTo } from '@/components/back-to'
+import { handleError } from '@/lib/utils'
 
 export async function loader({ params, context }: Route.LoaderArgs) {
-  return {
-    quotation: await fetchQuotaitonByNumber(+params.number, context.cloudflare.env.TELL_API_KEY),
+  try {
+    const quotation = await fetchQuotaitonByNumber(
+      +params.number,
+      context.cloudflare.env.TELL_API_KEY
+    )
+    return {
+      quotation,
+    }
+  } catch (error) {
+    throw new Response('Not Found', { status: 404 })
   }
 }
 

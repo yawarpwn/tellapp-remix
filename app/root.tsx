@@ -6,7 +6,6 @@ import {
   redirect,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
 } from 'react-router'
 
 // import { ThemeProvider, useTheme, PreventFlashOnWrongTheme } from 'remix-themes'
@@ -15,7 +14,6 @@ import { Toaster } from '@/components/ui/sonner'
 
 import type { Route } from './+types/root'
 import stylesheet from './app.css?url'
-import { HTTPRequestError } from './lib/errors'
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const url = new URL(request.url)

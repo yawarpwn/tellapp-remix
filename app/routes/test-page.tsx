@@ -1,11 +1,15 @@
 import type { Route } from './+types/test-page'
 import { BASE_URL } from '@/lib/constants'
-import type { LoaderFunction } from 'react-router'
+import { Form, replace, useNavigation, useSubmit, type LoaderFunction } from 'react-router'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { useEffect, useState } from 'react'
+import { LoaderCircleIcon, LoaderPinwheelIcon, LucideLoader, LucideLoader2 } from 'lucide-react'
 
-export const loader: LoaderFunction = async ({ context, params }) => {
-  console.log('context', context)
-
-  return { data: [] }
+export const loader = async ({ context, params, request }: Route.LoaderArgs) => {
+  const url = new URL(request.url)
+  const q = url.searchParams.get('q')
+  return { q }
 }
 
 // export async function loader() {
@@ -29,10 +33,42 @@ export const loader: LoaderFunction = async ({ context, params }) => {
 // }
 
 export default function testPage({ loaderData }: Route.ComponentProps) {
-  const { data } = loaderData
+  const { q } = loaderData
+
+  const [query, setQuery] = useState(q || '')
+  const submit = useSubmit()
+  const navigation = useNavigation()
+
+  const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q')
+
+  useEffect(() => {
+    setQuery(q || '')
+  }, [q])
+
   return (
     <div>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <Form
+        role="search"
+        onChange={(e) => {
+          const isFirstSearch = q === null
+          submit(e.currentTarget),
+            {
+              replace: !isFirstSearch,
+            }
+          // setQuery(e.target.value)
+        }}
+      >
+        <div className="flex gap-2">
+          <Input
+            id="query"
+            onChange={(e) => setQuery(e.target.value)}
+            value={query}
+            type="text"
+            name="q"
+          />
+          {searching && <LucideLoader2 className="animate-spin" />}
+        </div>
+      </Form>
     </div>
   )
 }

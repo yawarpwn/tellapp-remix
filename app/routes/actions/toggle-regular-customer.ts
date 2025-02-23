@@ -5,15 +5,15 @@ import { QUOTATIONS_KEY } from '@/lib/constants'
 export async function action({ params, request, context }: Route.ActionArgs) {
   const customer = await fetchCustomerById(params.id, context.cloudflare.env.TELL_API_KEY)
   const formData = await request.formData()
-  const status = formData.get('status') as string
+  const favorite = formData.get('favorite') as string
 
   const updatedCustomer = await updateCustomer(
     params.id,
     {
       ...customer,
-      isRegular: status !== 'is-regular',
+      isRegular: favorite === 'true',
     },
-    context.cloudflare.env.TELL_API_KEY,
+    context.cloudflare.env.TELL_API_KEY
   )
 
   return { updatedCustomer }

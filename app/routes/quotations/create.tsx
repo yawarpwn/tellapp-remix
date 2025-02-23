@@ -15,14 +15,18 @@ import { CUSTOMERS_KEY, PRODUCTS_KEY } from '@/lib/constants'
 
 let isFirstRequest = true
 export async function loader({ context }: Route.LoaderArgs) {
-  const [products, customers] = await Promise.all([
-    fetchProducts(context.cloudflare.env.TELL_API_KEY),
-    fetchCustomers(context.cloudflare.env.TELL_API_KEY, { onlyRegular: true }),
-  ])
+  try {
+    const [products, customers] = await Promise.all([
+      fetchProducts(context.cloudflare.env.TELL_API_KEY),
+      fetchCustomers(context.cloudflare.env.TELL_API_KEY, { onlyRegular: true }),
+    ])
 
-  return {
-    products,
-    customers,
+    return {
+      products,
+      customers,
+    }
+  } catch (error) {
+    throw new Response('Internal Server Error', { status: 500 })
   }
 }
 
