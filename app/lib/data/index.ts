@@ -71,7 +71,6 @@ export async function createQuotation(newQuotation: CreateQuotationClient, apiKe
 
 export async function updateQuotation(quotationToUpdate: UpdateQuotationClient, apiKey: string) {
   const url = `${BASE_URL}/api/quotations/${quotationToUpdate.id}`
-  console.log({ url, quotationToUpdate })
   const updateQuotation = await fetchData<QuotationClient>(url, {
     method: 'PUT',
     body: JSON.stringify(quotationToUpdate),
@@ -90,7 +89,7 @@ export async function duplicateQuotation(quotationNumber: number, apiKey: string
     {
       ...quotation,
     },
-    apiKey,
+    apiKey
   )
   return insertedQuotationNumber
 }
@@ -102,7 +101,7 @@ type FetchCustomerOptions = {
 //----------------------------- Customers ----------------------------->
 export async function fetchCustomers(
   apiKey: string,
-  options?: FetchCustomerOptions,
+  options?: FetchCustomerOptions
 ): Promise<Customer[]> {
   const { onlyRegular = false } = options ?? {}
   const url = `${BASE_URL}/api/customers`

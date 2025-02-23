@@ -4,6 +4,7 @@ import { DataTable } from '@/components/data-table'
 import { columns } from '@/products/columns'
 import { cache } from '@/lib/utils'
 import { PRODUCTS_KEY } from '@/lib/constants'
+import { DataTableSkeleton } from '@/components/skeletons/data-table'
 
 let isFirstRequest = true
 export async function loader({ context }: Route.LoaderArgs) {
@@ -28,6 +29,12 @@ export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
   const serverData = await serverLoader()
   cache.set(PRODUCTS_KEY, serverData)
   return serverData
+}
+
+clientLoader.hydrate = true as const
+
+export function HydrateFallback() {
+  return <DataTableSkeleton columnCount={5} rowCount={20} searchableColumnCount={1} />
 }
 
 export function meta({}: Route.MetaArgs) {

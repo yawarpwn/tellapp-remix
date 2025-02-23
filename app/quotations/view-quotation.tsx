@@ -16,15 +16,12 @@ import { DownloadAndShareButtons } from '@/quotations/download-and-share-buttons
 import { ActionButton } from '@/components/action-button'
 import type { QuotationClient } from '@/types'
 import { ToggleRegularCustomerButton } from './toggle-regular-customer-button'
-import { BackTo } from '@/components/back-to'
 
 type Props = {
   quotation: QuotationClient
 }
 export default function ViewQuotation({ quotation }: Props) {
   const { formatedIgv, formatedTotal, formatedSubTotal } = getIgv(quotation.items)
-
-  console.log({ quotation })
 
   return (
     <div className="flex flex-col gap-6">
@@ -39,11 +36,13 @@ export default function ViewQuotation({ quotation }: Props) {
           </Link>
           <DownloadAndShareButtons quotation={quotation} />
           <ActionButton
+            message={`¿Deseas duplicar la cotización ${quotation.number}?`}
             action={`/quotations/${quotation.number}/duplicate`}
             text="Duplicar"
             icon={<FilesIcon size={18} />}
           />
           <ActionButton
+            message={`¿Deseas eliminar la cotización ${quotation.number}?`}
             action={`/quotations/${quotation.number}/delete`}
             text="Eliminar"
             icon={<TrashIcon size={18} />}

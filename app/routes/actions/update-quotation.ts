@@ -8,8 +8,8 @@ export async function action({ request, context }: Route.ActionArgs) {
   const quotation = JSON.parse(formData.get('quotation') as string)
   // const quotation = JSON.parse(formData.get('quotation') as string)
   try {
-    await updateQuotation(quotation, context.cloudflare.env.TELL_API_KEY)
-    return redirect('/quotations')
+    const updatedQuotation = await updateQuotation(quotation, context.cloudflare.env.TELL_API_KEY)
+    return redirect(`/quotations/${updatedQuotation.number}`)
   } catch (error) {
     return handleError(error)
   }

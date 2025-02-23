@@ -6,10 +6,12 @@ import { LoaderIcon } from 'lucide-react'
 export function ConfirmActionDialog({
   open,
   closeModal,
+  description = 'Esta acción es irreversible',
   action,
 }: {
   open: boolean
   closeModal: () => void
+  description?: string
   action: string
 }) {
   const fetcher = useFetcher()
@@ -27,7 +29,7 @@ export function ConfirmActionDialog({
     <Dialog open={open} onOpenChange={closeModal}>
       <DialogContent className="max-w-xs rounded-md">
         <DialogTitle className="text-center">Confirmar acción</DialogTitle>
-        <DialogDescription className="text-center">Esta acción es irreversible</DialogDescription>
+        <DialogDescription className="text-center">{description}</DialogDescription>
         <div className="flex justify-between">
           <Button disabled={pending} onClick={closeModal} variant="secondary" type="button">
             Cancel
