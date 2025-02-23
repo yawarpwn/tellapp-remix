@@ -9,6 +9,7 @@ import {
   EditIcon,
   FilesIcon,
   SeparatorVerticalIcon,
+  GripIcon,
 } from 'lucide-react'
 import type { Product, QuotationItem } from '@/types'
 import { Separator } from '@/components/ui/separator'
@@ -58,6 +59,14 @@ export function ProductCard(props: Props) {
                 onClick={() => moveDownItem(index)}
               >
                 <ChevronDown />
+              </Button>
+              <Button
+                type="button"
+                size="icon"
+                variant="outline"
+                data-swapy-handle
+              >
+                <GripIcon />
               </Button>
             </div>
             <div className="flex items-center space-x-2">

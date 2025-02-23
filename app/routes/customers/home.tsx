@@ -10,6 +10,10 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { customers }
 }
 
+export function meta({}: Route.MetaArgs) {
+  return [{ title: 'Clientes' }]
+}
+
 export default function ({ loaderData }: Route.ComponentProps) {
   const { customers } = loaderData
   return <DataTable columns={columns} data={customers} createPath="#" />

@@ -8,6 +8,9 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { agencies }
 }
 
+export function meta({}: Route.MetaArgs) {
+  return [{ title: 'Agencias' }]
+}
 export default function QuotationsPage({ loaderData }: Route.ComponentProps) {
   const { agencies } = loaderData
   return (

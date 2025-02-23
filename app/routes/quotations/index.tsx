@@ -42,6 +42,10 @@ export function HydrateFallback() {
   )
 }
 
+export function meta({}: Route.MetaArgs) {
+  return [{ title: 'Cotizaciones' }]
+}
+
 export default function QuotationsPage({ loaderData }: Route.ComponentProps) {
   const { quotations } = loaderData
   // console.log('data', data)

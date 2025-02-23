@@ -30,6 +30,10 @@ export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
   return serverData
 }
 
+export function meta({}: Route.MetaArgs) {
+  return [{ title: 'Productos' }]
+}
+
 export default function QuotationsPage({ loaderData }: Route.ComponentProps) {
   const { products } = loaderData
   return (

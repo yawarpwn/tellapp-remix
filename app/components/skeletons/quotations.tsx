@@ -1,5 +1,5 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import { TableSkeleton } from "./table-skeleton";
+import { Skeleton } from '@/components/ui/skeleton'
+import { TableSkeleton } from './table-skeleton'
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table'
 
 export function UpdateCreateQuotationSkeleton() {
   return (
@@ -49,7 +49,7 @@ export function UpdateCreateQuotationSkeleton() {
         <Skeleton className="h-40 w-full"></Skeleton>
       </div>
     </div>
-  );
+  )
 }
 export function InvoiceSkeleton() {
   return (
@@ -63,7 +63,7 @@ export function InvoiceSkeleton() {
       </div>
       <div className="bg-base-200 mt-2 h-4 w-12 rounded-md" />
     </div>
-  );
+  )
 }
 
 export function InvoicesMobileSkeleton() {
@@ -87,7 +87,7 @@ export function InvoicesMobileSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 function SkeletonCard() {
@@ -111,7 +111,7 @@ function SkeletonCard() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 export function QuotationsTableSkeleton() {
@@ -129,7 +129,7 @@ export function QuotationsTableSkeleton() {
         <TableSkeleton />
       </div>
     </div>
-  );
+  )
 }
 
 function Row() {
@@ -154,7 +154,7 @@ function Row() {
         <Skeleton className=" h-20" />
       </TableCell>
     </TableRow>
-  );
+  )
 }
 
 export function QuotationSkeleton() {
@@ -249,5 +249,5 @@ export function QuotationSkeleton() {
         </div>
       </div>
     </div>
-  );
+  )
 }

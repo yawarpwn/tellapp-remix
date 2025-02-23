@@ -7,6 +7,10 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { watermarks }
 }
 
+export function meta({}: Route.MetaArgs) {
+  return [{ title: 'Marca Agua' }]
+}
+
 export default function ({ loaderData }: Route.ComponentProps) {
   const { watermarks } = loaderData
   return <MasonryLayout items={watermarks} />

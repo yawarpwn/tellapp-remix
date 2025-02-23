@@ -8,6 +8,10 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { labels }
 }
 
+export function meta({}: Route.MetaArgs) {
+  return [{ title: 'Etiquetas' }]
+}
+
 export default function QuotationsPage({ loaderData }: Route.ComponentProps) {
   const { labels } = loaderData
   return (
