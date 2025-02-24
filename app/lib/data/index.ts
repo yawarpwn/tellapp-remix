@@ -21,9 +21,12 @@ import type {
 import { fetchData } from '@/lib/utils'
 
 //----------------------------- Quotations ----------------------------->
-export async function fetchQuotations(apiKey: string): Promise<QuotationClient[]> {
+export async function fetchQuotations(
+  apiKey: string,
+  { query }: { query: string }
+): Promise<QuotationClient[]> {
   console.log('fetch quotations')
-  const url = `${BASE_URL}/api/quotations`
+  const url = `${BASE_URL}/api/quotations?q=${query}`
   const data = await fetchData<DataResponse<QuotationClient>>(url, {
     headers: {
       'TELL-API-KEY': apiKey,
