@@ -69,6 +69,22 @@ interface DataTableSkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   shrinkZero?: boolean
 }
 
+export function BodySkeleton({ columnCount, rowCount = 10, ...props }: DataTableSkeletonProps) {
+  return (
+    <TableBody>
+      {Array.from({ length: rowCount }).map((_, i) => (
+        <TableRow key={i}>
+          {Array.from({ length: columnCount }).map((_, j) => (
+            <TableCell key={j}>
+              <Skeleton className="h-7 w-full" />
+            </TableCell>
+          ))}
+        </TableRow>
+      ))}
+    </TableBody>
+  )
+}
+
 export function DataTableSkeleton(props: DataTableSkeletonProps) {
   const {
     columnCount,
@@ -120,23 +136,7 @@ export function DataTableSkeleton(props: DataTableSkeletonProps) {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {Array.from({ length: rowCount }).map((_, i) => (
-              <TableRow key={i} className="hover:bg-transparent">
-                {Array.from({ length: columnCount }).map((_, j) => (
-                  <TableCell
-                    key={j}
-                    style={{
-                      width: cellWidths[j],
-                      minWidth: shrinkZero ? cellWidths[j] : 'auto',
-                    }}
-                  >
-                    <Skeleton className="h-6 w-full" />
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
+          <BodySkeleton columnCount={columnCount} rowCount={rowCount} />
         </Table>
       </div>
       {withPagination ? (

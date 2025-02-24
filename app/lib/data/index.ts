@@ -33,6 +33,7 @@ export async function fetchQuotations(
     },
   })
 
+  await new Promise((resolve) => setTimeout(resolve, 1000))
   console.log('total quotations', data.meta.totalItems)
   return data.items
 }

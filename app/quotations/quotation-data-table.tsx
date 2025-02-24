@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
-import debounce from 'just-debounce-it'
 import { Input } from '@/components/ui/input'
 import {
   type ColumnDef,
@@ -26,10 +25,12 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  Loader2Icon,
   PlugIcon,
   PlusIcon,
+  SearchIcon,
 } from 'lucide-react'
-import { Form, Link, useFetcher } from 'react-router'
+import { Form, Link, useFetcher, useNavigate, useNavigation } from 'react-router'
 import {
   Select,
   SelectContent,
@@ -37,19 +38,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useSubmit } from 'react-router'
+import { BodySkeleton } from '@/components/skeletons/data-table'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   createPath: string
   q: string | undefined
+  searching: boolean | undefined
 }
 
 export function QuotationDataTable<TData, TValue>({
   columns,
   data,
   q,
+  searching,
   createPath,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -85,19 +88,23 @@ export function QuotationDataTable<TData, TValue>({
     },
   })
 
-  const submit = useSubmit()
-
   return (
     <div className="flex flex-col justify-between gap-6 pb-7 ">
       <div className="flex items-center justify-between ">
         <Form id="search-form" role="search">
-          <Input
-            name="q"
-            defaultValue={q || ''}
-            placeholder="buscar..."
-            type="search"
-            className="w-[200px]"
-          />
+          <div className="flex items-center gap-2">
+            <Input
+              name="q"
+              disabled={searching}
+              defaultValue={q || ''}
+              placeholder="Buscar Cotización"
+              type="search"
+              className="w-[200px]"
+            />
+            <Button disabled={searching}>
+              {searching ? <Loader2Icon className="animate-spin" /> : <SearchIcon />}
+            </Button>
+          </div>
         </Form>
         <Button asChild>
           <Link to={createPath}>
@@ -105,32 +112,6 @@ export function QuotationDataTable<TData, TValue>({
             Crear
           </Link>
         </Button>
-        {/* <DropdownMenu> */}
-        {/*   <DropdownMenuTrigger asChild> */}
-        {/*     <Button variant="outline" className="ml-auto"> */}
-        {/*       Columns */}
-        {/*     </Button> */}
-        {/*   </DropdownMenuTrigger> */}
-        {/*   <DropdownMenuContent align="end"> */}
-        {/*     {table */}
-        {/*       .getAllColumns() */}
-        {/*       .filter((column) => column.getCanHide()) */}
-        {/*       .map((column) => { */}
-        {/*         return ( */}
-        {/*           <DropdownMenuCheckboxItem */}
-        {/*             key={column.id} */}
-        {/*             className="capitalize" */}
-        {/*             checked={column.getIsVisible()} */}
-        {/*             onCheckedChange={(value) => */}
-        {/*               column.toggleVisibility(!!value) */}
-        {/*             } */}
-        {/*           > */}
-        {/*             {column.id} */}
-        {/*           </DropdownMenuCheckboxItem> */}
-        {/*         ); */}
-        {/*       })} */}
-        {/*   </DropdownMenuContent> */}
-        {/* </DropdownMenu> */}
       </div>
       <div className="rounded-md border">
         <Table>
@@ -149,25 +130,29 @@ export function QuotationDataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
+          {searching ? (
+            <BodySkeleton columnCount={6} rowCount={25} />
+          ) : (
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-[75vh] text-center">
+                    No results.
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-[75vh] text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+              )}
+            </TableBody>
+          )}
         </Table>
       </div>
 

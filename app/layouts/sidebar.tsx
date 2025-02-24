@@ -31,6 +31,7 @@ import { useTheme } from 'remix-themes'
 import { set } from 'zod'
 import { Switch } from '@/components/ui/switch'
 import { LogoutButton } from '@/components/logout-button'
+import React from 'react'
 
 const routes = [
   {
@@ -87,26 +88,26 @@ const routes = [
   },
 ]
 
-const ToggleThemeButton = () => {
-  const [theme, setTheme] = useTheme()
-  return (
-    <Button
-      variant="secondary"
-      onClick={() => setTheme((prev) => (prev === Theme.DARK ? 'ligth' : 'dark'))}
-    >
-      <span>{theme == 'light' ? 'Oscuro' : 'Claro'}</span>
-      {theme == 'light' ? <MoonIcon /> : <SunIcon />}
-    </Button>
-  )
-}
+// const ToggleThemeButton = () => {
+//   const [theme, setTheme] = useTheme()
+//   return (
+//     <Button
+//       variant="secondary"
+//       onClick={() => setTheme((prev) => (prev === Theme.DARK ? 'ligth' : 'dark'))}
+//     >
+//       <span>{theme == 'light' ? 'Oscuro' : 'Claro'}</span>
+//       {theme == 'light' ? <MoonIcon /> : <SunIcon />}
+//     </Button>
+//   )
+// }
 
 export default function SidebarLayout() {
+  const [routeLoading, setRouteLoading] = React.useState(false)
   const navigation = useNavigation()
 
-  // const fetcher = useFetcher()
-  // const logout = () => {
-  //   fetcher.submit(null, { method: 'post', action: '/action/logout' })
-  // }
+  const updateRouteLoading = (value: boolean) => {
+    setRouteLoading(value)
+  }
 
   return (
     <div
@@ -154,7 +155,7 @@ export default function SidebarLayout() {
       >
         <div className="w-full relative max-h-[calc(0px+100vh)] pb-[3rem]">
           <div className="px-3 pt-6 pb-14 lg:px-6">
-            <Outlet />
+            <Outlet context={{ updateRouteLoading }} />
           </div>
         </div>
       </main>
