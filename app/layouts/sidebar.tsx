@@ -153,7 +153,7 @@ export default function SidebarLayout() {
         )}
       >
         <div className="w-full relative max-h-[calc(0px+100vh)] pb-[3rem]">
-          <div className="px-3 py-6 lg:px-6">
+          <div className="px-3 pt-6 pb-14 lg:px-6">
             <Outlet />
           </div>
         </div>

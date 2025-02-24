@@ -4,6 +4,7 @@ import { commitSession, getSession } from '@/sessions.server'
 import { data, Form, Link, redirect, useFetcher } from 'react-router'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Logo } from '@/components/logo'
 import { Loader2Icon } from 'lucide-react'
 import { login } from '@/lib/data'
 
@@ -28,7 +29,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       headers: {
         'Set-Cookie': await commitSession(session),
       },
-    },
+    }
   )
 }
 
@@ -78,12 +79,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         src="/collage-johneyder.avif"
       />
 
-      <div className="relative flex min-h-screen p-14">
-        <div className="flex w-full overflow-hidden rounded-md">
+      <div className="relative flex min-h-screen p-14 lg:py-48">
+        <div className="flex w-full overflow-hidden rounded-md ">
           {/* Form */}
           <div className="flex min-w-full flex-col gap-3.5 overflow-auto bg-[#17171766] px-3 py-6 backdrop-blur md:min-w-[calc(1rem*26.25)]">
             <header className="mb-10 ">
-              <h1 className="text-center">Logo</h1>
+              <Logo />
               <h2 className="text-center text-xs text-muted-foreground">
                 Adminitra cotizaciónes, productos, clientes y más.
               </h2>
@@ -127,10 +128,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                   </p>
                 </div>
                 <Button type="submit" disabled={fetcher.state !== 'idle'}>
-                  {fetcher.state !== 'idle' && <Loader2Icon />}
+                  {fetcher.state !== 'idle' && <Loader2Icon className="animate-spin" />}
                   Ingresar
                 </Button>
-                {/* <SubmitButton /> */}
                 <p className="text-center text-xs">
                   Necesitas una cuenta?{' '}
                   <a href="#" className="text-primary ">
@@ -158,13 +158,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
             <div className="absolute bottom-1 right-1 z-10 flex max-w-md items-center gap-2 rounded-md bg-background/60 px-4">
               <div className=" text-sm italic">
-                <p>
-                  Desde que supimos que venías, nuestras vidas tomaron, rumbo, un horizonte, una
-                  meta, un camino.
-                </p>
+                {/* <p> */}
+                {/*   Desde que supimos que venías, nuestras vidas tomaron, rumbo, un horizonte, una */}
+                {/*   meta, un camino. */}
+                {/* </p> */}
                 <p className="mt-2">Todo nuestros logros son para ti y gracias a ti🙏</p>
               </div>
-              <div className="flex h-[100px] w-[150px] justify-center object-cover">
+              <div className="flex h-auto w-[150px] justify-center object-cover">
                 <img
                   className="animate-bounce"
                   loading="lazy"
