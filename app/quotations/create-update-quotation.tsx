@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { StarIcon, Loader2 } from 'lucide-react'
 import React from 'react'
-import { Link, useNavigate } from 'react-router'
+import { Link } from 'react-router'
 import { CustomerPickerDialog } from './customer-pick-dialog'
 import { ItemsQuotationTable } from './items-quotation-table'
 import { SearchRucButton } from './search-ruc-button'
@@ -17,15 +17,17 @@ import type {
   QuotationClient,
   QuotationItem,
 } from '@/types'
+import { QuotationItemsTableSkeleton } from '@/components/ui/quotation-items-table-skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
 
 type Props = {
   quotation: QuotationClient | CreateQuotationClient
   pending: boolean
-  customers: Customer[]
+  customers: Promise<Customer[]>
   pickCustomer: (customer: Customer) => void
   updateQuotation: (quotation: QuotationClient | CreateQuotationClient) => void
   showCreditOption: boolean
-  products: Product[]
+  products: Promise<Product[]>
   hasItems: boolean
   addItem: (item: QuotationItem) => void
   editItem: (itemToEdit: QuotationItem) => void
@@ -70,11 +72,13 @@ export function CreateUpdateQuotation({
       <header className="flex justify-between">
         <BackTo to="/quotations" />
         <div className="">
-          <CustomerPickerDialog
-            customers={customers}
-            onCustomerPick={pickCustomer}
-            customerId={quotation.customerId}
-          />
+          <React.Suspense fallback={<Skeleton className="w-[95px] h-[32px]"></Skeleton>}>
+            <CustomerPickerDialog
+              customersPromise={customers}
+              onCustomerPick={pickCustomer}
+              customerId={quotation.customerId}
+            />
+          </React.Suspense>
         </div>
       </header>
       <article className="mt-4 flex flex-col gap-4 ">
@@ -187,9 +191,9 @@ export function CreateUpdateQuotation({
           )}
         </div>
 
-        <React.Suspense fallback="...cargando">
+        <React.Suspense fallback={<QuotationItemsTableSkeleton />}>
           <ItemsQuotationTable
-            products={products}
+            productsPromise={products}
             onAddItem={addItem}
             items={quotation.items}
             onEditItem={editItem}

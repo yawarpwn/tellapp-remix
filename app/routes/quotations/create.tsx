@@ -11,54 +11,16 @@ import { Dialog, DialogDescription, DialogContent, DialogTitle } from '@/compone
 import { Button } from '@/components/ui/button'
 import { useAutoSave } from '@/hooks/use-auto-save'
 import { UpdateCreateQuotationSkeleton } from '@/components/skeletons/quotations'
-import { CUSTOMERS_KEY, PRODUCTS_KEY } from '@/lib/constants'
 
-let isFirstRequest = true
 export async function loader({ context }: Route.LoaderArgs) {
-  try {
-    const [products, customers] = await Promise.all([
-      fetchProducts(context.cloudflare.env.TELL_API_KEY),
-      fetchCustomers(context.cloudflare.env.TELL_API_KEY, { onlyRegular: true }),
-    ])
-
-    return {
-      products,
-      customers,
-    }
-  } catch (error) {
-    throw new Response('Internal Server Error', { status: 500 })
+  return {
+    products: fetchProducts(context.cloudflare.env.TELL_API_KEY),
+    customers: fetchCustomers(context.cloudflare.env.TELL_API_KEY, { onlyRegular: true }),
   }
 }
 
 export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
-  if (isFirstRequest) {
-    isFirstRequest = false
-    const { products, customers } = await serverLoader()
-    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products))
-    localStorage.setItem(CUSTOMERS_KEY, JSON.stringify(customers))
-    return {
-      products,
-      customers,
-    }
-  }
-  const cachedProducts = localStorage.getItem(PRODUCTS_KEY)
-  const cachedCustomers = localStorage.getItem(CUSTOMERS_KEY)
-
-  if (cachedCustomers && cachedProducts) {
-    console.log('used cached customers && products')
-    return {
-      customers: JSON.parse(cachedCustomers),
-      products: JSON.parse(cachedProducts),
-    }
-  }
-
-  const { products, customers } = await serverLoader()
-  localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products))
-  localStorage.setItem(CUSTOMERS_KEY, JSON.stringify(customers))
-  return {
-    products,
-    customers,
-  }
+  return serverLoader()
 }
 
 clientLoader.hydrate = true as const

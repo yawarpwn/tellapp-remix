@@ -14,12 +14,13 @@ import React, { useState } from 'react'
 import { DialogTitle } from '@radix-ui/react-dialog'
 
 interface Props {
-  customers: Customer[]
+  customersPromise: Promise<Customer[]>
   customerId?: string | null
   onCustomerPick: (customer: Customer) => void
 }
 
-export function CustomerPickerDialog({ customers, customerId, onCustomerPick }: Props) {
+export function CustomerPickerDialog({ customersPromise, customerId, onCustomerPick }: Props) {
+  const customers = React.use(customersPromise)
   if (customers.length === 0) return null
   const [open, setOpen] = useState(false)
   return (
@@ -47,7 +48,7 @@ export function CustomerPickerDialog({ customers, customerId, onCustomerPick }: 
                 <Check
                   className={cn(
                     'mr-2 size-2',
-                    customer.id === customerId ? 'opacity-100' : 'opacity-30',
+                    customer.id === customerId ? 'opacity-100' : 'opacity-30'
                   )}
                 />
                 {customer.name}

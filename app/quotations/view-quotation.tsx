@@ -59,9 +59,11 @@ export default function ViewQuotation({ quotation }: Props) {
       <div className="flex justify-end">
         <div className="text-right">
           <h2 className="text-2xl font-semibold md:text-3xl">Cotización</h2>
-          <div className="mt-1 flex justify-end gap-1 text-xl text-primary">
-            <span>#</span>
-            <span className="font-bold">{String(quotation.number).padStart(4, '0')}</span>
+          <div className="mt-1 flex justify-end gap-1 text-2xl ">
+            <span className="text-primary">#</span>
+            <span className="font-bold bg-gradient-to-r from-primary to-orange-500 bg-clip-text text-transparent ">
+              {String(quotation.number).padStart(4, '0')}
+            </span>
           </div>
         </div>
       </div>

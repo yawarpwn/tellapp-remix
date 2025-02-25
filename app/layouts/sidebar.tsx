@@ -150,7 +150,7 @@ export default function SidebarLayout() {
       {/* Main */}
       <main className="min-w-[320px] max-w-7xl mx-auto flex shrink w-full justify-center items-stretch">
         <div className="w-full relative max-h-[calc(0px+100vh)] pb-[3rem]">
-          <div className="px-3 pt-6 pb-14 lg:px-6">
+          <div className="px-3 pt-6 pb-10 lg:px-6">
             <Outlet />
           </div>
         </div>

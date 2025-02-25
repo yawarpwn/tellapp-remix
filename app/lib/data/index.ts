@@ -106,13 +106,14 @@ export async function fetchCustomers(
   options?: FetchCustomerOptions
 ): Promise<Customer[]> {
   const { onlyRegular = false } = options ?? {}
-  const url = `${BASE_URL}/api/customers`
+  const url = `${BASE_URL}/api/customers${onlyRegular ? '?isRegular=true' : ''}`
   const data = await fetchData<DataResponse<Customer>>(url, {
     headers: {
       'TELL-API-KEY': apiKey,
     },
   })
-  return onlyRegular ? data.items.filter((customer) => customer.isRegular) : data.items
+
+  return data.items
 }
 
 export async function searchCustomerByDniOrRuc(dniRuc: string, apiKey: string) {

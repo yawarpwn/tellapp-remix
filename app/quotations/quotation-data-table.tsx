@@ -111,7 +111,7 @@ export function QuotationDataTable<TData, TValue>({
               defaultValue={q || ''}
               placeholder="Buscar Cotización"
               type="search"
-              className="w-[200px]"
+              className="w-[200px] lg:w-[350px] border-primary"
             />
             <Button disabled={searching}>
               {searching ? <Loader2Icon className="animate-spin" /> : <SearchIcon />}

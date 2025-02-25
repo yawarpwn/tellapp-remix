@@ -20,7 +20,7 @@ import { ProductCard } from './product-card'
 
 interface Props {
   items: QuotationItem[]
-  products: Product[]
+  productsPromise: Promise<Product[]>
   onDuplicateItem: (item: QuotationItem) => void
   onEditItem: (itemToEdit: QuotationItem) => void
   onDeleteItem: (id: string) => void
@@ -31,7 +31,7 @@ interface Props {
 
 export function ItemsQuotationTable(props: Props) {
   const {
-    products,
+    productsPromise,
     items,
     onDuplicateItem,
     onEditItem,
@@ -41,12 +41,14 @@ export function ItemsQuotationTable(props: Props) {
     onMoveUpItem,
   } = props
 
+  const products = React.use(productsPromise)
+
   const [slotItemMap, setSlotItemMap] = useState<SlotItemMapArray>(
-    utils.initSlotItemMap(items, 'id'),
+    utils.initSlotItemMap(items, 'id')
   )
   const slottedItems = React.useMemo(
     () => utils.toSlottedItems(items, 'id', slotItemMap),
-    [items, slotItemMap],
+    [items, slotItemMap]
   )
   const swapyRef = React.useRef<Swapy | null>(null)
   const containerRef = React.useRef<HTMLDivElement>(null)
@@ -68,7 +70,7 @@ export function ItemsQuotationTable(props: Props) {
 
   React.useEffect(
     () => utils.dynamicSwapy(swapyRef.current, items, 'id', slotItemMap, setSlotItemMap),
-    [items],
+    [items]
   )
 
   React.useEffect(() => {
