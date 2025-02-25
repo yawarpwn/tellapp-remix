@@ -33,10 +33,6 @@ export async function fetchQuotations(
     },
   })
 
-  //WARNING: remove this promise:
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  console.log('total quotations', data.meta.totalItems)
   return data.items
 }
 
