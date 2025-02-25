@@ -22,11 +22,11 @@ const CHARS = {
 const INIT_MESSAGE = 'Copiar'
 const genericSizes = ['und', 'rollo']
 
-export function CopyText({ text, unitSize }: { text: string; unitSize: string }) {
+export function CopyText({ text, unitSize }: { text: string; unitSize?: string }) {
   const [message, setMessage] = useState(INIT_MESSAGE)
   const [open, setOpen] = useState(false)
 
-  const isGenericSize = genericSizes.includes(unitSize.toLowerCase())
+  const isGenericSize = unitSize ? genericSizes.includes(unitSize.toLowerCase()) : false
 
   const handleCopy = () => {
     const cleanText = text
@@ -37,7 +37,7 @@ export function CopyText({ text, unitSize }: { text: string; unitSize: string })
       .toUpperCase()
 
     navigator.clipboard
-      .writeText(cleanText)
+      .writeText(unitSize ? cleanText : text)
       .then(() => {
         setMessage('Copiado')
         setOpen(true)
@@ -68,7 +68,7 @@ export function CopyText({ text, unitSize }: { text: string; unitSize: string })
           className={cn(
             message === INIT_MESSAGE
               ? 'bg-foreground text-background'
-              : 'bg-primary text-primary-foreground',
+              : 'bg-primary text-primary-foreground'
           )}
         >
           <p>{message}</p>

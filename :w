@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import {
   HomeIcon,
   ShoppingBagIcon,
-  ReceiptTextIcon,
   LogOutIcon,
   TruckIcon,
   PrinterIcon,
@@ -39,13 +38,20 @@ const routes = [
     path: '/quotations',
     label: 'Cotizaciones',
     active: true,
-    Icon: ReceiptTextIcon,
+    Icon: HomeIcon,
   },
   {
     path: '/products',
     label: 'Productos',
     active: true,
     Icon: ShoppingBagIcon,
+  },
+
+  {
+    path: '/customers',
+    label: 'Clientes',
+    active: false,
+    Icon: UsersIcon,
   },
 
   {
@@ -66,12 +72,6 @@ const routes = [
     label: 'Marca de agua',
     active: true,
     Icon: ImageOffIcon,
-  },
-  {
-    path: '/customers',
-    label: 'Clientes',
-    active: false,
-    Icon: UsersIcon,
   },
   {
     path: '/gallery',
@@ -102,6 +102,13 @@ const routes = [
 // }
 
 export default function SidebarLayout() {
+  const [routeLoading, setRouteLoading] = React.useState(false)
+  const navigation = useNavigation()
+
+  const updateRouteLoading = (value: boolean) => {
+    setRouteLoading(value)
+  }
+
   return (
     <div
       style={{ alignSelf: 'center' }}
@@ -110,31 +117,30 @@ export default function SidebarLayout() {
       <div className="fixed size-px hidden"></div>
 
       {/* Sidebar Destopk  */}
-      <div className=" shrink-0 w-[15rem] hidden lg:block">
-        <div className="w-[15rem] h-screen border-r fixed z-50 left-0 flex justify-center">
+      <div className="w-[3rem] shrink-0 lg:w-[15rem] hidden lg:block">
+        <div className="w-[3rem] lg:w-[15rem]  h-screen border-r fixed z-50 left-0 flex justify-center">
           <div className="">
             <nav className="flex flex-col gap-8  pt-8">
               {routes.map((route) => (
-                <NavLink key={route.path} to={route.path}>
-                  {({ isPending, isActive }) => (
-                    <div className={'flex items-center justify-between  gap-2 relative'}>
-                      <div
-                        className={cn(
-                          'flex gap-2 flex-1 items-center',
-                          isActive ? 'text-primary' : 'text-muted-foreground'
-                        )}
-                      >
-                        <div className="size-6">
-                          {isPending ? (
-                            <Loader2Icon className="animate-spin" />
-                          ) : (
-                            <route.Icon size={22} />
-                          )}
-                        </div>
-                        <span className="hidden lg:block">{route.label}</span>
-                      </div>
+                <NavLink
+                  key={route.path}
+                  className={({ isActive, isPending }) =>
+                    cn('', {
+                      'text-primary': isActive,
+                      'is-pending': isPending,
+                    })
+                  }
+                  to={route.path}
+                >
+                  <div className={'flex items-center justify-between  gap-2 relative'}>
+                    <div className="flex gap-2 flex-1 items-center">
+                      <route.Icon size={22} />
+                      <span className="hidden lg:block">{route.label}</span>
                     </div>
-                  )}
+                    <div className="">
+                      <Loader2Icon className="animate-spin" />
+                    </div>
+                  </div>
                 </NavLink>
               ))}
             </nav>
@@ -148,34 +154,30 @@ export default function SidebarLayout() {
       </div>
 
       {/* Main */}
-      <main className="min-w-[320px] max-w-7xl mx-auto flex shrink w-full justify-center items-stretch">
+      <main
+        className={cn(
+          'min-w-[320px] max-w-7xl mx-auto flex shrink w-full justify-center items-stretch',
+          navigation.state === 'loading' && 'opacity-50'
+        )}
+      >
         <div className="w-full relative max-h-[calc(0px+100vh)] pb-[3rem]">
           <div className="px-3 pt-6 pb-14 lg:px-6">
-            <Outlet />
+            <Outlet context={{ updateRouteLoading }} />
           </div>
         </div>
       </main>
-
-      {/* Sidebar Mobile */}
       <div className="h-[3rem] fixed bottom-0 z-50  right-0 left-0 bg-background lg:hidden border-t border-primary">
         <div className="w-full  h-full px-3  flex items-center justify-center">
           <nav className="flex items-center  gap-5">
             {routes.slice(0, 6).map((route) => (
-              <NavLink key={route.path} to={route.path}>
-                {({ isPending, isActive }) => (
-                  <div
-                    className={cn(
-                      'flex items-center gap-2',
-                      isActive ? 'text-primary' : 'text-muted-foreground'
-                    )}
-                  >
-                    {isPending ? (
-                      <Loader2Icon className="animate-spin text-primary" />
-                    ) : (
-                      <route.Icon size={24} />
-                    )}
-                  </div>
-                )}
+              <NavLink
+                key={route.path}
+                className={({ isActive }) => (isActive ? 'text-primary' : '')}
+                to={route.path}
+              >
+                <div className={cn('flex items-center gap-2')}>
+                  <route.Icon size={24} />
+                </div>
               </NavLink>
             ))}
 

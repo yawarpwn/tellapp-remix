@@ -8,11 +8,15 @@ import { useNavigation } from 'react-router'
 export async function loader({ context, request }: Route.LoaderArgs) {
   const url = new URL(request.url)
   const q = url.searchParams.get('q') || ''
+  const pageIndex = Number(url.searchParams.get('page')) || 0
+  const pageSize = Number(url.searchParams.get('limit')) || 15
   try {
     const quotations = await fetchQuotations(context.cloudflare.env.TELL_API_KEY, {
       query: q,
+      page: pageIndex,
+      limit: pageSize,
     })
-    return { quotations, q }
+    return { quotations, q, pageSize, pageIndex }
   } catch (error) {
     throw new Response('Not Found', { status: 404 })
   }
@@ -34,22 +38,15 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function QuotationsPage({ loaderData }: Route.ComponentProps) {
-  const { quotations, q } = loaderData
-  // console.log('data', data)
+  const { quotations, q, pageSize, pageIndex } = loaderData
   const navigation = useNavigation()
   const searching = navigation.location && new URLSearchParams(navigation.location.search).has('q')
-
-  const navigationLoading = navigation.state === 'loading'
-
-  console.log(navigation.location)
-
-  if (navigationLoading && !searching) {
-    return <DataTableSkeleton columnCount={5} rowCount={20} searchableColumnCount={1} />
-  }
 
   return (
     <QuotationDataTable
       searching={searching}
+      pageIndex={pageIndex}
+      pageSize={pageSize}
       q={q}
       columns={columns}
       data={quotations}

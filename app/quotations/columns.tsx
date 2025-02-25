@@ -45,7 +45,7 @@ export const columns: ColumnDef<QuotationClient>[] = [
     cell: ({ row }) => (
       <div>
         <p className="min-w-[230px]">{row.original.customer?.name || 'SIN RUC'}</p>
-        <p>{row.original.customer?.ruc}</p>
+        <p className="text-muted-foreground">{row.original.customer?.ruc}</p>
       </div>
     ),
   },

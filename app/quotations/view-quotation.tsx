@@ -129,7 +129,9 @@ export default function ViewQuotation({ quotation }: Props) {
               </TableCell>
               <TableCell className="text-center">{item.unitSize}</TableCell>
               <TableCell className="text-center">{item.qty.toString().padStart(2, '0')}</TableCell>
-              <TableCell className="text-center">{(item.price / 1.18).toFixed(4)}</TableCell>
+              <TableCell className="text-center">
+                <CopyText text={(item.price / 1.18).toFixed(4)} />
+              </TableCell>
               <TableCell className="text-center">{formatNumberToLocal(item.price)}</TableCell>
               <TableCell className="text-center">
                 {formatNumberToLocal(item.price * item.qty)}
