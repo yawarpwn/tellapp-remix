@@ -92,7 +92,6 @@ export function QuotationDataTable<TData, TValue>({
   })
 
   const selectedRows = table.getFilteredSelectedRowModel().flatRows
-  console.log({ selectedRows })
   return (
     <div className="flex flex-col justify-between gap-6 pb-7 ">
       {selectedRows.length > 0 && (

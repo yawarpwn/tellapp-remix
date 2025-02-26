@@ -21,14 +21,16 @@ export function FloatingBar({ id, quotation, clearSelectedRow }: Props) {
   return (
     <>
       <ConfirmActionDialog
-        action="/action/{id}/delete-quotation"
+        action={`/action/${quotation.number}/delete-quotation`}
+        description={`¿Eliminar la cotización #${quotation.number}?`}
         // onSuccess={closeDeleteModal}
         open={showDeleteModal}
         closeModal={() => setShowDeleteModal(false)}
       />
 
       <ConfirmActionDialog
-        action="/action/{id}/duplicate-quotation"
+        action={`/action/${quotation.number}/duplicate-quotation`}
+        description={`¿Duplicar la cotización #${quotation.number}?`}
         open={showDuplicateModal}
         closeModal={() => setShowDuplicateModal(false)}
       />

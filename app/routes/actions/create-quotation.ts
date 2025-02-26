@@ -8,8 +8,11 @@ export async function action({ request, context }: Route.ActionArgs) {
   const quotation = JSON.parse(formData.get('quotation') as string)
   // const quotation = JSON.parse(formData.get('quotation') as string)
   try {
-    await createQuotation(quotation, context.cloudflare.env.TELL_API_KEY)
-    return redirect('/quotations')
+    const insertedQuotationNumber = await createQuotation(
+      quotation,
+      context.cloudflare.env.TELL_API_KEY
+    )
+    return redirect(`/quotations/${insertedQuotationNumber}`)
   } catch (error) {
     if (error instanceof HTTPRequestError) {
       return {
