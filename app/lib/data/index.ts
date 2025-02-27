@@ -349,7 +349,10 @@ export async function fetchWatermarks(apiKey: string): Promise<Watermark[]> {
       'TELL-API-KEY': apiKey,
     },
   })
-  return data.items
+  return data.items.map((photo) => ({
+    ...photo,
+    url: photo.url.replace(/v\d+/, 'fl_layer_apply,l_watermark-tellsenales'),
+  }))
 }
 
 export async function fetchWatermarkById(id: string, apiKey: string) {

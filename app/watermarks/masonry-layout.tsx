@@ -13,6 +13,8 @@ export function MasonryLayout({ items }: Props) {
   const [shareLoading, setShareLoading] = useState(false)
   const [downloadLoading, setDownloadLoading] = useState(false)
 
+  console.log({ items })
+
   const reset = () => {
     setSelectedPhotos([])
     setShareLoading(false)
@@ -44,11 +46,7 @@ export function MasonryLayout({ items }: Props) {
     if (navigator.share) {
       setShareLoading(true)
       const blobs = await Promise.all(
-        photosToShare.map((url) =>
-          fetch(url.replace(/v\d+/, 'fl_layer_apply,l_watermark-tellsenales')).then((res) =>
-            res.blob()
-          )
-        )
+        photosToShare.map((url) => fetch(url).then((res) => res.blob()))
       )
       try {
         await navigator.share({
