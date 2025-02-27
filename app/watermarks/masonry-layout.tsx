@@ -38,17 +38,17 @@ export function MasonryLayout({ items }: Props) {
 
   const handleShareSelectedImages = async () => {
     const photosToShare = selectedPhotos.map(
-      (id) => items.find((item) => item.id === id)?.url || '',
+      (id) => items.find((item) => item.id === id)?.url || ''
     )
 
     if (navigator.share) {
       setShareLoading(true)
       const blobs = await Promise.all(
         photosToShare.map((url) =>
-          fetch(url.replace(/v1737858778/, 'fl_layer_apply,l_watermark-tellsenales')).then((res) =>
-            res.blob(),
-          ),
-        ),
+          fetch(url.replace(/v\d+/, 'fl_layer_apply,l_watermark-tellsenales')).then((res) =>
+            res.blob()
+          )
+        )
       )
       try {
         await navigator.share({
@@ -59,7 +59,7 @@ export function MasonryLayout({ items }: Props) {
               (blob, index) =>
                 new File([blob], `Tellsenales-foto-${index}.jpg`, {
                   type: blob.type,
-                }),
+                })
             ),
           ],
         })
@@ -88,7 +88,7 @@ export function MasonryLayout({ items }: Props) {
   const handleDownloadSelectedImages = () => {
     setDownloadLoading(true)
     const photosToDownload = selectedPhotos.map(
-      (id) => items.find((item) => item.id === id)?.url || '',
+      (id) => items.find((item) => item.id === id)?.url || ''
     )
     photosToDownload.forEach(async (url) => {
       const blob = await fetch(url).then((res) => res.blob())
