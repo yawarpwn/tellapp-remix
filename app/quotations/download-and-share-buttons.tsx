@@ -16,10 +16,10 @@ const getCustomerName = (name?: string) => {
 
 const getQuotationPdfName = (quotation: QuotationClient) => {
   const date = formatDate(quotation.updatedAt)
-  const ruc = getCustomerName(quotation?.customer?.name) || `-${date}-SIN-RUC`
+  const customerName = getCustomerName(quotation?.customer?.name) || `-${date}-SIN-RUC`
   const isUpdate = Number(quotation.updatedAt) > Number(quotation.createdAt)
   const updatePrefix = isUpdate ? '-ACTUALIZADO' : ''
-  return `${quotation.number}-COT${ruc}${updatePrefix}.pdf`
+  return `${quotation.number}-COT-${customerName}${updatePrefix}.pdf`
 }
 
 export function DownloadAndShareButtons({ quotation }: { quotation: QuotationClient }) {
