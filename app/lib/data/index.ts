@@ -163,6 +163,7 @@ export async function fetchProducts(apiKey: string): Promise<Product[]> {
       'TELL-API-KEY': apiKey,
     },
   })
+  await new Promise((resolve) => setTimeout(resolve, 3000))
   return data.items
 }
 

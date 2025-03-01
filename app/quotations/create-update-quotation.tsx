@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { StarIcon, Loader2 } from 'lucide-react'
+import { StarIcon, Loader2, Plus } from 'lucide-react'
 import React from 'react'
 import { Link } from 'react-router'
 import { CustomerPickerDialog } from './customer-pick-dialog'
@@ -19,6 +19,8 @@ import type {
 } from '@/types'
 import { QuotationItemsTableSkeleton } from '@/components/ui/quotation-items-table-skeleton'
 import { Skeleton } from '@/components/ui/skeleton'
+import { CreateEditItemModal } from './create-edit-item-modal'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 type Props = {
   quotation: QuotationClient | CreateQuotationClient
@@ -39,16 +41,6 @@ type Props = {
   handleSubmit: () => void
 }
 
-const getSavedQuotation = () => {
-  if (typeof window === 'undefined') return null
-
-  const savedQuotation = window.localStorage.getItem('SAVED_QUOTATION')
-  if (savedQuotation) {
-    return JSON.parse(savedQuotation)
-  }
-  return null
-}
-
 export function CreateUpdateQuotation({
   quotation,
   pending,
@@ -56,7 +48,7 @@ export function CreateUpdateQuotation({
   updateQuotation,
   customers,
   showCreditOption,
-  products,
+  products: productsPromise,
   hasItems,
   addItem,
   moveDownItem,
@@ -67,8 +59,32 @@ export function CreateUpdateQuotation({
   toggleCreditOption,
   handleSubmit,
 }: Props) {
+  const [selectedItemId, setSelectedItemId] = React.useState<string | null>(null)
+  const [openCreateEditModal, setOpenCreateEditModal] = React.useState(false)
+  const selectedItem = React.useMemo(
+    () => quotation.items.find((item) => item.id === selectedItemId) ?? null,
+    [quotation.items, selectedItemId]
+  )
+
+  const closeItemModal = () => setOpenCreateEditModal(false)
+
+  const handleSelectEditItem = (id: string | null) => {
+    setSelectedItemId(id)
+    setOpenCreateEditModal(true)
+  }
+
   return (
     <div className="pb-8">
+      {openCreateEditModal && (
+        <CreateEditItemModal
+          open={openCreateEditModal}
+          onClose={closeItemModal}
+          productsPromise={productsPromise}
+          onAddItem={addItem}
+          onEditItem={editItem}
+          item={selectedItem}
+        />
+      )}
       <header className="flex justify-between">
         <BackTo to="/quotations" />
         <div className="">
@@ -191,18 +207,37 @@ export function CreateUpdateQuotation({
           )}
         </div>
 
-        <React.Suspense fallback={<QuotationItemsTableSkeleton />}>
-          <ItemsQuotationTable
-            productsPromise={products}
-            onAddItem={addItem}
-            items={quotation.items}
-            onEditItem={editItem}
-            onDeleteItem={deleteItem}
-            onDuplicateItem={duplicateItem}
-            onMoveDownItem={moveDownItem}
-            onMoveUpItem={moveUpItem}
-          />
-        </React.Suspense>
+        <section>
+          <header className="flex items-center justify-between py-4">
+            <h2 className="text-xl font-bold ">Productos</h2>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                onClick={() => {
+                  setOpenCreateEditModal(true)
+                  setSelectedItemId(null)
+                }}
+                variant={'secondary'}
+              >
+                <Plus size={20} />
+                <span className="ml-2 hidden md:block">Agregar Item</span>
+              </Button>
+            </div>
+          </header>
+          <React.Suspense fallback={<QuotationItemsTableSkeleton />}>
+            <ItemsQuotationTable
+              onSelectEditItem={handleSelectEditItem}
+              onAddItem={addItem}
+              items={quotation.items}
+              onEditItem={editItem}
+              onDeleteItem={deleteItem}
+              onDuplicateItem={duplicateItem}
+              onMoveDownItem={moveDownItem}
+              onMoveUpItem={moveUpItem}
+            />
+          </React.Suspense>
+        </section>
+
         <footer className="flex items-center justify-between">
           <Button variant="outline" disabled={false} type="button" className="px-12" asChild>
             <Link to="/quotations">Cancelar</Link>

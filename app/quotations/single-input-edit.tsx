@@ -14,14 +14,16 @@ export function SingleInputEdit({
   name: string | undefined
   className?: React.HTMLAttributes<HTMLElement>['className']
 }) {
+  const inputRef = React.useRef<HTMLInputElement>(null)
   const [isEditing, setIsEditing] = React.useState(false)
 
   return (
     <div className={cn(' h-full relative', className)}>
       <input
+        ref={inputRef}
         className={cn(
-          'absolute inset-0 text-center bg-muted border-none outline-none',
-          !isEditing && 'hidden',
+          'absolute inset-0 text-center bg-transparent outline-none border border-primary',
+          isEditing ? 'opacity-100' : 'opacity-0'
         )}
         type={type}
         onChange={(ev) => onInputChange(ev.target.value)}
@@ -35,7 +37,10 @@ export function SingleInputEdit({
         }}
       />
       <div
-        onClick={() => setIsEditing(true)}
+        onDoubleClick={() => {
+          setIsEditing(true)
+          inputRef.current?.focus()
+        }}
         className={cn('absolute flex justify-center inset-0', isEditing && 'hidden')}
       >
         <p>{value}</p>

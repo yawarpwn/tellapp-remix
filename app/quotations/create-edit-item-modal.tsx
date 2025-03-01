@@ -32,9 +32,9 @@ function EmpetyHits() {
 
 type Props = {
   open: boolean
-  products: Product[]
+  productsPromise: Promise<Product[]>
   onClose: () => void
-  item?: QuotationItem
+  item?: QuotationItem | null
   onAddItem: (item: QuotationItem) => void
   onEditItem: (itemToEdit: QuotationItem) => void
 }
@@ -51,13 +51,14 @@ const initialQuoItem = {
 
 export function CreateEditItemModal(props: Props) {
   const { open, onClose, item, onAddItem, onEditItem } = props
-  const { products } = props
+  const { productsPromise } = props
   const qtyInputRef = React.useRef<HTMLInputElement>(null)
 
   const [quoItem, setQuoItem] = useState<Omit<QuotationItem, 'id'> | QuotationItem>(
-    item ?? initialQuoItem,
+    item ?? initialQuoItem
   )
 
+  const products = React.use(productsPromise)
   const { hits, onSearch } = useFuse<Product>(products, {
     keys: [
       {
@@ -72,7 +73,7 @@ export function CreateEditItemModal(props: Props) {
   })
 
   const handleChangeItem = (
-    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const { name, value } = event.currentTarget
 
@@ -119,7 +120,7 @@ export function CreateEditItemModal(props: Props) {
       <DialogContent
         className={cn(
           'flex  max-w-md md:max-w-3xl flex-col border p-2 py-4 md:p-6',
-          hits.length === 0 ? 'h-auto' : 'h-[95svh] md:h-[90svh]',
+          hits.length === 0 ? 'h-auto' : 'h-[95svh] md:h-[90svh]'
         )}
       >
         {/* Search Product */}
