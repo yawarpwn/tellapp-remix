@@ -19,32 +19,39 @@ export function SingleInputEdit({
 
   return (
     <div className={cn(' h-full relative', className)}>
+      <div
+        onDoubleClick={() => {
+          setIsEditing(true)
+          const end = String(value).length
+          if (type !== 'number' && inputRef.current) {
+            inputRef.current.setSelectionRange(end, end)
+            inputRef.current.focus()
+          }
+        }}
+        className={cn('flex cursor-pointer justify-center', isEditing && 'hidden')}
+      >
+        {value}
+      </div>
       <input
         ref={inputRef}
         className={cn(
-          'absolute inset-0 text-center bg-transparent outline-none border border-primary',
-          isEditing ? 'opacity-100' : 'opacity-0'
+          'absolute inset-0 text-center bg-transparent outline-none outline-primary',
+          isEditing ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
         type={type}
         onChange={(ev) => onInputChange(ev.target.value)}
         name={name}
         value={value}
-        onBlur={() => setIsEditing(false)}
+        onBlur={() => {
+          console.log('blur')
+          setIsEditing(false)
+        }}
         onKeyDown={(ev) => {
           if (ev.key === 'Enter') {
             setIsEditing(false)
           }
         }}
       />
-      <div
-        onDoubleClick={() => {
-          setIsEditing(true)
-          inputRef.current?.focus()
-        }}
-        className={cn('absolute flex justify-center inset-0', isEditing && 'hidden')}
-      >
-        <p>{value}</p>
-      </div>
     </div>
   )
 }

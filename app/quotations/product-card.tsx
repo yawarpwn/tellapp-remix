@@ -25,8 +25,10 @@ interface Props {
   onDeleteItem: (id: string) => void
   index: number
 }
+
 export function ProductCard(props: Props) {
   const [isEditingDescription, setIsEditingDescription] = useState(false)
+  const descriptionRef = React.useRef<HTMLTextAreaElement>(null)
   const {
     item,
     moveUpItem,
@@ -87,12 +89,27 @@ export function ProductCard(props: Props) {
             </div>
           </div>
           <div className="flex items-center justify-between gap-4">
-            <div className="relative flex min-h-[100px]  w-full flex-col gap-4">
+            <div className="relative w-full py-2 ">
+              <div
+                onDoubleClick={() => {
+                  setIsEditingDescription(true)
+                  const end = item.description.length
+                  descriptionRef.current?.setSelectionRange(end, end)
+                  descriptionRef.current?.focus()
+                }}
+                className={cn('cursor-pointer', isEditingDescription && 'opacity-0')}
+              >
+                {item.description}
+              </div>
+
               <textarea
+                ref={descriptionRef}
+                value={item.description}
                 className={cn(
-                  'absolute inset-0 z-20 resize-none border-none outline-none bg-background',
-                  !isEditingDescription && 'hidden',
+                  'bg-transparent absolute inset-0 outline-none resize-none',
+                  isEditingDescription ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 )}
+                autoFocus
                 onChange={(event) => {
                   onEditItem({
                     ...item,
@@ -103,26 +120,18 @@ export function ProductCard(props: Props) {
                   setIsEditingDescription(false)
                 }}
                 name="description"
-                value={item.description}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     setIsEditingDescription(false)
                   }
                 }}
-              />
-              <p
-                onClick={() => {
-                  setIsEditingDescription(true)
-                }}
-                className={cn('absolute inset-0 z-10', isEditingDescription && 'hidden')}
-              >
-                {item.description}
-              </p>
+              ></textarea>
             </div>
           </div>
           <Separator className="mb-1" />
           <div className="flex space-x-4 items-center text-sm h-5">
             <SingleInputEdit
+              key={`qty-id-${item.id}`}
               value={item.unitSize}
               className="flex-1"
               onInputChange={(unitSize) => onEditItem({ ...item, unitSize: unitSize })}
@@ -131,6 +140,7 @@ export function ProductCard(props: Props) {
             />
             <Separator orientation="vertical" />
             <SingleInputEdit
+              key={`qlo-id-${item.id}`}
               className="flex-1"
               value={item.qty}
               onInputChange={(qty) => onEditItem({ ...item, qty: Number(qty) })}
@@ -139,6 +149,7 @@ export function ProductCard(props: Props) {
             />
             <Separator orientation="vertical" />
             <SingleInputEdit
+              key={`opot-id-${item.id}`}
               className="flex-1"
               value={item.price}
               onInputChange={(price) => onEditItem({ ...item, price: Number(price) })}
