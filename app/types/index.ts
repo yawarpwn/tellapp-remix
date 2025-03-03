@@ -18,6 +18,7 @@ export type CustomerFromService = {
   ruc: string
   name: string
   address?: string
+  isRegular: boolean
 }
 export interface QuotationClient {
   id: string

@@ -26,7 +26,7 @@ export async function fetchQuotations(
   { query, page }: { query: string; page: number; limit: number }
 ): Promise<QuotationClient[]> {
   console.log('fetch quotations')
-  const url = `${BASE_URL}/api/quotations?q=${query}&page=${page}&limit=40`
+  const url = `${BASE_URL}/api/quotations?q=${query}&page=${page}&limit=100`
   const data = await fetchData<DataResponse<QuotationClient>>(url, {
     headers: {
       'TELL-API-KEY': apiKey,
@@ -124,12 +124,8 @@ export async function searchCustomerByDniOrRuc(dniRuc: string, apiKey: string) {
       'TELL-API-KEY': apiKey,
     },
   })
-  return {
-    id: customer.id,
-    ruc: customer.ruc,
-    name: customer.name,
-    address: customer.address,
-  }
+
+  return customer
 }
 
 export async function fetchCustomerById(id: string, apiKey: string) {

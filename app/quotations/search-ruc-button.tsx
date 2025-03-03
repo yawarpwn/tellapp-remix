@@ -26,12 +26,7 @@ export function SearchRucButton({
 
         updateQuotation({
           ...quotation,
-          customer: {
-            ...quotation.customer,
-            ruc: fetcher.data.customer.ruc,
-            name: fetcher.data.customer.name,
-            address: fetcher.data.customer.address,
-          },
+          customer: fetcher.data.customer,
           customerId: fetcher.data.customer.id,
         })
       } else {
