@@ -91,7 +91,7 @@ export function ProductCard(props: Props) {
           <div className="flex items-center justify-between gap-4">
             <div className="relative w-full py-2 ">
               <div
-                onDoubleClick={() => {
+                onClick={() => {
                   setIsEditingDescription(true)
                   const end = item.description.length
                   descriptionRef.current?.setSelectionRange(end, end)
@@ -121,8 +121,13 @@ export function ProductCard(props: Props) {
                 }}
                 name="description"
                 onKeyDown={(e) => {
+                  const currentElement = e.target as HTMLInputElement
                   if (e.key === 'Enter') {
-                    setIsEditingDescription(false)
+                    currentElement.blur()
+                  }
+
+                  if (e.key === 'Escape') {
+                    currentElement.blur()
                   }
                 }}
               ></textarea>
@@ -138,7 +143,6 @@ export function ProductCard(props: Props) {
               type="text"
               name="name"
             />
-            <Separator orientation="vertical" />
             <SingleInputEdit
               key={`qlo-id-${item.id}`}
               className="flex-1"
@@ -147,7 +151,6 @@ export function ProductCard(props: Props) {
               name="qty"
               type="number"
             />
-            <Separator orientation="vertical" />
             <SingleInputEdit
               key={`opot-id-${item.id}`}
               className="flex-1"
@@ -156,7 +159,6 @@ export function ProductCard(props: Props) {
               name="price"
               type="number"
             />
-            <Separator orientation="vertical" />
             <div className="text-success flex justify-center  rounded px-2 md:px-8 ">
               S/ {item.price * item.qty}
             </div>

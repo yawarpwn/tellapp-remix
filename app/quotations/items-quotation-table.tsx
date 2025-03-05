@@ -17,6 +17,7 @@ import React, { useState } from 'react'
 //components
 import { CreateEditItemModal } from './create-edit-item-modal'
 import { ProductCard } from './product-card'
+import { Separator } from '@/components/ui/separator'
 
 interface Props {
   items: QuotationItem[]
@@ -116,18 +117,22 @@ export function ItemsQuotationTable(props: Props) {
       </div>
 
       <div className="mt-2 flex justify-start sm:flex sm:justify-end">
-        <div className="w-full space-y-2 sm:w-auto sm:text-right">
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-1 sm:gap-2">
+        <div className="w-full sm:w-auto sm:text-right mt-4">
+          <div className="grid grid-cols-[1fr_2fr_2fr_2fr] gap-2 sm:grid-cols-1 sm:gap-2">
             <dl className="grid gap-x-3 sm:grid-cols-5">
-              <dt className="col-span-3 font-semibold ">Subtotal:</dt>
+              <dt className="col-span-3 font-semibold text-primary ">Items:</dt>
+              <dd className="col-span-2 ">{totalItems}</dd>
+            </dl>
+            <dl className="grid gap-x-3 sm:grid-cols-5">
+              <dt className="col-span-3 font-semibold text-primary ">Subtotal:</dt>
               <dd className="col-span-2 ">{formatedSubTotal}</dd>
             </dl>
             <dl className="grid gap-x-3 sm:grid-cols-5">
-              <dt className="col-span-3 font-semibold ">Igv:</dt>
+              <dt className="col-span-3 font-semibold text-primary ">Igv:</dt>
               <dd className="col-span-2 ">{formatedIgv}</dd>
             </dl>
             <dl className="grid gap-x-3 sm:grid-cols-5">
-              <dt className="col-span-3 font-semibold ">Total:</dt>
+              <dt className="col-span-3 font-semibold text-primary">Total:</dt>
               <dd className="col-span-2 ">{formatedTotal}</dd>
             </dl>
           </div>

@@ -16,7 +16,6 @@ export async function loader({ context, request }: Route.LoaderArgs) {
       page: pageIndex,
       limit: pageSize,
     })
-    console.log(quotations)
     return { quotations, q, pageSize, pageIndex }
   } catch (error) {
     throw new Response('Not Found', { status: 404 })
