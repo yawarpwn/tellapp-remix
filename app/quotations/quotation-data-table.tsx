@@ -103,18 +103,18 @@ export function QuotationDataTable<TData, TValue>({
       )}
       <div className="flex items-center justify-between ">
         <Form id="search-form" role="search">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 relative">
             <Input
               name="q"
               disabled={searching}
               defaultValue={q || ''}
               placeholder="Buscar Cotización"
               type="search"
-              className="w-[200px] lg:w-[350px] border-primary"
+              className="w-[250px] lg:w-[350px] border-primary"
             />
-            <Button disabled={searching}>
+            <button className="absolute right-2 " disabled={searching}>
               {searching ? <Loader2Icon className="animate-spin" /> : <SearchIcon />}
-            </Button>
+            </button>
           </div>
         </Form>
         <Button asChild>

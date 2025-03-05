@@ -4,8 +4,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -14,7 +12,6 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
-import { Separator } from '@radix-ui/react-separator'
 import {
   ReceiptTextIcon,
   ShoppingBagIcon,
@@ -25,7 +22,7 @@ import {
   ImageIcon,
   SplitIcon,
 } from 'lucide-react'
-import { Link, NavLink } from 'react-router'
+import { NavLink } from 'react-router'
 import { LogoutButton } from './logout-button'
 
 const routes = [
