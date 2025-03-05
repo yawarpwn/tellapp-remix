@@ -1,23 +1,10 @@
 //utils
 import { getIgv } from '@/lib/utils'
 import { createSwapy, utils, type Swapy, type SlotItemMapArray } from 'swapy'
-
-//ui
-import { Button } from '@/components/ui/button'
-
-//icons
 import { Plus, CircleOffIcon } from 'lucide-react'
-
-//types
 import type { Product, QuotationItem } from '@/types'
-
-//react
 import React, { useState } from 'react'
-
-//components
-import { CreateEditItemModal } from './create-edit-item-modal'
 import { ProductCard } from './product-card'
-import { Separator } from '@/components/ui/separator'
 
 interface Props {
   items: QuotationItem[]
@@ -51,8 +38,6 @@ export function ItemsQuotationTable(props: Props) {
   )
   const swapyRef = React.useRef<Swapy | null>(null)
   const containerRef = React.useRef<HTMLDivElement>(null)
-
-  //States
 
   const { formatedIgv, formatedTotal, formatedSubTotal, totalItems } = getIgv(items)
 
