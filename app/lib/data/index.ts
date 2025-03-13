@@ -23,17 +23,17 @@ import { fetchData } from '@/lib/utils'
 //----------------------------- Quotations ----------------------------->
 export async function fetchQuotations(
   apiKey: string,
-  { query, page }: { query: string; page: number; limit: number }
-): Promise<QuotationClient[]> {
+  { query, page, limit }: { query: string; page: number; limit: number }
+): Promise<DataResponse<QuotationClient>> {
   console.log('fetch quotations')
-  const url = `${BASE_URL}/api/quotations?q=${query}&page=${page}&limit=40`
+  const url = `${BASE_URL}/api/quotations?q=${query}&page=${page}&limit=${limit}`
   const data = await fetchData<DataResponse<QuotationClient>>(url, {
     headers: {
       'TELL-API-KEY': apiKey,
     },
   })
 
-  return data.items
+  return data
 }
 
 export async function fetchQuotaitonByNumber(quotationNumber: number, apiKey: string) {
