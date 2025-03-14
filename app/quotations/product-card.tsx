@@ -102,14 +102,12 @@ export function ProductCard(props: Props) {
               <SingleInputEdit
                 key={`qty-id-${item.id}`}
                 value={item.unitSize}
-                className="flex-1"
                 onInputChange={(unitSize) => onEditItem({ ...item, unitSize: unitSize })}
                 type="text"
                 name="name"
               />
               <SingleInputEdit
                 key={`qlo-id-${item.id}`}
-                className="flex-1"
                 value={item.qty}
                 onInputChange={(qty) => onEditItem({ ...item, qty: Number(qty) })}
                 name="qty"
@@ -117,7 +115,6 @@ export function ProductCard(props: Props) {
               />
               <SingleInputEdit
                 key={`opot-id-${item.id}`}
-                className="flex-1"
                 value={item.price}
                 onInputChange={(price) => onEditItem({ ...item, price: Number(price) })}
                 name="price"

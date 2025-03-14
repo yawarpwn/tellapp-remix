@@ -134,36 +134,23 @@ export function CreateUpdateQuotation({
             <Label className="text-muted-foreground" htmlFor="company">
               Cliente
             </Label>
-            <Input
-              name="customer.name"
-              type="text"
-              value={quotation?.customer?.name ?? ''}
-              onChange={(e) => {
-                updateQuotation({
-                  ...quotation,
-                  customer: { ...quotation?.customer, name: e.target.value },
-                })
-              }}
-            />
+            {quotation.customer?.name ? (
+              <p>{quotation?.customer?.name}</p>
+            ) : (
+              <Skeleton className="h-14" />
+            )}
           </div>
           {/* Address */}
           <div className="col-span-6 grid gap-2 md:col-span-3">
             <Label className="text-muted-foreground" htmlFor="company">
               Dirección
             </Label>
-            <Input
-              id="address"
-              name="address"
-              type="text"
-              value={quotation?.customer?.address ?? ''}
-              disabled={true}
-              onChange={(e) => {
-                updateQuotation({
-                  ...quotation,
-                  customer: { ...quotation.customer, address: e.target.value },
-                })
-              }}
-            />
+
+            {quotation.customer?.address ? (
+              <p>{quotation?.customer?.address}</p>
+            ) : (
+              <Skeleton className="h-14" />
+            )}
           </div>
           {/* Include IGV */}
           <div className="col-span-3 flex items-center gap-2 ">

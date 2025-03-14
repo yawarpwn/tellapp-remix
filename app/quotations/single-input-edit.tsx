@@ -31,14 +31,14 @@ export function SingleInputEdit({
             inputRef.current.focus()
           }
         }}
-        className={cn('flex cursor-pointer ', isEditing ? 'opacity-0' : 'opacity-100')}
+        className={cn('cursor-pointer text-center', isEditing ? 'opacity-0' : 'opacity-100')}
       >
         {value}
       </div>
       <Component
         ref={inputRef}
         className={cn(
-          'absolute inset-0  bg-transparent p-0  outline-none resize-none',
+          'absolute inset-0 text-center bg-transparent p-0  outline-none resize-none',
           isEditing ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
         type={type}
