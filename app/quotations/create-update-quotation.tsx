@@ -182,8 +182,17 @@ export function CreateUpdateQuotation({
                 className="flex 
                   items-center gap-2"
               >
-                <StarIcon className="size-5 text-primary" />
-                <span className="text-sm">Cliente Atendido</span>
+                <StarIcon
+                  size={20}
+                  className={
+                    quotation.customer?.isRegular
+                      ? 'text-primary fill-primary'
+                      : 'text-muted-foreground fill-muted-foreground'
+                  }
+                />
+                <span className="text-sm">
+                  {quotation.customer?.isRegular ? 'Cliente Frecuente' : 'Cliente Atendido'}
+                </span>
               </div>
             )}
           </div>
@@ -229,7 +238,7 @@ export function CreateUpdateQuotation({
                 variant={'secondary'}
               >
                 <Plus size={20} />
-                <span className="ml-2 hidden md:block">Agregar Item</span>
+                <span className="">Agregar </span>
               </Button>
             </div>
           </header>

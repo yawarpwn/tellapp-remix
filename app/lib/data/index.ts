@@ -106,7 +106,7 @@ export async function fetchCustomers(
   options?: FetchCustomerOptions
 ): Promise<Customer[]> {
   const { onlyRegular = false } = options ?? {}
-  const url = `${BASE_URL}/api/customers${onlyRegular ? '?isRegular=true' : ''}`
+  const url = `${BASE_URL}/api/customers${onlyRegular ? '?onlyRegular=true' : ''}`
   const data = await fetchData<DataResponse<Customer>>(url, {
     headers: {
       'TELL-API-KEY': apiKey,

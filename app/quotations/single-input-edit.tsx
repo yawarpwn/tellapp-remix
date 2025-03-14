@@ -6,19 +6,22 @@ export function SingleInputEdit({
   value,
   type,
   name,
+  as = 'input',
   className,
 }: {
   onInputChange: (value: string) => void
   value: string | number
   type: React.HTMLInputTypeAttribute | undefined
-  name: string | undefined
+  name?: string | undefined
+  as?: 'input' | 'textarea'
   className?: React.HTMLAttributes<HTMLElement>['className']
 }) {
-  const inputRef = React.useRef<HTMLInputElement>(null)
+  const inputRef = React.useRef<HTMLInputElement | HTMLTextAreaElement | null>(null)
   const [isEditing, setIsEditing] = React.useState(false)
+  const Component = as === 'input' ? 'input' : 'textarea'
 
   return (
-    <div className={cn(' h-full relative', className)}>
+    <div className={cn('relative', className)}>
       <div
         onClick={() => {
           setIsEditing(true)
@@ -28,14 +31,14 @@ export function SingleInputEdit({
             inputRef.current.focus()
           }
         }}
-        className={cn('flex cursor-pointer border justify-center', isEditing && 'hidden')}
+        className={cn('flex cursor-pointer ', isEditing ? 'opacity-0' : 'opacity-100')}
       >
         {value}
       </div>
-      <input
+      <Component
         ref={inputRef}
         className={cn(
-          'absolute inset-0 text-center bg-transparent outline-none outline-1 outline-primary',
+          'absolute inset-0  bg-transparent p-0  outline-none resize-none',
           isEditing ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
         type={type}
