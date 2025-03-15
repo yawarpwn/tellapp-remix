@@ -1,7 +1,6 @@
 //utils
 import { getIgv, formatNumberToLocal } from '@/lib/utils'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Reorder } from 'framer-motion'
+import * as motion from 'motion/react-client'
 
 import {
   Plus,
@@ -76,7 +75,7 @@ export function ItemsQuotationTable(props: Props) {
           </TableHeader>
           <TableBody>
             {items.map((item, index) => (
-              <TableRow>
+              <motion.tr key={item.id} layout>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button
@@ -165,7 +164,7 @@ export function ItemsQuotationTable(props: Props) {
                     </Button>
                   </div>
                 </TableCell>
-              </TableRow>
+              </motion.tr>
             ))}
           </TableBody>
           <TableFooter>
@@ -189,40 +188,23 @@ export function ItemsQuotationTable(props: Props) {
         </Table>
       </div>
       <div className="md:hidden">
-        <div className="flex flex-col gap-4">
-          <Reorder.Group axis="y" values={items} onReorder={() => {}} className="space-y-4">
-            <AnimatePresence>
-              {items.map((item, index) => (
-                <Reorder.Item
-                  key={item.id}
-                  value={item}
-                  whileDrag={{ scale: 1.05 }}
-                  // className="cursor-grab active:cursor-grabbing"
-                >
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  >
-                    <ProductCard
-                      onDuplicateItem={onDuplicateItem}
-                      item={item}
-                      onEditItem={onEditItem}
-                      index={index}
-                      onOpenCreateEditItemModal={onSelectEditItem}
-                      moveUpItem={onMoveUpItem}
-                      moveDownItem={onMoveDownItem}
-                      onDeleteItem={onDeleteItem}
-                      itemsLength={items.length}
-                    />
-                  </motion.div>
-                </Reorder.Item>
-              ))}
-            </AnimatePresence>
-          </Reorder.Group>
-        </div>
+        <ul className="flex flex-col gap-4">
+          {items.map((item, index) => (
+            <motion.li key={item.id} layout>
+              <ProductCard
+                onDuplicateItem={onDuplicateItem}
+                item={item}
+                onEditItem={onEditItem}
+                index={index}
+                onOpenCreateEditItemModal={onSelectEditItem}
+                moveUpItem={onMoveUpItem}
+                moveDownItem={onMoveDownItem}
+                onDeleteItem={onDeleteItem}
+                itemsLength={items.length}
+              />
+            </motion.li>
+          ))}
+        </ul>
         <div className="mt-2 flex justify-end bg-muted ">
           <dl className="flex p-4 border gap-4 bg-muted">
             <dt className="uppercase font-bold">ITEMS :</dt>
