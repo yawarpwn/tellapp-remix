@@ -75,24 +75,14 @@ export function CreateUpdateQuotation({
   return (
     <div className="pb-8">
       {openCreateEditModal && (
-        <React.Suspense
-          fallback={
-            <div className="absolute inset-0 bg-background/80 backdrop-blur-md z-50 flex items-center justify-center">
-              <span className="animate-bounce">
-                <LoaderPinwheelIcon className="animate-spin" />
-              </span>
-            </div>
-          }
-        >
-          <CreateEditItemModal
-            open={openCreateEditModal}
-            onClose={closeItemModal}
-            productsPromise={productsPromise}
-            onAddItem={addItem}
-            onEditItem={editItem}
-            item={selectedItem}
-          />
-        </React.Suspense>
+        <CreateEditItemModal
+          open={openCreateEditModal}
+          onClose={closeItemModal}
+          productsPromise={productsPromise}
+          onAddItem={addItem}
+          onEditItem={editItem}
+          item={selectedItem}
+        />
       )}
       <header className="flex justify-between">
         <BackTo to="/quotations" />
@@ -135,7 +125,7 @@ export function CreateUpdateQuotation({
               Cliente
             </Label>
             {quotation.customer?.name ? (
-              <p>{quotation?.customer?.name}</p>
+              <p className="text-green-200">{quotation?.customer?.name}</p>
             ) : (
               <Skeleton className="h-14" />
             )}
@@ -147,7 +137,7 @@ export function CreateUpdateQuotation({
             </Label>
 
             {quotation.customer?.address ? (
-              <p>{quotation?.customer?.address}</p>
+              <p className="text-green-200">{quotation?.customer?.address}</p>
             ) : (
               <Skeleton className="h-14" />
             )}
