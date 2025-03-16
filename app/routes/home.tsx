@@ -10,8 +10,8 @@ import { login } from '@/lib/data'
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: 'New React Router App' },
-    { name: 'description', content: 'Welcome to React Router!' },
+    { title: 'Cotizaciones | TellApp' },
+    { name: 'description', content: 'Administracion de Cotizacion, clientes, productos ' },
   ]
 }
 
@@ -79,7 +79,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         src="/collage-johneyder.avif"
       />
 
-      <div className="relative flex min-h-screen p-14 ">
+      <div className="relative flex min-h-screen p-14 lg:py-48">
         <div className="flex w-full overflow-hidden rounded-md ">
           {/* Form */}
           <div className="flex min-w-full flex-col gap-3.5 overflow-auto bg-[#17171766] px-3 py-6 backdrop-blur md:min-w-[calc(1rem*26.25)]">
