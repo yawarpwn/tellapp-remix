@@ -96,7 +96,7 @@ export function CreateUpdateQuotation({
           </React.Suspense>
         </div>
       </header>
-      <article className="mt-4 flex flex-col gap-4 ">
+      <article className="mt-4 flex flex-col gap-6 ">
         <div className="grid grid-cols-6 gap-3 md:gap-4">
           {/* Ruc  */}
           <SearchRucButton quotation={quotation} updateQuotation={updateQuotation} />
@@ -175,31 +175,6 @@ export function CreateUpdateQuotation({
           </div>
 
           {/*Credit */}
-          <div className="col-span-3 flex h-9 items-center gap-2">
-            <Switch
-              checked={showCreditOption}
-              onCheckedChange={(checked) => toggleCreditOption(checked)}
-            />
-            <Label htmlFor="credit">Pago a Credito?</Label>
-          </div>
-          {showCreditOption && (
-            <div className="flex items-center gap-2">
-              <Input
-                id="credit"
-                name="credit"
-                type="number"
-                className="w-32 grow"
-                value={quotation.credit ?? ''}
-                placeholder="30"
-                onChange={(e) => {
-                  const { value } = e.target
-                  const credit = value ? Number(value) : null
-                  updateQuotation({ ...quotation, credit })
-                }}
-              />
-              <span>Días</span>
-            </div>
-          )}
         </div>
 
         <section>
