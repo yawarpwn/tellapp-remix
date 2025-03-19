@@ -144,14 +144,12 @@ export function ProductList(props: Props) {
               <div className="line-clamp-2 text-left text-muted-foreground">
                 {hit.item.description}
               </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="lowercase text-muted-foreground">
+              <div className="flex items-center justify-evenly gap-2">
+                <Badge variant="secondary" className="lowercase text-muted-foreground">
                   {hit.item.unitSize}
                 </Badge>
-                <Badge variant="outline" className="border border-primary uppercase text-primary">
-                  {hit.item.code}
-                </Badge>
-                <Badge variant="outline" className="text-muted-foreground">
+                <Badge className="border border-primary uppercase ">{hit.item.code}</Badge>
+                <Badge variant="secondary" className="text-muted-foreground">
                   {formatNumberToLocal(hit.item.price)}
                 </Badge>
               </div>
@@ -239,7 +237,7 @@ export function ProductList(props: Props) {
             </div>
           </div>
 
-          <footer className="flex gap-2">
+          <footer className="flex gap-8">
             <DialogClose asChild>
               <Button type="button" variant="secondary" className="w-full">
                 Cancelar

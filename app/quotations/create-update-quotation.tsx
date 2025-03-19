@@ -3,7 +3,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
+
+const CREDIT_OPTION = {
+  Contado: null,
+  '1 Semana': 7,
+  '2 Semanas': 15,
+  '1 Mes': 30,
+}
 import { StarIcon, Loader2, Plus, LoaderPinwheelIcon } from 'lucide-react'
 import React from 'react'
 import { Link } from 'react-router'
@@ -20,6 +26,7 @@ import type {
 import { QuotationItemsTableSkeleton } from '@/components/ui/quotation-items-table-skeleton'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CreateEditItemModal } from './create-edit-item-modal'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 type Props = {
   quotation: QuotationClient | CreateQuotationClient
@@ -72,6 +79,8 @@ export function CreateUpdateQuotation({
     setOpenCreateEditModal(true)
   }
 
+  console.log(quotation)
+
   return (
     <div className="pb-8">
       {openCreateEditModal && (
@@ -97,7 +106,7 @@ export function CreateUpdateQuotation({
         </div>
       </header>
       <article className="mt-4 flex flex-col gap-6 ">
-        <div className="grid grid-cols-6 gap-3 md:gap-4">
+        <div className="grid grid-cols-6 gap-6 md:gap-4">
           {/* Ruc  */}
           <SearchRucButton quotation={quotation} updateQuotation={updateQuotation} />
           {/* Deadline  */}
@@ -175,6 +184,32 @@ export function CreateUpdateQuotation({
           </div>
 
           {/*Credit */}
+          <div className="col-span-6 grid gap-2 overflow-x-auto">
+            <div className="text-muted-foreground">Forma de Pago</div>
+            <div className="flex gap-2">
+              {Object.entries(CREDIT_OPTION).map(([key, value]) => (
+                <div className="flex items-center gap-2" key={key}>
+                  <input
+                    type="radio"
+                    className="sr-only"
+                    value={value}
+                    checked={quotation.credit === value}
+                    id={key}
+                    onChange={(ev) => {
+                      updateQuotation({ ...quotation, credit: value })
+                    }}
+                  />
+                  <label
+                    htmlFor={key}
+                    className="bg-secondary px-4 py-2 rounded-md text-secondary-foreground data-[active=true]:bg-primary"
+                    data-active={value === quotation.credit ? 'true' : 'false'}
+                  >
+                    {key}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <section>
