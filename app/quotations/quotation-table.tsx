@@ -106,7 +106,7 @@ export function QuotationTable({ quotations }: Props) {
                       <p className="text-sm">{customer?.name || 'SIN RUC'}</p>
                       <span className="text-muted-foreground">{customer?.ruc}</span>
                     </div>
-                    <span className="text-[orangered] text-lg">#{number}</span>
+                    <span className="text-primary text-lg">#{number}</span>
                   </div>
                   <div className="bg-muted h-px"></div>
                   <div className="flex items-center justify-between">
@@ -118,8 +118,12 @@ export function QuotationTable({ quotations }: Props) {
                       {customerId && (
                         <StarIcon
                           size={18}
-                          stroke={customer.isRegular ? 'orangered' : 'gray'}
-                          fill={customer.isRegular ? 'orangered' : undefined}
+                          stroke={
+                            customer.isRegular
+                              ? 'hsl(var(--primary))'
+                              : 'hsl(var(--muted-foreground))'
+                          }
+                          fill={customer.isRegular ? 'hsl(var(--primary))' : undefined}
                         />
                       )}
                       <Button variant="secondary" size="icon" asChild>

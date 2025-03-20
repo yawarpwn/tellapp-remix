@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { PlugIcon, PlusIcon } from 'lucide-react'
+import { PlugIcon, PlusIcon, SearchIcon } from 'lucide-react'
 import { Link } from 'react-router'
 
 interface DataTableProps<TData, TValue> {
@@ -70,13 +70,16 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex flex-col justify-between gap-6 pb-7 ">
-      <div className="flex items-center justify-between ">
-        <Input
-          placeholder="buscar..."
-          value={globalFilter}
-          onChange={(event) => setGlobalFilter(event.target.value)}
-          className="w-[200px]"
-        />
+      <div className="flex items-center gap-4 justify-between ">
+        <div className="flex max-w-[350px] items-center h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm gap-1">
+          <SearchIcon className="h-[1em] opacity-50" />
+          <input
+            placeholder="buscar..."
+            className="bg-transparent outline-none border-none"
+            value={globalFilter}
+            onChange={(event) => setGlobalFilter(event.target.value)}
+          />
+        </div>
         <Button asChild>
           <Link to={createPath}>
             <PlusIcon />
