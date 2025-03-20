@@ -25,9 +25,9 @@ export function CustomerPickerDialog({ customersPromise, customerId, onCustomerP
   const [open, setOpen] = useState(false)
   return (
     <>
-      <Button variant="secondary" size="sm" type="button" onClick={() => setOpen(true)}>
-        Clientes
+      <Button variant="secondary" type="button" onClick={() => setOpen(true)}>
         <SearchIcon />
+        Clientes
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <DialogTitle className="sr-only">Buscar Clientes frecuentes</DialogTitle>

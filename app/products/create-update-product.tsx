@@ -157,8 +157,8 @@ export default function CreateUpdateProduct({ product, productCategories }: Prop
           </div>
           <footer className="flex items-center justify-between mt-4">
             <Link to="/products">Cancelar</Link>
-            <Button type="submit">
-              {fetcher.state !== 'idle' && <Loader2Icon />}
+            <Button type="submit" disabled={fetcher.state !== 'idle'}>
+              {fetcher.state !== 'idle' && <Loader2Icon className="animate-spin" />}
               <span>{product ? 'Actualizar' : 'Crear'}</span>
             </Button>
           </footer>

@@ -26,7 +26,6 @@ import type {
 import { QuotationItemsTableSkeleton } from '@/components/ui/quotation-items-table-skeleton'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CreateEditItemModal } from './create-edit-item-modal'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 type Props = {
   quotation: QuotationClient | CreateQuotationClient
@@ -79,8 +78,6 @@ export function CreateUpdateQuotation({
     setOpenCreateEditModal(true)
   }
 
-  console.log(quotation)
-
   return (
     <div className="pb-8">
       {openCreateEditModal && (
@@ -110,9 +107,9 @@ export function CreateUpdateQuotation({
           {/* Ruc  */}
           <SearchRucButton quotation={quotation} updateQuotation={updateQuotation} />
           {/* Deadline  */}
-          <div className="col-span-2 grid gap-2 md:col-span-3">
+          <div className="col-span-6 grid gap-2 md:col-span-3">
             <Label className="text-muted-foreground" htmlFor="deadline">
-              Entrega
+              Tiempo de Entrega (Días)
             </Label>
             <Input
               required
@@ -131,24 +128,56 @@ export function CreateUpdateQuotation({
           {/* Customer */}
           <div className="col-span-6 grid gap-2 md:col-span-3">
             <Label className="text-muted-foreground" htmlFor="company">
-              Cliente
+              Razóm Social / Nombre Cliente
             </Label>
             {quotation.customer?.name ? (
               <p className="text-green-200">{quotation?.customer?.name}</p>
             ) : (
-              <Skeleton className="h-14" />
+              <Input
+                required
+                placeholder="Ejemplo Sociedad Anónima Cerrada"
+                type="text"
+                id="company"
+                value={quotation.customer.name}
+                disabled={pending}
+                onChange={(e) =>
+                  updateQuotation({
+                    ...quotation,
+                    customer: {
+                      ...quotation.customer,
+                      name: e.target.value,
+                    },
+                  })
+                }
+              />
             )}
           </div>
           {/* Address */}
           <div className="col-span-6 grid gap-2 md:col-span-3">
             <Label className="text-muted-foreground" htmlFor="company">
-              Dirección
+              Dirección de Cliente
             </Label>
 
             {quotation.customer?.address ? (
               <p className="text-green-200">{quotation?.customer?.address}</p>
             ) : (
-              <Skeleton className="h-14" />
+              <Input
+                required
+                placeholder="Maquinarias 325 Urb. Villa Nueva"
+                type="text"
+                id="address"
+                value={quotation.customer.address}
+                disabled={pending}
+                onChange={(e) =>
+                  updateQuotation({
+                    ...quotation,
+                    customer: {
+                      ...quotation.customer,
+                      address: e.target.value,
+                    },
+                  })
+                }
+              />
             )}
           </div>
           {/* Include IGV */}
@@ -184,9 +213,9 @@ export function CreateUpdateQuotation({
           </div>
 
           {/*Credit */}
-          <div className="col-span-6 grid gap-2 overflow-x-auto">
+          <div className="col-span-6 grid gap-2 ">
             <div className="text-muted-foreground">Forma de Pago</div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 overflow-x-auto">
               {Object.entries(CREDIT_OPTION).map(([key, value]) => (
                 <div className="flex items-center gap-2" key={key}>
                   <input
@@ -201,7 +230,7 @@ export function CreateUpdateQuotation({
                   />
                   <label
                     htmlFor={key}
-                    className="bg-secondary px-4 py-2 rounded-md text-secondary-foreground data-[active=true]:bg-primary"
+                    className="bg-secondary min-w-[120px] text-center px-3 py-2 rounded-md text-secondary-foreground data-[active=true]:bg-primary"
                     data-active={value === quotation.credit ? 'true' : 'false'}
                   >
                     {key}
@@ -214,7 +243,7 @@ export function CreateUpdateQuotation({
 
         <section>
           <header className="flex items-center justify-between py-4">
-            <h2 className="text-xl font-bold ">Productos</h2>
+            <h2 className="text-xl font-bold ">Items</h2>
             <div className="flex items-center gap-2">
               <Button
                 type="button"

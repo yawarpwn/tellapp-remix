@@ -66,7 +66,7 @@ export function ItemsQuotationTable(props: Props) {
             <TableRow>
               <TableHead>ITEM</TableHead>
               <TableHead className="text-center">DESCRIPCION</TableHead>
-              <TableHead className="text-center">U/M</TableHead>
+              <TableHead className="text-center min-w-[50px]">U/M</TableHead>
               <TableHead className="text-center">CANT</TableHead>
               <TableHead className="text-center">PRECIO</TableHead>
               <TableHead className="text-center">IMPORTE</TableHead>

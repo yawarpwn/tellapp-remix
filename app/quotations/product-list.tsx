@@ -192,7 +192,7 @@ export function ProductList(props: Props) {
                 ref={qtyInputRef}
                 id="qty"
                 name="qty"
-                type="number"
+                type="text"
                 onChange={handleChangeItem}
                 value={quoItem.qty}
               />
@@ -217,7 +217,7 @@ export function ProductList(props: Props) {
               </label>
               <Input
                 id="price"
-                type="number"
+                type="text"
                 name="price"
                 onChange={handleChangeItem}
                 value={quoItem.price}

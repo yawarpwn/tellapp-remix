@@ -18,6 +18,7 @@ export function SingleInputEdit({
 }) {
   const inputRef = React.useRef<HTMLInputElement | HTMLTextAreaElement | null>(null)
   const [isEditing, setIsEditing] = React.useState(false)
+  const isTextarea = as === 'textarea'
   const Component = as === 'input' ? 'input' : 'textarea'
 
   return (
@@ -31,15 +32,21 @@ export function SingleInputEdit({
             inputRef.current.focus()
           }
         }}
-        className={cn('cursor-pointer text-center', isEditing ? 'opacity-0' : 'opacity-100')}
+        className={cn('cursor-pointer text-center opacity-100 text-muted-foreground', {
+          'opacity-0': isEditing,
+          'text-left': isTextarea,
+        })}
       >
         {value}
       </div>
       <Component
         ref={inputRef}
         className={cn(
-          'absolute inset-0 text-center bg-transparent p-0  outline-none resize-none',
-          isEditing ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          'absolute inset-0 text-center bg-transparent p-0  outline-none opacity-0 pointer-events-none',
+          {
+            'opacity-100 pointer-events-auto': isEditing,
+            'resize-none text-left': isTextarea,
+          }
         )}
         type={type}
         name={name}
