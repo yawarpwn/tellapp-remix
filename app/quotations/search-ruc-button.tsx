@@ -18,7 +18,7 @@ export function SearchRucButton({
   React.useEffect(() => {
     if (fetcher.data) {
       if (fetcher.data.success) {
-        toast.success(quotation.customer.ruc, {
+        toast.success(quotation.customer?.ruc, {
           description: fetcher.data.customer.name,
         })
 
@@ -28,7 +28,7 @@ export function SearchRucButton({
           customerId: fetcher.data.customer.id,
         })
       } else {
-        toast.error(quotation.customer.ruc, {
+        toast.error(quotation.customer?.ruc, {
           description: fetcher.data.error,
         })
       }
@@ -74,20 +74,22 @@ export function SearchRucButton({
               }
             />
           </div>
-          <button
-            type="button"
-            disabled={pending}
-            onClick={resetCustomer}
-            className="absolute right-1.5 top-1/2 -translate-y-1/2 size-5 bg-muted text-muted-foreground hover:text-foreground  rounded-full flex items-center justify-center"
-          >
-            {pending ? (
-              <Loader2Icon className="size-3 animate-spin" />
-            ) : (
-              <span>
-                <XIcon className="size-3 " />
-              </span>
-            )}
-          </button>
+          {quotation.customer?.ruc && (
+            <button
+              type="button"
+              disabled={pending}
+              onClick={resetCustomer}
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 size-5 bg-muted text-muted-foreground hover:text-foreground  rounded-full flex items-center justify-center"
+            >
+              {pending ? (
+                <Loader2Icon className="size-3 animate-spin" />
+              ) : (
+                <span>
+                  <XIcon className="size-3 " />
+                </span>
+              )}
+            </button>
+          )}
         </fetcher.Form>
       </div>
     </div>

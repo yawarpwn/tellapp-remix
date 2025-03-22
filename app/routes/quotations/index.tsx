@@ -4,7 +4,7 @@ import { DataTableSkeleton } from '@/components/skeletons/data-table'
 import { Form, Link, useNavigation } from 'react-router'
 import { QuotationTable } from '@/quotations/quotation-table'
 import { Input } from '@/components/ui/input'
-import { Loader2Icon, PlusIcon, SearchIcon } from 'lucide-react'
+import { Loader2Icon, PlusCircleIcon, PlusIcon, SearchIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PaginationQuotation } from '@/quotations/pagination-quotation'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -85,16 +85,20 @@ export default function QuotationsPage({ loaderData }: Route.ComponentProps) {
               defaultValue={q || ''}
               placeholder="Buscar Cotización"
               type="search"
-              className="w-[250px] lg:w-[350px]"
+              className="w-[200px] lg:w-[350px]"
             />
             <button className="absolute right-2 " disabled={searching}>
-              {searching ? <Loader2Icon className="animate-spin" /> : <SearchIcon />}
+              {searching ? (
+                <Loader2Icon className="h-[1em] opacity-50 animate-spin" />
+              ) : (
+                <SearchIcon className="h-[1em] opacity-50" />
+              )}
             </button>
           </div>
         </Form>
         <Button asChild>
           <Link to={'/quotations/create'}>
-            <PlusIcon />
+            <PlusCircleIcon />
             Crear
           </Link>
         </Button>

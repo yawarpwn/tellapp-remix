@@ -30,7 +30,7 @@ export interface QuotationClient {
   items: QuotationItem[]
   createdAt: string
   updatedAt: string
-  customer: Omit<Customer, 'createdAt' | 'updatedAt' | 'id'>
+  customer?: Omit<Customer, 'createdAt' | 'updatedAt' | 'id'>
   customerId?: string | null
 }
 

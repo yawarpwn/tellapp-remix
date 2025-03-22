@@ -29,7 +29,7 @@ export function CreateEditItemModal(props: Props) {
       <DialogTitle>Crear Item</DialogTitle>
       <DialogContent
         className={cn(
-          'flex  max-w-md md:max-w-3xl flex-col border p-2 py-4 md:p-6',
+          'flex  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg flex-col border p-2 py-4 md:p-6',
           'h-[95svh] md:h-[90svh]'
         )}
       >

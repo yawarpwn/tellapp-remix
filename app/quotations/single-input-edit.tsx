@@ -32,7 +32,7 @@ export function SingleInputEdit({
             inputRef.current.focus()
           }
         }}
-        className={cn('cursor-pointer text-center opacity-100 text-muted-foreground', {
+        className={cn('cursor-pointer text-center opacity-100 text-foreground/80', {
           'opacity-0': isEditing,
           'text-left': isTextarea,
         })}

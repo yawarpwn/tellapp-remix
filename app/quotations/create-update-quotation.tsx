@@ -138,7 +138,7 @@ export function CreateUpdateQuotation({
                 placeholder="Ejemplo Sociedad Anónima Cerrada"
                 type="text"
                 id="company"
-                value={quotation.customer.name}
+                value={quotation.customer?.name}
                 disabled={pending}
                 onChange={(e) =>
                   updateQuotation({
@@ -166,7 +166,7 @@ export function CreateUpdateQuotation({
                 placeholder="Maquinarias 325 Urb. Villa Nueva"
                 type="text"
                 id="address"
-                value={quotation.customer.address}
+                value={quotation.customer?.address}
                 disabled={pending}
                 onChange={(e) =>
                   updateQuotation({
